@@ -4,7 +4,7 @@
             "lieu": {
                 "id": 1,
                 "name": "Musée 1",
-                "desciption": "blabla",
+                "description": "blabla",
                 "tag": [
                     "Visiter"
                 ],
@@ -20,9 +20,9 @@
             "lieu": {
                 "id": 2,
                 "name": "Resto 1",
-                "desciption": "miam miam",
+                "description": "miam miam",
                 "tag": [
-                    "Mnager",
+                    "Manger",
                     "Boire un coup"
                 ],
                 "location": {
