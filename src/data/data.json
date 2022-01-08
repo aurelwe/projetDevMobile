@@ -1,33 +1,37 @@
 {
     "lieux": [
-      {
-        "id": 1,
-        "name": "Musée 1",
-        "desciption": "blabla",
-        "tag": [
-            "Visiter"
-          ],
-        "location": {
-            "address": "Heron Tower, 110 Bishopsgate, City of London, London EC2N 4AY",
-            "city": "London",
-            "zipcode": "EC2N 4AY"
+        {
+            "lieu": {
+                "id": 1,
+                "name": "Musée 1",
+                "description": "blabla",
+                "tag": [
+                    "Visiter"
+                ],
+                "location": {
+                    "address": "Heron Tower, 110 Bishopsgate, City of London, London EC2N 4AY",
+                    "city": "London",
+                    "zipcode": "EC2N 4AY"
+                },
+                "country_name": "United Kingdom"   
+            }
         },
-        "country_name": "United Kingdom"
-      },
-      {
-        "id": 2,
-        "name": "Resto 1",
-        "desciption": "miam miam",
-        "tag": [
-            "Mnager",
-            "Boire un coup"
-          ],
-        "location": {
-            "address": "4 rue de Lucile",
-            "city": "La lune",
-            "zipcode": "Estrella"
-        },
-        "country_name": "Universe"
-      }
+        {
+            "lieu": {
+                "id": 2,
+                "name": "Resto 1",
+                "description": "miam miam",
+                "tag": [
+                    "Manger",
+                    "Boire un coup"
+                ],
+                "location": {
+                    "address": "4 rue de Lucile",
+                    "city": "La lune",
+                    "zipcode": "Estrella"
+                },
+                "country_name": "Universe"
+            }
+        }
     ]
-  }
+    }
