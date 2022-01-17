@@ -28,3 +28,9 @@ const Accueil = ({route}) => {
 };
 
 export default Accueil;
+
+const styles = StyleSheet.create({
+  map: {
+    ...StyleSheet.absoluteFillObject,
+  },
+});

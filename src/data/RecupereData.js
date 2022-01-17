@@ -10,20 +10,24 @@ export async function getLieux(searchTerm = '') {
 };
 
 
-export async function getRestaurantDetails(restaurantID) {
+export async function getLieuDetails(lieuID) {
   try {
+    // recupere le fichier json
+    var data = require('../data/data.json');
+    var dataLieux = data.lieux;
+ 
+    var found=[];
+    // parcours le json pour trouver le lieu correspondant a l'id
+    for (var i=0; i < dataLieux.length; i++) {
+      if(dataLieux[i].lieu.id == lieuID){
+        found= dataLieux[i].lieu;
+      }
+  }
 
-    let response;
-    let test;
-    response = require('../data/data.json');
-    
-    test=response.find(id => id = 2);
-    console.log("helloe".test);
-    return test;
-
+  return found;
 
   } catch (error) {
-    console.log(`Error with function getRestaurantDetails ${error.message}`);
+    console.log(`Error with function getLieuDetails ${error.message}`);
     throw error;
   }
 };

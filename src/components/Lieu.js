@@ -8,7 +8,8 @@ import { View, StyleSheet, Image, Text, TouchableOpacity } from 'react-native';
 const Lieu = ({onClick, lieuxData, lieuxData: { location }, lieuxData: { tag }}) => {
 
   return (
-    <TouchableOpacity onPress={onClick}>
+    <TouchableOpacity
+    onPress={() => { onClick(lieuxData.id) }}>
       <View>
         <View>
           <Text>
