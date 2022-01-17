@@ -26,6 +26,9 @@
         "backgroundColor": "#FFFFFF"
       }
     },
+    "android.config.googleMaps.apiKey": {
+      "key": "AIzaSyABzF2LNH0gGeyLkUMb0izOfcKOReAGqlI"
+    },
     "web": {
       "favicon": "./assets/favicon.png"
     }

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Input } from '@ui-kitten/components';
 import { View, Text, TextInput, Button, StyleSheet, FlatList, Keyboard } from 'react-native';
 import { connect } from 'react-redux';
 
@@ -8,33 +9,38 @@ import LieuListItem from './LieuListItem';
 
 // const [searchTerm, setSearchTerm] = useState('');
 
+// const useInputState = (initialValue = '') => {
+//     const [value, setValue] = React.useState(initialValue);
+//     return { value, onChangeText: setValue };
+//   };
 
 
 const Search = () => {
+    
     const [lieux, setLieux] = useState([]);
+    // const mediumInputState = useInputState();
+
 
     return (
-        <View style={styles.container}>
-            <View style={styles.searchContainer}>
-                <TextInput
-                    placeholder='Nom du lieu'
-                    style={styles.inputPlaceName}
-                    // onChangeText={(text) => setSearchTerm(text)}
-                    //   onSubmitEditing={searchRestaurants}
-                />
-                <TextInput
+        <Input
+            placeholder='Place your Text'
+            value={lieux}
+            onChangeText={nextValue => setLieux(nextValue)}
+      />
+                /* <Input
                     placeholder='Tag'
                     style={styles.inputPlaceName}
                     // onChangeText={(text) => setSearchTerm(text)}
                     //   onSubmitEditing={searchRestaurants}
                 />
-                <TextInput
+                <Input
                     placeholder='Ville'
                     style={styles.inputPlaceName}
                     // onChangeText={(text) => setSearchTerm(text)}
                     //   onSubmitEditing={searchRestaurants}
-                />
-                <Text>Tri :</Text>
+                /> */
+                /* <Text>Tri :</Text>
+
                 <FlatList
                     data={lieux}
                     keyExtractor={(item) => item.lieu.id.toString()}
@@ -49,10 +55,8 @@ const Search = () => {
                     // onEndReachedThreshold={0.5}
                     // refreshing={isRefreshing}
                     // onRefresh={searchRestaurants}
-                />
+                /> */
 
-            </View>
-        </View>
     );
 }
 

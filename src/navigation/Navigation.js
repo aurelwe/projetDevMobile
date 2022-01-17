@@ -7,6 +7,8 @@ import { Text } from 'react-native';
 import Carte from '../components/Carte';
 import DetailsLieu from '../components/DetailsLieu';
 import Accueil from '../components/Accueil';
+import Search from '../components/Search';
+import AddLieu from '../components/AddLieu';
 
 const SearchNavigation = createStackNavigator();
 const FavNavigation = createStackNavigator();
@@ -31,6 +33,20 @@ function carte() {
   )
 };
 
+function search() {
+  return (
+    <SearchNavigation.Navigator
+      initialRouteName="ViewSearch"
+    >
+      <SearchNavigation.Screen
+        name="ViewSearch"
+        component={Search}
+        options={{ title: 'Search' }}
+      />
+    </SearchNavigation.Navigator>
+  )
+};
+
 function accueil() {
   return (
     <FavNavigation.Navigator
@@ -40,6 +56,20 @@ function accueil() {
         name="ViewAccueil"
         component={Accueil}
         options={{ title: 'Accueil' }}
+      />
+    </FavNavigation.Navigator>
+  )
+};
+
+function addLieu() {
+  return (
+    <FavNavigation.Navigator
+      initialRouteName="ViewAjout"
+    >
+      <FavNavigation.Screen
+        name="ViewAjout"
+        component={AddLieu}
+        options={{ title: 'Ajout d\'un lieu' }}
       />
     </FavNavigation.Navigator>
   )
@@ -71,6 +101,26 @@ function RootStack() {
           }
         })}
       />
+
+      <TabNavigation.Screen
+        name="Search"
+        component={search}
+        options={() => ({
+          tabBarIcon: ({ color }) => {
+            return <Text>Search</Text>;
+          }
+        })}
+      /> 
+
+      <TabNavigation.Screen
+        name="Ajout"
+        component={addLieu}
+        options={() => ({
+          tabBarIcon: ({ color }) => {
+            return <Text>Ajout</Text>;
+          }
+        })}
+      /> 
 
     </TabNavigation.Navigator>
   );
