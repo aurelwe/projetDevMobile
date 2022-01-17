@@ -7,18 +7,16 @@ import { getLieux } from '../data/RecupereData';
 
 const Carte = ({ navigation }) => {
     
-    
-   const [lieux, setLieux] = useState([]);
+  const [lieux, setLieux] = useState([]);
 
-
-    const searchLieux = async () => {
-        try {
-          const dataSearchResult = await getLieux();
-          setLieux(dataSearchResult.lieux);
-        } catch (error) {
-    
-        }
+  const searchLieux = async () => {
+      try {
+        const dataSearchResult = await getLieux();
+        setLieux(dataSearchResult.lieux);
+      } catch (error) {
+  
       }
+    }
 
     // affiche les lieux a l'initialisation de la page
     useEffect(() => {
@@ -26,10 +24,9 @@ const Carte = ({ navigation }) => {
     }, []);
 
     // pour passer a la page de details d'un lieu
-    const navigateToDetailsLieu = () => {
-        navigation.navigate("ViewDetailsLieu");
-      };
-
+    const navigateToDetailsLieu = (lieuID) => {
+      navigation.navigate("ViewDetailsLieu", { lieuID });
+    };
 
   return (
     <View>
@@ -41,10 +38,10 @@ const Carte = ({ navigation }) => {
             <Lieu lieuxData={item.lieu} onClick={navigateToDetailsLieu} />
             )}
         />
-
-        </View>
+      </View>
     </View>
   );
 };
 
 export default Carte;
+
