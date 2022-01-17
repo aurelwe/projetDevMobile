@@ -2,6 +2,9 @@ import React from 'react';
 import { View, StyleSheet, Image, Text, TouchableOpacity } from 'react-native';
 
 //LIEU EST DANS LA FLATLIST, UTILISE POUR AVOIR LA LISTE DES LIEUX
+
+
+
 const Lieu = ({onClick, lieuxData, lieuxData: { location }, lieuxData: { tag }}) => {
 
   return (

@@ -123,7 +123,6 @@ function RootStack() {
       /> 
 
     </TabNavigation.Navigator>
-  );
-}
+  )};
 
 export default RootStack;
