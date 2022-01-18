@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Button, Text, TouchableOpacity, FlatList } from 'react-native';
+import MapView, { Marker } from 'react-native-maps';
+import { StyleSheet, Text, View, Dimensions, FlatList } from 'react-native';
 
 import Lieu from '../components/Lieu';
 import { getLieux } from '../data/RecupereData';
 
 
 const Carte = ({ navigation }) => {
-    
+  // liste de lieux
   const [lieux, setLieux] = useState([]);
 
+  // recherche tous les lieux enregistrés
   const searchLieux = async () => {
       try {
         const dataSearchResult = await getLieux();
@@ -29,7 +31,20 @@ const Carte = ({ navigation }) => {
     };
 
   return (
-    <View>
+    <View style={styles.container}>
+
+      <View >
+        <MapView style={styles.map}>
+
+        <Marker
+          coordinate= {{latitude: 48.270321, longitude: 7.441033,}}
+          title={"marker.title"}
+          description= {"lolz"}
+        />   
+        </MapView>
+
+      </View>
+
       <View>
         <FlatList
             data={lieux}
@@ -44,4 +59,17 @@ const Carte = ({ navigation }) => {
 };
 
 export default Carte;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  map: {
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
+  },
+});
 
