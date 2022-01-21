@@ -1,7 +1,7 @@
 const API_KEY_POSITION_STACK = '8f04313167a956f65a0316786139ca3e';
 
 // recupere tous les lieux enregistres
-export async function getLieux(searchTerm = '') {
+export async function getLieux() {
   try {
     let response;
     response = require('../data/data.json');
@@ -33,20 +33,35 @@ export async function getLieuDetails(lieuID) {
   }
 };
 
-// recupere les coordonnees d'un lieu en fonction de son adresse
-export async function getLieuCoordonnees(adresse) {
-  try {
-    const url = `http://api.positionstack.com/v1/forward?access_key=${API_KEY_POSITION_STACK}&query=${adresse}`;
-    const response = await fetch(url);
-    const json = await response.json();
-    return json;
-  } catch (error) {
-    console.log(`Error with function getLieuCoordonnees ${error.message}`);
-    throw error;
-  }
-};
+// quand on ajoute un lieu, on appelle l'api pour récupérer les coordonnées.
+// On stocke les coordonnées dans le json. Donc on affiche les lieux sur la map a partir du json
+// export async function getLieuCoordonnees() {
+//   try {
+//     // recupere le fichier json
+//     var data = require('../data/data.json');
+//     var dataLieux = data.lieux;
+//     var listeCoordonnees=[];
+
+
+//       dataLieux.forEach(element => {
+//         listeCoordonnees.concat(element.lieu.location.address, element.lieu.location.address);
+//         console.log("element=== "+ element.lieu.location.address);
+//       });
+      
+  
+
+//     // const url = `http://api.positionstack.com/v1/forward?access_key=${API_KEY_POSITION_STACK}&query=${adresse}`;
+//     // const response = await fetch(url);
+//     // const json = await response.json();
+//     //return json;
+//   } catch (error) {
+//     console.log(`Error with function getLieuCoordonnees ${error.message}`);
+//     throw error;
+//   }
+// };
 
 // parcourir getLieux
 // pour chaque lieu recuperer adresse
 // pour chaque adresse récupérer avece getLieuCoordonnees
 // return liste coordonnées
+

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import MapView, { Marker } from 'react-native-maps';
-import { StyleSheet, Text, View, Dimensions, FlatList } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, FlatList, TouchableHighlightBase } from 'react-native';
+import * as Location from 'expo-location';
+import { useIsFocused } from '@react-navigation/native';
 
 import Lieu from '../components/Lieu';
 import { getLieux } from '../data/RecupereData';
@@ -9,6 +11,10 @@ import { getLieux } from '../data/RecupereData';
 const Carte = ({ navigation }) => {
   // liste de lieux
   const [lieux, setLieux] = useState([]);
+  
+  const [positionActuelle, setPosition] = useState(null);
+  
+  const isFocused = useIsFocused();
 
   // recherche tous les lieux enregistrés
   const searchLieux = async () => {
@@ -19,30 +25,48 @@ const Carte = ({ navigation }) => {
   
       }
     }
+  
+  // recupere la position actuelle de l'utilisateur
+  const getPositionActuelle = async () => {
+    try {
+      const positionActuelle = await Location.getCurrentPositionAsync({});
+      setPosition({
+        latitude: positionActuelle.coords.latitude,
+        longitude: positionActuelle.coords.longitude,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421,
+      });
+    } catch (error) {
 
-    // affiche les lieux a l'initialisation de la page
-    useEffect(() => {
-        searchLieux();
-    }, []);
+    }
+  }
 
-    // pour passer a la page de details d'un lieu
-    const navigateToDetailsLieu = (lieuID) => {
-      navigation.navigate("ViewDetailsLieu", { lieuID });
-    };
+  // initialisation de la page
+  useEffect(() => {
+      searchLieux();
+      getPositionActuelle();
+  },[isFocused]);
+
+  // pour passer a la page de details d'un lieu
+  const navigateToDetailsLieu = (lieuID) => {
+    navigation.navigate("ViewDetailsLieu", { lieuID });
+  };
 
   return (
     <View style={styles.container}>
 
-      <View >
-        <MapView style={styles.map}>
-
-        <Marker
-          coordinate= {{latitude: 48.270321, longitude: 7.441033,}}
-          title={"marker.title"}
-          description= {"lolz"}
-        />   
+      <View>
+        <MapView style={styles.map}  
+         initialRegion={positionActuelle} 
+        >
+          {lieux.map((listeLieux) => (   
+            <Marker
+              key={listeLieux.lieu.id}
+              coordinate= {{latitude: listeLieux.lieu.location.latitude, longitude: listeLieux.lieu.location.longitude}}
+              title={listeLieux.lieu.name}
+            />           
+          ))}
         </MapView>
-
       </View>
 
       <View>
@@ -54,6 +78,7 @@ const Carte = ({ navigation }) => {
             )}
         />
       </View>
+
     </View>
   );
 };

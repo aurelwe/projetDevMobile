@@ -11,7 +11,9 @@
                 "location": {
                     "address": "Place d'Armes",
                     "city": "Metz",
-                    "zipcode": "57000"
+                    "zipcode": "57000",
+                    "latitude": 49.12044149204529, 
+                    "longitude": 6.175840312986322
                 },
                 "country_name": "France"   
             }
@@ -28,7 +30,28 @@
                 "location": {
                     "address": "1 Parv. des Droits de l'Homme",
                     "city": "Metz",
-                    "zipcode": "57020"
+                    "zipcode": "57020",
+                    "latitude": 49.10842318842822, 
+                    "longitude": 6.181676297641799
+                },
+                "country_name": "France"
+            }
+        },
+        {
+            "lieu": {
+                "id": 3,
+                "name": "Tour Eiffel",
+                "description": "c'est beau",
+                "tag": [
+                    "Visiter",
+                    "Manger"
+                ],
+                "location": {
+                    "address": "Champ de Mars, 5 Av. Anatole France",
+                    "city": "Paris",
+                    "zipcode": "75007",
+                    "latitude": 48.85931336636904,
+                    "longitude": 2.2967202138484897
                 },
                 "country_name": "France"
             }
