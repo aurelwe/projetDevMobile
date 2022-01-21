@@ -33,6 +33,32 @@ export async function getLieuDetails(lieuID) {
   }
 };
 
+// recherche un lieu en fonction du terme de recherche
+export async function getSearchLieu(searchTerm = '') {
+  try {
+    // recupere les donnees
+    var data = require('../data/data.json');
+    var match=[];
+
+    data.lieux.filter((val)=>
+    {
+      // si aucun terme de recherche alors on envoi tous les lieux
+      if(searchTerm == ""){
+        match.push(val);
+      }
+      // sinon si le terme de recherche correspond au nom du lieu, on envoi le lieu en question
+      else if(val.lieu.name.toLowerCase().includes(searchTerm.toLowerCase())){
+        match.push(val);
+      }
+    })        
+    return match;
+  } 
+  catch (error){
+    console.log(`Error with function searchLieu ${error.message}`);
+    throw error;
+  }
+};
+
 // quand on ajoute un lieu, on appelle l'api pour récupérer les coordonnées.
 // On stocke les coordonnées dans le json. Donc on affiche les lieux sur la map a partir du json
 // export async function getLieuCoordonnees() {

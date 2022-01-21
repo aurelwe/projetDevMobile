@@ -1,11 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SafeAreaView, View, Text, TextInput, Button, StyleSheet, FlatList, Keyboard } from 'react-native';
 
+import JSONDATA from '../data/data.json';
 
 
 const AddLieu = () => {
     const [lieux, setLieux] = useState([]);
+    
+  const newLieu = async () => {
+    
+  //   const data = fs.readFileSync('../data/data.json');
+  //   const myObject= JSON.parse(data);
 
+  //   const newData = {
+  //     "country": "England"
+  // } 
+  // myObject.push(newData);
+  // var newDataa = JSON.stringify(myObject);
+  // fs.writeFile('data.json', newDataa, err => {
+  //     // error checking
+  //     if(err) throw err;
+      
+  //     console.log("New data added");
+  // }); 
+}
+
+useEffect(() => {
+  newLieu();
+})
+
+
+   
 
     return (
         <SafeAreaView style={styles.container}>

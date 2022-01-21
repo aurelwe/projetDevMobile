@@ -1,65 +1,53 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Input } from '@ui-kitten/components';
 import { View, Text, TextInput, Button, StyleSheet, FlatList, Keyboard } from 'react-native';
-import { connect } from 'react-redux';
 
-import LieuListItem from './LieuListItem';
-
-// import data from './src/data/data'
-
-// const [searchTerm, setSearchTerm] = useState('');
-
-// const useInputState = (initialValue = '') => {
-//     const [value, setValue] = React.useState(initialValue);
-//     return { value, onChangeText: setValue };
-//   };
+import Lieu from '../components/Lieu';
+import { getSearchLieu } from '../data/RecupereData';
 
 
-const Search = () => {
+const Search = ({ navigation }) => {
     
+    // liste des lieux
     const [lieux, setLieux] = useState([]);
-    // const mediumInputState = useInputState();
-
+    // terme de recherche
+    const [searchTerm, setSearchTerm] = useState('');
+  
+    // recupere les lieux correspondants au terme de recherhce
+    const searchLieu = async () => {
+      try {
+        const jsonSearchResult = await getSearchLieu(searchTerm);
+        setLieux(jsonSearchResult);
+      } catch (error) {
+  
+      }
+    }
 
     return (
-        <Input
-            placeholder='Place your Text'
-            value={lieux}
-            onChangeText={nextValue => setLieux(nextValue)}
-      />
-                /* <Input
-                    placeholder='Tag'
-                    style={styles.inputPlaceName}
-                    // onChangeText={(text) => setSearchTerm(text)}
-                    //   onSubmitEditing={searchRestaurants}
-                />
-                <Input
-                    placeholder='Ville'
-                    style={styles.inputPlaceName}
-                    // onChangeText={(text) => setSearchTerm(text)}
-                    //   onSubmitEditing={searchRestaurants}
-                /> */
-                /* <Text>Tri :</Text>
+      <View style={styles.container}>
+        <View style={styles.searchContainer}>
+          <TextInput
+            placeholder='Nom du lieu'
+            onChangeText={(text) => setSearchTerm(text)}
+          />
+          <Button
+            title='Rechercher'
+            onPress={searchLieu}
+          />
+        </View>
 
-                <FlatList
-                    data={lieux}
-                    keyExtractor={(item) => item.lieu.id.toString()}
-                    renderItem={({ item }) => (
-                    <LieuListItem
-                        LieuData={item.lieu}
-                        // onClick={navigateToRestaurantDetails}
-                        // isFav={amIaFavRestaurant(item.restaurant.id)} 
-                    />
-                    )}
-                    // onEndReached={loadMoreRestaurants}
-                    // onEndReachedThreshold={0.5}
-                    // refreshing={isRefreshing}
-                    // onRefresh={searchRestaurants}
-                /> */
-
+        <View>
+          <FlatList
+            data={lieux}
+            keyExtractor={(item) => item.lieu.id.toString()}
+            renderItem={({ item }) => (
+              <Lieu lieuxData={item.lieu}/>
+            )}
+          />
+        </View>
+      </View>
     );
 }
-
 
 export default Search;
 

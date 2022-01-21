@@ -12,8 +12,10 @@ const Carte = ({ navigation }) => {
   // liste de lieux
   const [lieux, setLieux] = useState([]);
   
+  // position actuelle de l'utilisateur
   const [positionActuelle, setPosition] = useState(null);
   
+  // test au changement de page
   const isFocused = useIsFocused();
 
   // recherche tous les lieux enregistrés
@@ -21,6 +23,7 @@ const Carte = ({ navigation }) => {
       try {
         const dataSearchResult = await getLieux();
         setLieux(dataSearchResult.lieux);
+        console.log("search lieu Carte ===" + JSON.stringify(lieux));
       } catch (error) {
   
       }
@@ -29,10 +32,10 @@ const Carte = ({ navigation }) => {
   // recupere la position actuelle de l'utilisateur
   const getPositionActuelle = async () => {
     try {
-      const positionActuelle = await Location.getCurrentPositionAsync({});
+      const positionActuelleUser = await Location.getCurrentPositionAsync({});
       setPosition({
-        latitude: positionActuelle.coords.latitude,
-        longitude: positionActuelle.coords.longitude,
+        latitude: positionActuelleUser.coords.latitude,
+        longitude: positionActuelleUser.coords.longitude,
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421,
       });
