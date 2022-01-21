@@ -13,6 +13,7 @@ const Accueil = ({route}) => {
   }
   return (
     <View>
+      <Text>hello</Text>
        <MapView
           initialRegion={{
             latitude: 37.78825,

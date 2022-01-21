@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Input } from '@ui-kitten/components';
+import { Input, Layout, Select, SelectItem, Icon } from '@ui-kitten/components';
 import { View, Text, TextInput, Button, StyleSheet, FlatList, Keyboard } from 'react-native';
 import { connect } from 'react-redux';
 
@@ -15,48 +15,87 @@ import LieuListItem from './LieuListItem';
 //   };
 
 
+function getSelectValue(selectedIndexPaths, options) {
+  if (selectedIndexPaths.length) {
+    // multiSelect
+    return selectedIndexPaths
+    .map((indexPath) => options[indexPath.row])
+    .join(', ');
+  } else {
+    // singleSelect
+    return options[selectedIndexPaths.row]
+  }
+}
+
+
+
 const Search = () => {
     
     const [lieux, setLieux] = useState([]);
-    // const mediumInputState = useInputState();
+    const [ville, setVille] = useState([]);
+    const [tags, setTags] = useState([]);
+    const tagsList = ["Boire", "Manger", "Visiter"]
+    const [km, setKm] = useState([]);
+    const kmList = ["5 km", "10 km", "20 km", "30 km", "40 km", "+50 km"]
 
+    const SearchIcon = (props) => (
+      <Icon {...props} name='search-outline'/>
+    );
+
+    const TagsIcon = (props) => (
+      <Icon {...props} name='pricetags-outline'/>
+    );
+
+    const VilleIcon = (props) => (
+      <Icon {...props} name='pin-outline'/>
+    );
 
     return (
-        <Input
-            placeholder='Place your Text'
+      <React.Fragment>
+        <Layout style={styles.container} level='1'>
+          <Input
+            style={styles.input}
+            accessoryLeft={SearchIcon}
+            placeholder='Chercher un lieu'
             value={lieux}
             onChangeText={nextValue => setLieux(nextValue)}
-      />
-                /* <Input
-                    placeholder='Tag'
-                    style={styles.inputPlaceName}
-                    // onChangeText={(text) => setSearchTerm(text)}
-                    //   onSubmitEditing={searchRestaurants}
-                />
-                <Input
-                    placeholder='Ville'
-                    style={styles.inputPlaceName}
-                    // onChangeText={(text) => setSearchTerm(text)}
-                    //   onSubmitEditing={searchRestaurants}
-                /> */
-                /* <Text>Tri :</Text>
+          />
 
-                <FlatList
-                    data={lieux}
-                    keyExtractor={(item) => item.lieu.id.toString()}
-                    renderItem={({ item }) => (
-                    <LieuListItem
-                        LieuData={item.lieu}
-                        // onClick={navigateToRestaurantDetails}
-                        // isFav={amIaFavRestaurant(item.restaurant.id)} 
-                    />
-                    )}
-                    // onEndReached={loadMoreRestaurants}
-                    // onEndReachedThreshold={0.5}
-                    // refreshing={isRefreshing}
-                    // onRefresh={searchRestaurants}
-                /> */
+          <Select
+            style={styles.select}
+            accessoryLeft={TagsIcon}
+            multiSelect={true}
+            placeholder="Tags"
+            selectedIndex={tags}
+            onSelect={index => setTags(index)}
+            value={getSelectValue(tags, tagsList)}>
+              {tagsList.map((value) => 
+                <SelectItem title={value} key={value}/>
+              )}          
+          </Select>       
 
+          <View style={styles.rowContainer}>
+            <Input
+              style={styles.inputRow}
+              accessoryLeft={VilleIcon}
+              placeholder='Ville'
+              value={ville}
+              onChangeText={nextValue => setVille(nextValue)}
+            />
+
+            <Select
+              style={styles.selectRow}
+              selectedIndex={km}
+              placeholder="Rayon"
+              onSelect={index => setKm(index)}
+              value={getSelectValue(km, kmList)}>
+                {kmList.map((value) => 
+                  <SelectItem title={value} key={value}/>
+                )}          
+            </Select>
+          </View>
+        </Layout>
+      </React.Fragment>
     );
 }
 
@@ -69,13 +108,22 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     marginTop: 16,
   },
-  searchContainer: {
-    marginBottom: 16,
+  input: {
+    margin: 2,
   },
-  inputPlaceName: {
-    marginBottom: 8,
-    borderWidth: 1,
-    height: 40,
-    padding: 10,
+  select: {
+    margin: 2,
   },
+  rowContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  inputRow: {
+    margin: 2,
+    flex: 1,
+  },
+  selectRow: {
+    margin: 2,
+    flex: 1,
+  }
 });
