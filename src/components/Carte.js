@@ -22,8 +22,7 @@ const Carte = ({ navigation }) => {
   const searchLieux = async () => {
       try {
         const dataSearchResult = await getLieux();
-        setLieux(dataSearchResult.lieux);
-        console.log("search lieu Carte ===" + JSON.stringify(lieux));
+        setLieux(dataSearchResult);
       } catch (error) {
   
       }

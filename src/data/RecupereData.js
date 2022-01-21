@@ -1,17 +1,5 @@
 const API_KEY_POSITION_STACK = '8f04313167a956f65a0316786139ca3e';
 
-// recupere tous les lieux enregistres
-export async function getLieux() {
-  try {
-    let response;
-    response = require('../data/data.json');
-    return response;
-  } catch (error) {
-    console.log(`Error with function getLieux ${error.message}`);
-    throw error;
-  }
-};
-
 // recupere les details d'un lieu en fonction de son id
 export async function getLieuDetails(lieuID) {
   try {
@@ -33,8 +21,8 @@ export async function getLieuDetails(lieuID) {
   }
 };
 
-// recherche un lieu en fonction du terme de recherche
-export async function getSearchLieu(searchTerm = '') {
+// recherche les lieux + fonction du terme de recherche
+export async function getLieux(searchTerm = '') {
   try {
     // recupere les donnees
     var data = require('../data/data.json');
