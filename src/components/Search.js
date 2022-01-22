@@ -1,19 +1,21 @@
 import React, { useState } from 'react';
 import { Input, Layout, Select, SelectItem, Icon } from '@ui-kitten/components';
-import { View, Text, TextInput, Button, StyleSheet, FlatList, Keyboard } from 'react-native';
-import { connect } from 'react-redux';
+import { View, StyleSheet, FlatList, Button } from 'react-native';
+import Lieu from '../components/Lieu';
+import { getLieux } from '../data/RecupereData';
 
-import LieuListItem from './LieuListItem';
 
-// import data from './src/data/data'
-
-// const [searchTerm, setSearchTerm] = useState('');
-
-// const useInputState = (initialValue = '') => {
-//     const [value, setValue] = React.useState(initialValue);
-//     return { value, onChangeText: setValue };
-//   };
-
+function getSelectValue(selectedIndexPaths, options) {
+  if (selectedIndexPaths.length) {
+    // multiSelect
+    return selectedIndexPaths
+    .map((indexPath) => options[indexPath.row])
+    .join(', ');
+  } else {
+    // singleSelect
+    return options[selectedIndexPaths.row]
+  }
+}
 
 function getSelectValue(selectedIndexPaths, options) {
   if (selectedIndexPaths.length) {
@@ -31,12 +33,26 @@ function getSelectValue(selectedIndexPaths, options) {
 
 const Search = () => {
     
+    // liste des lieux
     const [lieux, setLieux] = useState([]);
+    // terme de recherche
+    const [searchTerm, setSearchTerm] = useState('');
+
     const [ville, setVille] = useState([]);
     const [tags, setTags] = useState([]);
-    const tagsList = ["Boire", "Manger", "Visiter"]
+    const tagsList = ["Boire", "Manger", "Visiter"];
     const [km, setKm] = useState([]);
-    const kmList = ["5 km", "10 km", "20 km", "30 km", "40 km", "+50 km"]
+    const kmList = ["5 km", "10 km", "20 km", "30 km", "40 km", "+50 km"];
+
+    // recupere les lieux correspondants au terme de recherhce
+    const searchLieu = async () => {
+      try {
+        const jsonSearchResult = await getLieux(searchTerm);
+        setLieux(jsonSearchResult);
+      } catch (error) {
+        // TO DO
+      }
+    }
 
     const SearchIcon = (props) => (
       <Icon {...props} name='search-outline'/>
@@ -57,8 +73,8 @@ const Search = () => {
             style={styles.input}
             accessoryLeft={SearchIcon}
             placeholder='Chercher un lieu'
-            value={lieux}
-            onChangeText={nextValue => setLieux(nextValue)}
+            // value={lieux}
+            onChangeText={(text) => setSearchTerm(text)}
           />
 
           <Select
@@ -79,7 +95,7 @@ const Search = () => {
               style={styles.inputRow}
               accessoryLeft={VilleIcon}
               placeholder='Ville'
-              value={ville}
+              // value={ville}
               onChangeText={nextValue => setVille(nextValue)}
             />
 
@@ -94,6 +110,24 @@ const Search = () => {
                 )}          
             </Select>
           </View>
+
+          <View>
+            <Button
+              title='Rechercher'
+              onPress={searchLieu}
+            />
+          </View>
+
+          <View>
+            <FlatList
+            data={lieux}
+            keyExtractor={(item) => item.lieu.id.toString()}
+            renderItem={({ item }) => (
+              <Lieu lieuxData={item.lieu}/>
+            )}
+          />
+        </View>
+
         </Layout>
       </React.Fragment>
     );
