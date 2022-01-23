@@ -1,11 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, View, Text, TextInput, Button, StyleSheet, FlatList, Keyboard } from 'react-native';
+import { View, StyleSheet, Keyboard } from 'react-native';
+import { Input, Layout, Select, SelectItem, Icon, List, Divider, Button } from '@ui-kitten/components';
 
 import JSONDATA from '../data/data.json';
 
+function getSelectValue(selectedIndexPaths, options) {
+  if (selectedIndexPaths.length) {
+    // multiSelect
+    return selectedIndexPaths
+    .map((indexPath) => options[indexPath.row])
+    .join(', ');
+  } else {
+    // singleSelect
+    return options[selectedIndexPaths.row]
+  }
+}
+
 
 const AddLieu = () => {
-    const [lieux, setLieux] = useState([]);
     
   const newLieu = async () => {
     
@@ -29,45 +41,77 @@ useEffect(() => {
   newLieu();
 })
 
+  const [tags, setTags] = useState([]);
+  const tagsList = ["Boire", "Manger", "Visiter"];
 
-   
+  const TagsIcon = (props) => (
+    <Icon {...props} name='tag' pack='fontawesome'/>
+  );
 
-    return (
-        <SafeAreaView style={styles.container}>
-            <TextInput
-                placeholder='Nom du lieu'
-                style={styles.inputPlaceName}
-                // onChangeText={(text) => setSearchTerm(text)}
-                //   onSubmitEditing={searchRestaurants}
-            />
-            <TextInput
-                multiline
-                numberOfLines={10}
-                placeholder='Description'
-                style={styles.textArea}
-                // onChangeText={(text) => setSearchTerm(text)}
-                //   onSubmitEditing={searchRestaurants}
-            />
-            <TextInput
-                placeholder='Tag'
-                style={styles.inputPlaceName}
-                // onChangeText={(text) => setSearchTerm(text)}
-                //   onSubmitEditing={searchRestaurants}
-            />
-            <TextInput
-                placeholder='Adresse'
-                style={styles.inputPlaceName}
-                // onChangeText={(text) => setSearchTerm(text)}
-                //   onSubmitEditing={searchRestaurants}
-            />
-            <TextInput
-                placeholder='Note'
-                style={styles.inputPlaceName}
-                // onChangeText={(text) => setSearchTerm(text)}
-                //   onSubmitEditing={searchRestaurants}
-            />
-        </SafeAreaView>
-    );
+  const VilleIcon = (props) => (
+    <Icon {...props} name='pin'/>
+  );
+
+  const NoteIcon = (props) => (
+    <Icon {...props} name='star' pack='fontawesome'/>
+  );
+
+  //ajoute le lieu qui vient d'être créé
+  const addLieu = async () => {
+    try {
+      console.log("lieu ajouté")
+    } catch (error) {
+      // TO DO
+    }
+  }
+
+   return (
+
+    <React.Fragment>
+      <Layout style={styles.container} level='1'>
+        <Input
+          style={styles.input}
+          placeholder='Nom du lieu'
+        />
+
+        <Input
+          style={styles.input}
+          accessoryLeft={VilleIcon}
+          placeholder='Adresse'
+        />
+        <Input
+          style={styles.input}
+          multiline={true}
+          textStyle={{ minHeight: 64 }}
+          placeholder='Description'
+        />
+
+        <View style={styles.rowContainer}>
+          <Select
+            style={styles.selectRow}
+            accessoryLeft={TagsIcon}
+            multiSelect={true}
+            placeholder="Tags"
+            selectedIndex={tags}
+            onSelect={index => setTags(index)}
+            value={getSelectValue(tags, tagsList)}>
+              {tagsList.map((value) => 
+                <SelectItem title={value} key={value}/>
+              )}          
+          </Select> 
+
+          <Input
+            style={styles.inputRow}
+            placeholder='Note'
+            accessoryLeft={NoteIcon}
+          />
+        </View>
+        <Button onPress={addLieu}>Ajouter</Button>
+
+      </Layout>
+    </React.Fragment>
+            
+  );
 }
 
 
@@ -77,21 +121,24 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 12,
-    marginTop: 16,
+    paddingVertical: 7,
   },
-  searchContainer: {
-    marginBottom: 16,
+  input: {
+    margin: 2,
   },
-  inputPlaceName: {
-    marginBottom: 8,
-    borderWidth: 1,
-    height: 40,
-    padding: 10,
+  select: {
+    margin: 2,
   },
-  textArea: {
-    borderWidth: 1,
-    marginBottom: 8,
-    padding: 10,
-    justifyContent: 'flex-start',
+  rowContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
+  inputRow: {
+    margin: 2,
+    flex: 1,
+  },
+  selectRow: {
+    margin: 2,
+    flex: 1,
+  }
 });

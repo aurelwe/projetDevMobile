@@ -1,38 +1,20 @@
 import React from 'react';
-import { View, StyleSheet, Image, Text, TouchableOpacity } from 'react-native';
-
+import { StyleSheet } from 'react-native';
+import { ListItem, Text } from '@ui-kitten/components';
 //LIEU EST DANS LA FLATLIST, UTILISE POUR AVOIR LA LISTE DES LIEUX
-
-
 
 const Lieu = ({onClick, lieuxData, lieuxData: { location }, lieuxData: { tag }}) => {
 
-  return (
-    <TouchableOpacity
-    onPress={() => { onClick(lieuxData.id) }}>
-      <View>
-        <View>
-          <Text>
-            {lieuxData.name}
-          </Text>
-        </View>
-        <View>
-          <Text>
-            {lieuxData.description}
-          </Text>
-        </View>
-        <View>
-          <Text>
-            {location.city}
-          </Text>
-        </View>
-        <View>
-          <Text>
-            {tag}
-          </Text>
-        </View>
-    </View>
-    </TouchableOpacity>
+  const renderItemAccessory = (props) => (
+    <Text size='s1'>{lieuxData.tag}</Text>
+  );
+  return ( //Chaque éléments de la flatlist dans carte
+    <ListItem 
+      title={lieuxData.name}
+      description={location.city}
+      accessoryRight={renderItemAccessory}
+      onPress={() => { onClick(lieuxData.id) }}
+    />    
   );
 };
 

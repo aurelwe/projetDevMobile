@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import MapView, { Marker } from 'react-native-maps';
-import { StyleSheet, Text, View, Dimensions, FlatList, TouchableHighlightBase } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 import * as Location from 'expo-location';
 import { useIsFocused } from '@react-navigation/native';
+import {Layout, List, Divider } from '@ui-kitten/components';
 
 import Lieu from '../components/Lieu';
 import { getLieux } from '../data/RecupereData';
@@ -51,13 +52,12 @@ const Carte = ({ navigation }) => {
 
   // pour passer a la page de details d'un lieu
   const navigateToDetailsLieu = (lieuID) => {
-    navigation.navigate("ViewDetailsLieu", { lieuID });
+    navigation.navigate("Details", { lieuID });
   };
 
   return (
-    <View style={styles.container}>
+    <Layout style={styles.container}>
 
-      <View>
         <MapView style={styles.map}  
          initialRegion={positionActuelle} 
         >
@@ -69,19 +69,18 @@ const Carte = ({ navigation }) => {
             />           
           ))}
         </MapView>
-      </View>
 
-      <View>
-        <FlatList
+        <List
+            style={styles.list}
+            ItemSeparatorComponent={Divider}
             data={lieux}
             keyExtractor={(item) => item.lieu.id.toString()}
             renderItem={({ item }) => (
             <Lieu lieuxData={item.lieu} onClick={navigateToDetailsLieu} />
             )}
         />
-      </View>
 
-    </View>
+    </Layout>
   );
 };
 
@@ -91,12 +90,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    alignItems: 'center',
+    alignItems: 'stretch',
     justifyContent: 'center',
+    paddingVertical: 7,
   },
   map: {
+    flex: 1,
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
   },
+  list: {
+    flex: 1,
+  }
 });
 

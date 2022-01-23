@@ -1,8 +1,7 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Text } from 'react-native';
-
+import { BottomNavigation, BottomNavigationTab, Icon } from '@ui-kitten/components';
 
 import Carte from '../components/Carte';
 import DetailsLieu from '../components/DetailsLieu';
@@ -10,119 +9,64 @@ import Accueil from '../components/Accueil';
 import Search from '../components/Search';
 import AddLieu from '../components/AddLieu';
 
+const {Navigator, Screen} = createBottomTabNavigator();
+const MapNavigation = createStackNavigator();
 const SearchNavigation = createStackNavigator();
-const FavNavigation = createStackNavigator();
-const TabNavigation = createBottomTabNavigator();
 
-function carte() {
+const AccueilIcon = (props) => (
+  <Icon {...props} name='home' pack='fontawesome'/>
+);
+
+const MapIcon = (props) => (
+  <Icon {...props} name='map' pack='fontawesome'/>
+);
+
+const SearchIcon = (props) => (
+  <Icon {...props} name='search' pack='fontawesome'/>
+);
+
+const AddIcon = (props) => (
+  <Icon {...props} name='plus' pack='fontawesome'/>
+);
+
+const BottomTabBar = ({ navigation, state }) => (
+  <BottomNavigation
+    selectedIndex={state.index}
+    onSelect={index => navigation.navigate(state.routeNames[index])}>
+    <BottomNavigationTab title="Accueil" icon={AccueilIcon}/>
+    <BottomNavigationTab title="Carte" icon={MapIcon}/>
+    <BottomNavigationTab title="Search" icon={SearchIcon}/>
+    <BottomNavigationTab title="AddLieu" icon={AddIcon}/>
+  </BottomNavigation>
+);
+
+function map() {
   return (
-    <SearchNavigation.Navigator
-      initialRouteName="ViewCarte"
-    >
-      <SearchNavigation.Screen
-        name="ViewCarte"
-        component={Carte}
-        options={{ title: 'Carte' }}
-      />
-      <SearchNavigation.Screen
-        name="ViewDetailsLieu"
-        component={DetailsLieu}
-        options={{ title: 'Details du lieu' }}
-      />
-    </SearchNavigation.Navigator>
+    <MapNavigation.Navigator 
+      initialRouteName="ViewCarte" > 
+      <MapNavigation.Screen name="Carte" component={Carte} />
+      <MapNavigation.Screen name="Details" component={DetailsLieu}/>
+    </MapNavigation.Navigator>
   )
 };
 
 function search() {
   return (
-    <SearchNavigation.Navigator
-      initialRouteName="ViewSearch"
-    >
-      <SearchNavigation.Screen
-        name="ViewSearch"
-        component={Search}
-        options={{ title: 'Search' }}
-      />
+    <SearchNavigation.Navigator 
+      initialRouteName="ViewSearch" > 
+      <SearchNavigation.Screen name="Search" component={Search} />
+      <SearchNavigation.Screen name="Details" component={DetailsLieu}/>
     </SearchNavigation.Navigator>
   )
 };
 
-function accueil() {
-  return (
-    <FavNavigation.Navigator
-      initialRouteName="ViewAccueil"
-    >
-      <FavNavigation.Screen
-        name="ViewAccueil"
-        component={Accueil}
-        options={{ title: 'Accueil' }}
-      />
-    </FavNavigation.Navigator>
-  )
-};
+const TabNavigator = () => (
+  <Navigator tabBar={props => <BottomTabBar {...props} />}>
+    <Screen name="Accueil" component={Accueil} />
+    <Screen name="Map" component={map} options={{headerShown: false}}/>
+    <Screen name="Recherche" component={search} options={{headerShown: false}}/>
+    <Screen name="Nouveau lieu" component={AddLieu}/>
+  </Navigator>
+);
 
-function addLieu() {
-  return (
-    <FavNavigation.Navigator
-      initialRouteName="ViewAjout"
-    >
-      <FavNavigation.Screen
-        name="ViewAjout"
-        component={AddLieu}
-        options={{ title: 'Ajout d\'un lieu' }}
-      />
-    </FavNavigation.Navigator>
-  )
-};
-
-function RootStack() {
-  return (
-    <TabNavigation.Navigator
-      screenOptions={{
-        headerShown: false
-      }}>
-
-      <TabNavigation.Screen
-        name="Accueil"
-        component={accueil}
-        options={() => ({
-          tabBarIcon: ({ color }) => {
-            return <Text>Accueil</Text>;
-          }
-        })}
-      />
-
-      <TabNavigation.Screen
-        name="Carte"
-        component={carte}
-        options={() => ({
-          tabBarIcon: ({ color }) => {
-            return <Text>Carte</Text>;
-          }
-        })}
-      />
-
-      <TabNavigation.Screen
-        name="Search"
-        component={search}
-        options={() => ({
-          tabBarIcon: ({ color }) => {
-            return <Text>Search</Text>;
-          }
-        })}
-      /> 
-
-      <TabNavigation.Screen
-        name="Ajout"
-        component={addLieu}
-        options={() => ({
-          tabBarIcon: ({ color }) => {
-            return <Text>Ajout</Text>;
-          }
-        })}
-      /> 
-
-    </TabNavigation.Navigator>
-  )};
-
-export default RootStack;
+export default TabNavigator;

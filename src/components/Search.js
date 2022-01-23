@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Input, Layout, Select, SelectItem, Icon } from '@ui-kitten/components';
-import { View, StyleSheet, FlatList, Button } from 'react-native';
+import { Input, Layout, Select, SelectItem, Icon, List, Divider, Button } from '@ui-kitten/components';
+import { View, StyleSheet } from 'react-native';
 import Lieu from '../components/Lieu';
 import { getLieux } from '../data/RecupereData';
 
@@ -17,21 +17,7 @@ function getSelectValue(selectedIndexPaths, options) {
   }
 }
 
-function getSelectValue(selectedIndexPaths, options) {
-  if (selectedIndexPaths.length) {
-    // multiSelect
-    return selectedIndexPaths
-    .map((indexPath) => options[indexPath.row])
-    .join(', ');
-  } else {
-    // singleSelect
-    return options[selectedIndexPaths.row]
-  }
-}
-
-
-
-const Search = () => {
+const Search = ({ navigation }) => {
     
     // liste des lieux
     const [lieux, setLieux] = useState([]);
@@ -55,16 +41,21 @@ const Search = () => {
     }
 
     const SearchIcon = (props) => (
-      <Icon {...props} name='search-outline'/>
+      <Icon {...props} name='search' pack='fontawesome'/>
     );
 
     const TagsIcon = (props) => (
-      <Icon {...props} name='pricetags-outline'/>
+      <Icon {...props} name='tag' pack='fontawesome'/>
     );
 
     const VilleIcon = (props) => (
-      <Icon {...props} name='pin-outline'/>
+      <Icon {...props} name='pin'/>
     );
+
+     // pour passer a la page de details d'un lieu
+    const navigateToDetailsLieu = (lieuID) => {
+      navigation.navigate("Details", { lieuID });
+    };
 
     return (
       <React.Fragment>
@@ -111,22 +102,17 @@ const Search = () => {
             </Select>
           </View>
 
-          <View>
-            <Button
-              title='Rechercher'
-              onPress={searchLieu}
-            />
-          </View>
+          <Button onPress={searchLieu}>Rechercher</Button>
 
-          <View>
-            <FlatList
+          <List
+            style={styles.list}
+            ItemSeparatorComponent={Divider}
             data={lieux}
             keyExtractor={(item) => item.lieu.id.toString()}
             renderItem={({ item }) => (
-              <Lieu lieuxData={item.lieu}/>
+            <Lieu lieuxData={item.lieu} onClick={navigateToDetailsLieu} />
             )}
-          />
-        </View>
+        />
 
         </Layout>
       </React.Fragment>
@@ -140,7 +126,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 12,
-    marginTop: 16,
+    paddingVertical: 7,
   },
   input: {
     margin: 2,
