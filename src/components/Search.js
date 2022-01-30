@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import { Input, Layout, Select, SelectItem, Icon, List, Divider, Button } from '@ui-kitten/components';
+import React, { useState, useEffect } from 'react';
+import { Input, Layout, Select, SelectItem, Icon, List, Divider, Button, IndexPath } from '@ui-kitten/components';
 import { View, StyleSheet } from 'react-native';
 import Lieu from '../components/Lieu';
-import { getLieux } from '../data/RecupereData';
+import { getLieux, getVilles} from '../data/RecupereData';
+import {Picker} from '@react-native-picker/picker';
 
 
 function getSelectValue(selectedIndexPaths, options) {
@@ -21,10 +22,15 @@ const Search = ({ navigation }) => {
     
     // liste des lieux
     const [lieux, setLieux] = useState([]);
-    // terme de recherche
-    const [searchTerm, setSearchTerm] = useState('');
+    // terme de recherche  par nom
+    const [searchTermNom, setSearchTermNom] = useState('');
+    // terme de recherche par ville
+    const [searchTermVille, setSearchTermVille] = useState('');
+    // liste des villes
+    const [villeList, setVillesList] = useState([]);
+    // ville choisie
+    const [ville, setVille] = useState('');
 
-    const [ville, setVille] = useState([]);
     const [tags, setTags] = useState([]);
     const tagsList = ["Boire", "Manger", "Visiter"];
     const [km, setKm] = useState([]);
@@ -33,12 +39,27 @@ const Search = ({ navigation }) => {
     // recupere les lieux correspondants au terme de recherhce
     const searchLieu = async () => {
       try {
-        const jsonSearchResult = await getLieux(searchTerm);
+        const jsonSearchResult = await getLieux(searchTermNom, ville);
         setLieux(jsonSearchResult);
       } catch (error) {
         // TO DO
       }
     }
+
+    
+    const searchVilles = async () => {
+      try {
+        const jsonSearchResultVilles = await getVilles();
+        setVillesList(jsonSearchResultVilles);
+      } catch (error) {
+        // TO DO
+      }
+    }
+
+    useEffect(() => {
+      searchVilles();
+      console.log("liste ville == "+ JSON.stringify(villeList));
+    }, []); // Uniquement à l'initialisation
 
     const SearchIcon = (props) => (
       <Icon {...props} name='search' pack='fontawesome'/>
@@ -65,7 +86,7 @@ const Search = ({ navigation }) => {
             accessoryLeft={SearchIcon}
             placeholder='Chercher un lieu'
             // value={lieux}
-            onChangeText={(text) => setSearchTerm(text)}
+            onChangeText={(text) => setSearchTermNom(text)}
           />
 
           <Select
@@ -79,17 +100,21 @@ const Search = ({ navigation }) => {
               {tagsList.map((value) => 
                 <SelectItem title={value} key={value}/>
               )}          
-          </Select>       
+          </Select>  
+
+          <View>
+            <Picker
+              selectedValue={ville}
+              style={{ height: 50, width: 150 }}
+              onValueChange={(itemValue, itemIndex) => setVille(itemValue)}
+            >
+              {villeList.map(value=> 
+                <Picker.Item key={value} label={value} value={value}/>
+              )}
+            </Picker>
+          </View>
 
           <View style={styles.rowContainer}>
-            <Input
-              style={styles.inputRow}
-              accessoryLeft={VilleIcon}
-              placeholder='Ville'
-              // value={ville}
-              onChangeText={nextValue => setVille(nextValue)}
-            />
-
             <Select
               style={styles.selectRow}
               selectedIndex={km}
@@ -112,7 +137,7 @@ const Search = ({ navigation }) => {
             renderItem={({ item }) => (
             <Lieu lieuxData={item.lieu} onClick={navigateToDetailsLieu} />
             )}
-        />
+          />
 
         </Layout>
       </React.Fragment>
