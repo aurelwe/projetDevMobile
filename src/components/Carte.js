@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import MapView, { Marker } from 'react-native-maps';
 import { StyleSheet, Dimensions, Button } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
-import {Layout, List, Divider } from '@ui-kitten/components';
+import {Layout, List, Divider, TopNavigation, TopNavigationAction, Icon } from '@ui-kitten/components';
 
 import Lieu from '../components/Lieu';
 import { getLieux, getPositionActuelle } from '../data/RecupereData';
@@ -57,8 +57,22 @@ const Carte = ({ navigation }) => {
     navigation.navigate("Details", { lieuID });
   };
 
+  const AddIcon = (props) => (
+    <Icon {...props} name='plus' pack='fontawesome'/>
+  );
+
+  const navigateToAddLieu = () => {
+    navigation.navigate("Nouveau lieu");
+  };
+
+  const renderAddAction = () => (
+    <TopNavigationAction icon={AddIcon}/>
+  );
+
   return (
     <Layout style={styles.container}>
+
+        <TopNavigation onTouchEnd={navigateToAddLieu} accessoryRight={renderAddAction}/>
 
         <MapView style={styles.map}  
          initialRegion={positionActuelle} 

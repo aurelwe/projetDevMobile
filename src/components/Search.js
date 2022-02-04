@@ -108,31 +108,34 @@ const Search = ({ navigation }) => {
             // value={lieux}
             onChangeText={(text) => setSearchTermNom(text)}
           />
-
-          <View>
+        
+          <View style={styles.viewPicker}>
             <Picker
               selectedValue={ville}
-              style={{ height: 50, width: 150 }}
+              style={styles.picker}
               onValueChange={(itemValue, itemIndex) => setVille(itemValue)}
-            >
+              >
               {villeList.map(value=> 
                 <Picker.Item key={value} label={value} value={value}/>
               )}
             </Picker>
           </View>
-
+          
           <View style={styles.rowContainer}>
-            <SelectBox
-              label="Select tags"
-              options={tagsList}
-              selectedValues={tags}
-              onMultiSelect={onMultiChange()}
-              onTapClose={onMultiChange()}
-              isMulti
-            />
+            <View style={styles.viewSelect}>
+              <SelectBox
+                style={styles.selectRow}
+                options={tagsList}
+                selectedValues={tags}
+                onMultiSelect={onMultiChange()}
+                onTapClose={onMultiChange()}
+                isMulti
+              />
+            </View>
           </View>
 
           <View style={styles.rowContainer}>
+            
             <Select
               style={styles.selectRow}
               selectedIndex={km}
@@ -188,5 +191,25 @@ const styles = StyleSheet.create({
   selectRow: {
     margin: 2,
     flex: 1,
+  },
+  viewSelect: {
+    flex: 1,
+    marginTop: 10,
+    borderWidth: 1,
+    padding: 5,
+    borderRadius: 4,
+    backgroundColor: '#f0f7fe',
+    borderColor: 'lightgrey',
+    
+  },
+  viewPicker: {
+    borderColor: 'lightgrey',
+    backgroundColor: '#f0f7fe',
+    borderWidth: 1,
+    marginTop: 10,
+    borderRadius: 4
+  },
+  picker: {
+    color: "grey"
   }
 });

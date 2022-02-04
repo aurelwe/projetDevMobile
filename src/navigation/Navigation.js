@@ -1,7 +1,7 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { BottomNavigation, BottomNavigationTab, Icon } from '@ui-kitten/components';
+import { BottomNavigation, BottomNavigationTab, TopNavigation, TopNavigationAction, Icon } from '@ui-kitten/components';
 
 import Carte from '../components/Carte';
 import DetailsLieu from '../components/DetailsLieu';
@@ -29,6 +29,10 @@ const AddIcon = (props) => (
   <Icon {...props} name='plus' pack='fontawesome'/>
 );
 
+const renderAddAction = () => (
+  <TopNavigationAction icon={AddIcon}/>
+);
+
 const BottomTabBar = ({ navigation, state }) => (
   <BottomNavigation
     selectedIndex={state.index}
@@ -36,16 +40,17 @@ const BottomTabBar = ({ navigation, state }) => (
     <BottomNavigationTab title="Accueil" icon={AccueilIcon}/>
     <BottomNavigationTab title="Carte" icon={MapIcon}/>
     <BottomNavigationTab title="Search" icon={SearchIcon}/>
-    <BottomNavigationTab title="AddLieu" icon={AddIcon}/>
   </BottomNavigation>
 );
 
 function map() {
   return (
+    // <TopNavigation accessoryRight={renderAddAction}/>
     <MapNavigation.Navigator 
       initialRouteName="ViewCarte" > 
-      <MapNavigation.Screen name="Carte" component={Carte} />
+      <MapNavigation.Screen name="Carte" component={Carte} />           
       <MapNavigation.Screen name="Details" component={DetailsLieu}/>
+      <SearchNavigation.Screen name="Nouveau lieu" component={AddLieu}/>
     </MapNavigation.Navigator>
   )
 };
@@ -65,7 +70,6 @@ const TabNavigator = () => (
     <Screen name="Accueil" component={Accueil} />
     <Screen name="Map" component={map} options={{headerShown: false}}/>
     <Screen name="Recherche" component={search} options={{headerShown: false}}/>
-    <Screen name="Nouveau lieu" component={AddLieu}/>
   </Navigator>
 );
 

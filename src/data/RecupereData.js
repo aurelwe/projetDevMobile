@@ -66,7 +66,7 @@ export async function getVilles() {
     var lieux=[];
     // ajoute un champs vide pour la recherche dans leselect de la ville 
     // autre technique ?
-    lieux.push("");
+    lieux.push("Selectionnez une ville");
 
     // parcours le json pour lister les villes
     for (let value of dataLieux) {
