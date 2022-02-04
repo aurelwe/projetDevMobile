@@ -1,8 +1,13 @@
-import React, { useState } from 'react';
-import { Input, Layout, Select, SelectItem, Icon, List, Divider, Button } from '@ui-kitten/components';
+import React, { useState, useEffect } from 'react';
+import { Input, Layout, Select, SelectItem, Icon, List, Divider, Button, IndexPath } from '@ui-kitten/components';
 import { View, StyleSheet } from 'react-native';
 import Lieu from '../components/Lieu';
-import { getLieux } from '../data/RecupereData';
+import { getLieux, getVilles, getTags, getPositionActuelleVille} from '../data/RecupereData';
+import {Picker} from '@react-native-picker/picker';
+import MultiSelect from 'react-native-multiple-select';
+import SelectBox from 'react-native-multi-selectbox';
+import { xorBy } from 'lodash';
+
 
 
 function getSelectValue(selectedIndexPaths, options) {
@@ -21,24 +26,54 @@ const Search = ({ navigation }) => {
     
     // liste des lieux
     const [lieux, setLieux] = useState([]);
-    // terme de recherche
-    const [searchTerm, setSearchTerm] = useState('');
-
-    const [ville, setVille] = useState([]);
+    // terme de recherche  par nom
+    const [searchTermNom, setSearchTermNom] = useState('');
+    // liste des villes
+    const [villeList, setVillesList] = useState([]);
+    // ville choisie
+    const [ville, setVille] = useState('');
+    // liste des tags
+    const [tagsList, setTagsList] = useState([]);
+    // tags choisis
     const [tags, setTags] = useState([]);
-    const tagsList = ["Boire", "Manger", "Visiter"];
+
     const [km, setKm] = useState([]);
     const kmList = ["5 km", "10 km", "20 km", "30 km", "40 km", "+50 km"];
 
     // recupere les lieux correspondants au terme de recherhce
     const searchLieu = async () => {
       try {
-        const jsonSearchResult = await getLieux(searchTerm);
+        const jsonSearchResult = await getLieux(searchTermNom, ville, tags);
         setLieux(jsonSearchResult);
       } catch (error) {
         // TO DO
       }
     }
+    
+    // recupere la liste des villes
+    const searchVilles = async () => {
+      try {
+        const jsonSearchResultVilles = await getVilles();
+        setVillesList(jsonSearchResultVilles);
+      } catch (error) {
+        // TO DO
+      }
+    }
+
+    // recupere la liste des tags
+    const searchTags = async () => {
+      try {
+        const jsonSearchResultTags= await getTags();
+        setTagsList(jsonSearchResultTags);
+      } catch (error) {
+        // TO DO
+      }
+    }
+
+    useEffect(() => {
+      searchVilles();
+      searchTags();
+    }, []); // Uniquement à l'initialisation
 
     const SearchIcon = (props) => (
       <Icon {...props} name='search' pack='fontawesome'/>
@@ -57,6 +92,12 @@ const Search = ({ navigation }) => {
       navigation.navigate("Details", { lieuID });
     };
 
+   
+  
+    function onMultiChange() {
+      return (item) => setTags(xorBy(tags, [item]));
+    }
+
     return (
       <React.Fragment>
         <Layout style={styles.container} level='1'>
@@ -65,31 +106,33 @@ const Search = ({ navigation }) => {
             accessoryLeft={SearchIcon}
             placeholder='Chercher un lieu'
             // value={lieux}
-            onChangeText={(text) => setSearchTerm(text)}
+            onChangeText={(text) => setSearchTermNom(text)}
           />
 
-          <Select
-            style={styles.select}
-            accessoryLeft={TagsIcon}
-            multiSelect={true}
-            placeholder="Tags"
-            selectedIndex={tags}
-            onSelect={index => setTags(index)}
-            value={getSelectValue(tags, tagsList)}>
-              {tagsList.map((value) => 
-                <SelectItem title={value} key={value}/>
-              )}          
-          </Select>       
+          <View>
+            <Picker
+              selectedValue={ville}
+              style={{ height: 50, width: 150 }}
+              onValueChange={(itemValue, itemIndex) => setVille(itemValue)}
+            >
+              {villeList.map(value=> 
+                <Picker.Item key={value} label={value} value={value}/>
+              )}
+            </Picker>
+          </View>
 
           <View style={styles.rowContainer}>
-            <Input
-              style={styles.inputRow}
-              accessoryLeft={VilleIcon}
-              placeholder='Ville'
-              // value={ville}
-              onChangeText={nextValue => setVille(nextValue)}
+            <SelectBox
+              label="Select tags"
+              options={tagsList}
+              selectedValues={tags}
+              onMultiSelect={onMultiChange()}
+              onTapClose={onMultiChange()}
+              isMulti
             />
+          </View>
 
+          <View style={styles.rowContainer}>
             <Select
               style={styles.selectRow}
               selectedIndex={km}

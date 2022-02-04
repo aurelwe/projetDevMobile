@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import MapView, { Marker } from 'react-native-maps';
-import { StyleSheet, Dimensions } from 'react-native';
-import * as Location from 'expo-location';
+import { StyleSheet, Dimensions, Button } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import {Layout, List, Divider } from '@ui-kitten/components';
 
 import Lieu from '../components/Lieu';
-import { getLieux } from '../data/RecupereData';
+import { getLieux, getPositionActuelle } from '../data/RecupereData';
 
 
 const Carte = ({ navigation }) => {
@@ -15,6 +14,9 @@ const Carte = ({ navigation }) => {
   
   // position actuelle de l'utilisateur
   const [positionActuelle, setPosition] = useState(null);
+
+  // position actuelle de l'utilisateur
+  const [colorMarquer, setColor] = useState('red');
   
   // test au changement de page
   const isFocused = useIsFocused();
@@ -23,31 +25,31 @@ const Carte = ({ navigation }) => {
   const searchLieux = async () => {
       try {
         const dataSearchResult = await getLieux();
-        setLieux(dataSearchResult);
+        setLieux(dataSearchResult);   
       } catch (error) {
-  
+        // TO DO
       }
     }
-  
+
   // recupere la position actuelle de l'utilisateur
-  const getPositionActuelle = async () => {
+  const getPosition = async () => {
     try {
-      const positionActuelleUser = await Location.getCurrentPositionAsync({});
+      const dataSearchResultPosition = await getPositionActuelle();
       setPosition({
-        latitude: positionActuelleUser.coords.latitude,
-        longitude: positionActuelleUser.coords.longitude,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
-      });
+              latitude: dataSearchResultPosition.coords.latitude,
+              longitude: dataSearchResultPosition.coords.longitude,
+              latitudeDelta: 0.0922,
+              longitudeDelta: 0.0421,
+            });
     } catch (error) {
 
     }
-  }
+  }  
 
   // initialisation de la page
   useEffect(() => {
       searchLieux();
-      getPositionActuelle();
+      getPosition();
   },[isFocused]);
 
   // pour passer a la page de details d'un lieu
@@ -60,10 +62,12 @@ const Carte = ({ navigation }) => {
 
         <MapView style={styles.map}  
          initialRegion={positionActuelle} 
+         onRegionChangeComplete={(coordonneesDeplacement)=>{console.log(coordonneesDeplacement); }}
         >
           {lieux.map((listeLieux) => (   
             <Marker
               key={listeLieux.lieu.id}
+              pinColor={colorMarquer}
               coordinate= {{latitude: listeLieux.lieu.location.latitude, longitude: listeLieux.lieu.location.longitude}}
               title={listeLieux.lieu.name}
             />           
