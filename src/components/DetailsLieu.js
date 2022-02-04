@@ -1,7 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, ActivityIndicator, ScrollView  } from 'react-native';
+import { View, StyleSheet, ActivityIndicator } from 'react-native';
 import { getLieuDetails } from '../data/RecupereData';
 import { Layout, Text } from '@ui-kitten/components';
+
+// function tagIcons(tags){
+//   const icons = []
+//   for (let i = 0; i<= tags.size; i++) {
+//     if (tags[i] === "Boire un coup"){
+//      icons[i].push(<Icon name='cocktail' pack='fontawesome'/>)
+//     }
+//     if (tags[i] === "Manger"){
+//       icons[i].push(<Icon name='utensils' pack='fontawesome'/>)
+//     }
+//     if (tags[i] === "Visiter"){
+//       icons[i].push(<Icon name='camera' pack='fontawesome'/>)
+//     }
+//   }
+//   return icons
+// }
 
 const DetailsLieu = ({ route }) => {
 
@@ -22,6 +38,19 @@ const DetailsLieu = ({ route }) => {
       setIsError(true);
     }
   }
+  // const tags = []
+  // for (let i = 0; i<= lieu.tag.size; i++) {
+  //   if (tags[i] === "Boire un coup"){
+  //     tags.push(<Icon name='cocktail' pack='fontawesome'/>)
+  //   }
+  //   if (tags[i] === "Manger"){
+  //     tapGestureHandlerProps.push(<Icon name='utensils' pack='fontawesome'/>)
+  //   }
+  //   if (tags[i] === "Visiter"){
+  //     tags.push(<Icon name='camera' pack='fontawesome'/>)
+  //   }
+  // }
+
 
   const MangerIcon = (props) => (
     <Icon {...props} name='utensils' pack='fontawesome'/>
@@ -62,9 +91,10 @@ const DetailsLieu = ({ route }) => {
                 </Text>
 
                 <View style={styles.tag}>
-                  <Text>
-                    {lieu.tag}
-                  </Text>
+                  {/* {lieu.tag.map((item) => (
+                    tagIcons(item)
+                  ))} */}
+                  <Text>{lieu.tag}</Text>
                 </View>
               </React.Fragment>
             )
@@ -87,6 +117,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12, 
   },
   tag: {
-    marginTop: 30
+    
   }
 });

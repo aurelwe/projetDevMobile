@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Keyboard } from 'react-native';
 import { Input, Layout, Select, SelectItem, Icon, List, Divider, Button } from '@ui-kitten/components';
-
-import JSONDATA from '../data/data.json';
+import data from '../data/data.json'
 
 function getSelectValue(selectedIndexPaths, options) {
   if (selectedIndexPaths.length) {
@@ -37,12 +36,59 @@ const AddLieu = () => {
   // }); 
 }
 
+//ajoute le lieu qui vient d'être créé
+const addLieu = async () => {
+  console.log("lieu ajouté")
+
+  // const RNFS = require('react-native-fs')
+  // const path = RNFS.DocumentDirectoryPath + '/data.json'
+  // const myData = JSON.parse(data)
+  
+  // myData.push(data)
+
+  // const newData = {
+  //    "lieu": {
+  //     "id": 1,
+  //     "name": nom,
+  //     "description": description,
+  //     "tag": [
+  //         "Visiter"
+  //     ],
+  //     "location": {
+  //         "address": adresse,
+  //         "city": ville,
+  //         "zipcode": cp,
+  //         "latitude": 49.12044149204529, 
+  //         "longitude": 6.175840312986322
+  //     },
+  //     "country_name": "France"   
+  //   }
+  // } 
+
+  // RNFS.writeFile(data, newData, 'utf-8')
+  // console.log(data)
+  // myData.push(newData)
+  // data = JSON.stringify(myData)
+  // console.log(data)
+  // fs.writeFileSync('../data/data.json', data, 'utf-8')
+  // console.log(myData)
+  // myObject.push(newData);
+  // var newDataa = JSON.stringify(newData);
+  // myObject.push(newDataa)
+}
+
 useEffect(() => {
   newLieu();
 })
 
   const [tags, setTags] = useState([]);
   const tagsList = ["Boire", "Manger", "Visiter"];
+  const [nom, setNom] = useState([])
+  const [adresse, setAdresse] = useState([])
+  const [description, setDescritpion] = useState([])
+  const [note, setNote] = useState([])
+  const [ville, setVille] = useState([])
+  const [cp, setCp] = useState([])
 
   const TagsIcon = (props) => (
     <Icon {...props} name='tag' pack='fontawesome'/>
@@ -56,15 +102,6 @@ useEffect(() => {
     <Icon {...props} name='star' pack='fontawesome'/>
   );
 
-  //ajoute le lieu qui vient d'être créé
-  const addLieu = async () => {
-    try {
-      console.log("lieu ajouté")
-    } catch (error) {
-      // TO DO
-    }
-  }
-
    return (
 
     <React.Fragment>
@@ -72,18 +109,35 @@ useEffect(() => {
         <Input
           style={styles.input}
           placeholder='Nom du lieu'
+          onChangeText={(n) => setNom(n)}
         />
 
         <Input
           style={styles.input}
           accessoryLeft={VilleIcon}
           placeholder='Adresse'
+          onChangeText={(a) => setAdresse(a)}
         />
+        <View style={styles.rowContainer}>
+          <Input
+            style={styles.inputRow}
+            accessoryLeft={VilleIcon}
+            placeholder='Ville'
+            onChangeText={(v) => setVille(v)}
+          />
+          <Input
+            style={styles.inputRow}
+            placeholder='Code postal'
+            onChangeText={(cp) => setCp(cp)}
+          />
+        </View>
+        
         <Input
           style={styles.input}
           multiline={true}
           textStyle={{ minHeight: 64 }}
           placeholder='Description'
+          onChangeText={(d) => setDescritpion(d)}
         />
 
         <View style={styles.rowContainer}>
@@ -104,6 +158,7 @@ useEffect(() => {
             style={styles.inputRow}
             placeholder='Note'
             accessoryLeft={NoteIcon}
+            onChangeText={(rate) => setNote(rate)}
           />
         </View>
         <Button onPress={addLieu}>Ajouter</Button>

@@ -112,7 +112,7 @@ const Search = ({ navigation }) => {
             renderItem={({ item }) => (
             <Lieu lieuxData={item.lieu} onClick={navigateToDetailsLieu} />
             )}
-        />
+          />
 
         </Layout>
       </React.Fragment>
