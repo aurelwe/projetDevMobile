@@ -1,5 +1,18 @@
 {
-    "tagListe":["Visiter", "Manger", "Boire un coup"],
+    "tagListe":[
+        {
+            "item": "Visiter",
+            "id": 1
+          },
+          {
+            "item": "Manger",
+            "id": 2
+          },
+          {
+            "item": "Boire un coup",
+            "id": 3
+          }
+        ],
     "lieux": [
         {
             "lieu": {
@@ -16,7 +29,7 @@
                     "latitude": 49.12044149204529, 
                     "longitude": 6.175840312986322
                 },
-                "country_name": "France"   
+                "country_name": "France"
             }
         },
         {
