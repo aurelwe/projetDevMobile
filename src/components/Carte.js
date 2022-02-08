@@ -1,14 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import MapView, { Marker } from 'react-native-maps';
-import { StyleSheet, Dimensions, Button } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
+import { Icon } from "react-native-elements";
 import { useIsFocused } from '@react-navigation/native';
-import {Layout, List, Divider, TopNavigation, TopNavigationAction, Icon } from '@ui-kitten/components';
+import {Layout, List, Divider } from '@ui-kitten/components';
 
 import Lieu from '../components/Lieu';
 import { getLieux, getPositionActuelle } from '../data/RecupereData';
 
 
 const Carte = ({ navigation }) => {
+
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: 'Carte',
+      headerRight: () => (
+        <Icon name='plus' type='font-awesome' onPress={navigateToAddLieu}/>
+      ),
+    });
+  }, [navigation]);
+  
   // liste de lieux
   const [lieux, setLieux] = useState([]);
   
@@ -65,14 +76,14 @@ const Carte = ({ navigation }) => {
     navigation.navigate("Nouveau lieu");
   };
 
-  const renderAddAction = () => (
-    <TopNavigationAction icon={AddIcon}/>
-  );
+  // const renderAddAction = () => (
+  //   <TopNavigationAction icon={AddIcon}/>
+  // );
 
   return (
     <Layout style={styles.container}>
 
-        <TopNavigation onTouchEnd={navigateToAddLieu} accessoryRight={renderAddAction}/>
+        {/* <TopNavigation onTouchEnd={navigateToAddLieu} accessoryRight={renderAddAction}/> */}
 
         <MapView style={styles.map}  
          initialRegion={positionActuelle} 

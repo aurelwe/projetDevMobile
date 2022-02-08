@@ -1,13 +1,14 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { BottomNavigation, BottomNavigationTab, TopNavigation, TopNavigationAction, Icon } from '@ui-kitten/components';
+import { BottomNavigation, BottomNavigationTab, Icon } from '@ui-kitten/components';
 
 import Carte from '../components/Carte';
 import DetailsLieu from '../components/DetailsLieu';
 import Accueil from '../components/Accueil';
 import Search from '../components/Search';
 import AddLieu from '../components/AddLieu';
+import { Button } from 'react-native';
 
 const {Navigator, Screen} = createBottomTabNavigator();
 const MapNavigation = createStackNavigator();
@@ -29,9 +30,6 @@ const AddIcon = (props) => (
   <Icon {...props} name='plus' pack='fontawesome'/>
 );
 
-const renderAddAction = () => (
-  <TopNavigationAction icon={AddIcon}/>
-);
 
 const BottomTabBar = ({ navigation, state }) => (
   <BottomNavigation
@@ -47,8 +45,8 @@ function map() {
   return (
     // <TopNavigation accessoryRight={renderAddAction}/>
     <MapNavigation.Navigator 
-      initialRouteName="ViewCarte" > 
-      <MapNavigation.Screen name="Carte" component={Carte} />           
+      initialRouteName="ViewCarte"> 
+      <MapNavigation.Screen name="Carte" component={Carte}/>           
       <MapNavigation.Screen name="Details" component={DetailsLieu}/>
       <SearchNavigation.Screen name="Nouveau lieu" component={AddLieu}/>
     </MapNavigation.Navigator>
@@ -68,7 +66,7 @@ function search() {
 const TabNavigator = () => (
   <Navigator tabBar={props => <BottomTabBar {...props} />}>
     <Screen name="Accueil" component={Accueil} />
-    <Screen name="Map" component={map} options={{headerShown: false}}/>
+    <Screen name="Map" component={map} options={{headerShown: false }} />
     <Screen name="Recherche" component={search} options={{headerShown: false}}/>
   </Navigator>
 );
