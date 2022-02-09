@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, ActivityIndicator } from 'react-native';
-import { getLieuDetails } from '../data/RecupereData';
-import { Layout, Text } from '@ui-kitten/components';
+import { getLieuDetails, deleteLieu } from '../data/RecupereData';
+import { Layout, Text, Button } from '@ui-kitten/components';
 
 // function tagIcons(tags){
 //   const icons = []
@@ -19,7 +19,7 @@ import { Layout, Text } from '@ui-kitten/components';
 //   return icons
 // }
 
-const DetailsLieu = ({ route }) => {
+const DetailsLieu = ({ route, navigation }) => {
 
   const [isLoading, setIsLoading] = useState(true);
   const [lieu, setLieu] = useState(null);
@@ -64,26 +64,42 @@ const DetailsLieu = ({ route }) => {
     <Icon {...props} name='camera' pack='fontawesome'/>
   );
 
+  // supprimer un lieu
+  const supprimerLieu = () => {
+    deleteLieu(route.params.lieuID);
+    navigateToCarte();
+  }
+
+  // pour passer a la carte apres la suppression
+  const navigateToCarte = () => {
+    navigation.navigate("Carte");
+  };
+
 
   return (
     <Layout style={styles.container}>
       {isError ?
-        (<DisplayError message='Impossible de récupérer les données du restaurants' />) :
+        (<DisplayError message='Impossible de récupérer les données du lieu' />) :
         (isLoading ?   
           (<View style={styles.containerLoading}>
             <ActivityIndicator size="large" />
           </View>
           ) : (
               <React.Fragment>
+                <View>
+                  <Text>
+                    {lieu.name}
+                  </Text>
+                </View>
                 <View style={styles.location}>
                   <Text>
                     {lieu.location.address}
                   </Text>
                   <Text>
-                    {lieu.location.city}
+                    {lieu.location.zipcode}{lieu.location.city}
                   </Text>
                   <Text>
-                    {lieu.location.zip}
+                    {lieu.country_name}
                   </Text>
                 </View>
                 <Text>
@@ -91,11 +107,10 @@ const DetailsLieu = ({ route }) => {
                 </Text>
 
                 <View style={styles.tag}>
-                  {/* {lieu.tag.map((item) => (
-                    tagIcons(item)
-                  ))} */}
                   <Text>{lieu.tag}</Text>
                 </View>
+                <Button onPress={supprimerLieu}>Supprimer</Button>
+
               </React.Fragment>
             )
         )

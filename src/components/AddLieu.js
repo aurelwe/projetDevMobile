@@ -1,94 +1,75 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Keyboard } from 'react-native';
-import { Input, Layout, Select, SelectItem, Icon, List, Divider, Button } from '@ui-kitten/components';
-import data from '../data/data.json'
+import { View, StyleSheet, Keyboard, Alert } from 'react-native';
+import { Input, Layout, Icon, Button } from '@ui-kitten/components';
+import { addLieu, getTags } from '../data/RecupereData';
+import SelectBox from 'react-native-multi-selectbox';
+import { xorBy } from 'lodash';
+import Toast from 'react-native-root-toast';
 
-function getSelectValue(selectedIndexPaths, options) {
-  if (selectedIndexPaths.length) {
-    // multiSelect
-    return selectedIndexPaths
-    .map((indexPath) => options[indexPath.row])
-    .join(', ');
-  } else {
-    // singleSelect
-    return options[selectedIndexPaths.row]
-  }
-}
+const AddLieu  = () => {
 
-
-const AddLieu = () => {
-    
-  const newLieu = async () => {
-    
-  //   const data = fs.readFileSync('../data/data.json');
-  //   const myObject= JSON.parse(data);
-
-  //   const newData = {
-  //     "country": "England"
-  // } 
-  // myObject.push(newData);
-  // var newDataa = JSON.stringify(myObject);
-  // fs.writeFile('data.json', newDataa, err => {
-  //     // error checking
-  //     if(err) throw err;
-      
-  //     console.log("New data added");
-  // }); 
-}
-
-//ajoute le lieu qui vient d'être créé
-const addLieu = async () => {
-  console.log("lieu ajouté")
-
-  // const RNFS = require('react-native-fs')
-  // const path = RNFS.DocumentDirectoryPath + '/data.json'
-  // const myData = JSON.parse(data)
-  
-  // myData.push(data)
-
-  // const newData = {
-  //    "lieu": {
-  //     "id": 1,
-  //     "name": nom,
-  //     "description": description,
-  //     "tag": [
-  //         "Visiter"
-  //     ],
-  //     "location": {
-  //         "address": adresse,
-  //         "city": ville,
-  //         "zipcode": cp,
-  //         "latitude": 49.12044149204529, 
-  //         "longitude": 6.175840312986322
-  //     },
-  //     "country_name": "France"   
-  //   }
-  // } 
-
-  // RNFS.writeFile(data, newData, 'utf-8')
-  // console.log(data)
-  // myData.push(newData)
-  // data = JSON.stringify(myData)
-  // console.log(data)
-  // fs.writeFileSync('../data/data.json', data, 'utf-8')
-  // console.log(myData)
-  // myObject.push(newData);
-  // var newDataa = JSON.stringify(newData);
-  // myObject.push(newDataa)
-}
-
-useEffect(() => {
-  newLieu();
-})
 
   const [tags, setTags] = useState([]);
-  const tagsList = ["Boire", "Manger", "Visiter"];
-  const [nom, setNom] = useState([])
-  const [adresse, setAdresse] = useState([])
-  const [description, setDescritpion] = useState([])
-  const [note, setNote] = useState([])
-  const [ville, setVille] = useState([])
-  const [cp, setCp] = useState([])
+  const [tagsList, setTagsList] = useState([]);
+  const [name, setNom] = useState("");
+  const [adress, setAdresse] = useState("");
+  const [description, setDescritpion] = useState("");
+  const [note, setNote] = useState([]);
+  const [city, setVille] = useState("");
+  const [zipCode, setCp] = useState("");
+  const [country, setCounrty] = useState("");
+  const [id, setId] = useState("5");
+
+  // recupere la liste des tags
+  const searchTags = async () => {
+    try {
+      const jsonSearchResultTags= await getTags();
+      setTagsList(jsonSearchResultTags);
+    } catch (error) {
+      // TO DO
+    }
+  }
+
+  
+  // ajoute le nouveau lieu
+  const addNewLieu = () => {
+
+    // verification des champs
+    if(isNaN(zipCode) || zipCode.trim() ==0)
+    {
+      Alert.alert("Le code postal est obligatoire et doit comporter uniquement des chiffres");
+    }
+    else if (name.trim() ==0) { 
+      Alert.alert('Le nom est obligatoire');
+    }
+    else if (adress.trim() ==0) {
+      Alert.alert('L adresse est obligatoire');
+    }
+    else if (city.trim() ==0) {
+      Alert.alert('La ville est obligatoire');
+    }
+    else if (country.trim() ==0) {
+      Alert.alert('Le pays est obligatoire');
+    }
+    else if (tags.length == 0) {
+      Alert.alert('Les catégories sont obligatoires');
+    }
+    else{
+      setId(id+1);
+      addLieu(id, name, description, adress, city, zipCode, country, tags);
+      let toast = Toast.show('Restaurant ajouté aux favoris', {
+        duration: Toast.durations.LONG,
+      });
+    } 
+  }
+
+  useEffect(() => {
+    searchTags();
+  }, []); // Uniquement à l'initialisation
+
+  function onMultiChange() {
+    return (item) => setTags(xorBy(tags, [item]));
+  }
 
   const TagsIcon = (props) => (
     <Icon {...props} name='tag' pack='fontawesome'/>
@@ -131,6 +112,14 @@ useEffect(() => {
             onChangeText={(cp) => setCp(cp)}
           />
         </View>
+        <View style={styles.rowContainer}>
+          <Input
+            style={styles.inputRow}
+            accessoryLeft={VilleIcon}
+            placeholder='Pays'
+            onChangeText={(c) => setCounrty(c)}
+          />
+        </View>
         
         <Input
           style={styles.input}
@@ -141,19 +130,16 @@ useEffect(() => {
         />
 
         <View style={styles.rowContainer}>
-          <Select
-            style={styles.selectRow}
-            accessoryLeft={TagsIcon}
-            multiSelect={true}
-            placeholder="Tags"
-            selectedIndex={tags}
-            onSelect={index => setTags(index)}
-            value={getSelectValue(tags, tagsList)}>
-              {tagsList.map((value) => 
-                <SelectItem title={value} key={value}/>
-              )}          
-          </Select> 
-
+            <SelectBox
+              label="Choisir une catégorie "
+              options={tagsList}
+              selectedValues={tags}
+              onMultiSelect={onMultiChange()}
+              onTapClose={onMultiChange()}
+              isMulti
+            />
+            </View>
+           <View style={styles.rowContainer}>
           <Input
             style={styles.inputRow}
             placeholder='Note'
@@ -161,7 +147,7 @@ useEffect(() => {
             onChangeText={(rate) => setNote(rate)}
           />
         </View>
-        <Button onPress={addLieu}>Ajouter</Button>
+        <Button onPress={addNewLieu}>Ajouter</Button>
 
       </Layout>
     </React.Fragment>

@@ -18,7 +18,7 @@
             "lieu": {
                 "id": 1,
                 "name": "Cathédrale",
-                "description": "blabla",
+                "description": "La cathédrale Saint-Étienne de Metz est la cathédrale catholique du diocèse de Metz, dans le département français de la Moselle en région Grand Est. Si sa construction s'étend sur trois siècles, à partir de 1220, la cathédrale présente une certaine homogénéité de style : les critères stylistiques furent respectés à chaque campagne de construction. La cathédrale de Metz est non seulement la cathédrale de France ayant la plus grande surface vitrée, près de 6 500 m2, mais également celle qui présente les plus grandes verrières gothiques d’Europe. Quant à la hauteur de ses voûtes, elle n'est surpassée en France que par les cathédrales de Beauvais (inachevée) et d'Amiens.",
                 "tag": [
                     "Visiter"
                 ],
@@ -36,10 +36,10 @@
             "lieu": {
                 "id": 2,
                 "name": "Centre Pompidou",
-                "description": "miam miam",
+                "description": "Le Centre Pompidou-Metz (CPM) est un établissement public de coopération culturelle2 d’art situé à Metz, entre le parc de la Seille et la gare. Sa construction est réalisée dans le cadre de l’opération d’aménagement du quartier de l’Amphithéâtre. Créé en 2006, le Centre Pompidou-Metz est l'un des musées français les plus visités hors de Paris3,4, du fait notamment de sa proximité avec l'Allemagne, le Luxembourg et la Belgique5.",
                 "tag": [
-                    "Manger",
-                    "Boire un coup"
+                    "Boire un coup",
+                    "Visiter"
                 ],
                 "location": {
                     "address": "1 Parv. des Droits de l'Homme",
@@ -55,10 +55,11 @@
             "lieu": {
                 "id": 3,
                 "name": "Tour Eiffel",
-                "description": "c'est beau",
+                "description": "La tour Eiffel Écouter est une tour de fer puddlé de 324 mètres de hauteur (avec antennes)o 1 située à Paris, à l’extrémité nord-ouest du parc du Champ-de-Mars en bordure de la Seine dans le 7e arrondissement. Son adresse officielle est 5, avenue Anatole-France. Construite en deux ans par Gustave Eiffel et ses collaborateurs pour l'Exposition universelle de Paris de 1889, célébrant le centenaire de la Révolution française, et initialement nommée « tour de 300 mètres », elle est devenue le symbole de la capitale française et un site touristique de premier plan : il s’agit du troisième site culturel français payant le plus visité en 2015, avec 5,9 millions de visiteurs en 20162. Depuis son ouverture au public, elle a accueilli plus de 300 millions de visiteurs3.",
                 "tag": [
                     "Visiter",
-                    "Manger"
+                    "Manger",
+                    "Boire un coup"
                 ],
                 "location": {
                     "address": "Champ de Mars, 5 Av. Anatole France",
@@ -66,6 +67,24 @@
                     "zipcode": "75007",
                     "latitude": 48.85931336636904,
                     "longitude": 2.2967202138484897
+                },
+                "country_name": "France"
+            }
+        },
+        {
+            "lieu": {
+                "id": 4,
+                "name": "Au Petit Louis",
+                "description": "Restauant à Metz",
+                "tag": [
+                    "Manger"
+                ],
+                "location": {
+                    "address": "3 avenue de Lattre de Tassigny",
+                    "city": "Metz",
+                    "zipcode": "57000",
+                    "latitude": 49.11006531276558, 
+                    "longitude": 6.166784055313908
                 },
                 "country_name": "France"
             }

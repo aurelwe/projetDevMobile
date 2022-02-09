@@ -17,20 +17,27 @@ const Carte = ({ navigation }) => {
 
   // position actuelle de l'utilisateur
   const [colorMarquer, setColor] = useState('red');
+
+  const [isRefreshing, setIsRefreshing] = useState(false);
   
   // test au changement de page
   const isFocused = useIsFocused();
 
   // recherche tous les lieux enregistrés
   const searchLieux = async () => {
+    setIsRefreshing(true);
       try {
         const dataSearchResult = await getLieux();
-        setLieux(dataSearchResult);   
+        setLieux(dataSearchResult);
       } catch (error) {
         // TO DO
       }
+      setIsRefreshing(false);
     }
 
+    const searchRestaurants = () => {
+      searchLieux([], 0);
+    };
   // recupere la position actuelle de l'utilisateur
   const getPosition = async () => {
     try {
@@ -50,7 +57,7 @@ const Carte = ({ navigation }) => {
   useEffect(() => {
       searchLieux();
       getPosition();
-  },[isFocused]);
+  },[]);
 
   // pour passer a la page de details d'un lieu
   const navigateToDetailsLieu = (lieuID) => {
@@ -67,7 +74,7 @@ const Carte = ({ navigation }) => {
           {lieux.map((listeLieux) => (   
             <Marker
               key={listeLieux.lieu.id}
-              pinColor={colorMarquer}
+              pinColor={"blue"}
               coordinate= {{latitude: listeLieux.lieu.location.latitude, longitude: listeLieux.lieu.location.longitude}}
               title={listeLieux.lieu.name}
             />           
@@ -82,6 +89,8 @@ const Carte = ({ navigation }) => {
             renderItem={({ item }) => (
             <Lieu lieuxData={item.lieu} onClick={navigateToDetailsLieu} />
             )}
+            refreshing={isRefreshing}
+            onRefresh={searchRestaurants}
         />
 
     </Layout>
