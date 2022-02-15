@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import MapView, { Marker } from 'react-native-maps';
-import { StyleSheet, Dimensions, Button } from 'react-native';
+import { StyleSheet, Dimensions, Button, Text, TouchableOpacity } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import {Layout, List, Divider } from '@ui-kitten/components';
 
 import Lieu from '../components/Lieu';
-import { getLieux, getPositionActuelle } from '../data/RecupereData';
+import { getPositionActuelle } from '../data/RecupereData';
+import { connect, useSelector } from 'react-redux';
 
 
-const Carte = ({ navigation }) => {
+
+
+const Carte = ({ navigation, allLieux }) => {
   // liste de lieux
   const [lieux, setLieux] = useState([]);
   
@@ -27,17 +30,14 @@ const Carte = ({ navigation }) => {
   const searchLieux = async () => {
     setIsRefreshing(true);
       try {
-        const dataSearchResult = await getLieux();
-        setLieux(dataSearchResult);
+        setLieux(allLieux);
+        console.log("SET LIEUX CARTE ===="+  JSON.stringify(lieux));
       } catch (error) {
         // TO DO
       }
       setIsRefreshing(false);
     }
-
-    const searchRestaurants = () => {
-      searchLieux([], 0);
-    };
+    
   // recupere la position actuelle de l'utilisateur
   const getPosition = async () => {
     try {
@@ -53,16 +53,28 @@ const Carte = ({ navigation }) => {
     }
   }  
 
+  const amIaFavRestaurant = (lieuID) => {
+    if (allLieux.findIndex(i => i === lieuID) !== -1) {
+      return true;
+    }
+    return false;
+  };
+
   // initialisation de la page
   useEffect(() => {
       searchLieux();
       getPosition();
-  },[]);
+  },[allLieux]);
 
   // pour passer a la page de details d'un lieu
   const navigateToDetailsLieu = (lieuID) => {
-    navigation.navigate("Details", { lieuID });
+    navigation.navigate("Details", {lieuID});
   };
+
+  // const renderItem = ({ item }) => (
+  //   console.log("ITEM ="+ (item))
+  //   // <Lieu lieuxData={item} onClick={navigateToDetailsLieu} />
+  // );
 
   return (
     <Layout style={styles.container}>
@@ -71,14 +83,14 @@ const Carte = ({ navigation }) => {
          initialRegion={positionActuelle} 
          onRegionChangeComplete={(coordonneesDeplacement)=>{console.log(coordonneesDeplacement); }}
         >
-          {lieux.map((listeLieux) => (   
+          {/* {lieux.map((listeLieux) => (   
             <Marker
               key={listeLieux.lieu.id}
               pinColor={"blue"}
               coordinate= {{latitude: listeLieux.lieu.location.latitude, longitude: listeLieux.lieu.location.longitude}}
               title={listeLieux.lieu.name}
             />           
-          ))}
+          ))} */}
         </MapView>
 
         <List
@@ -87,17 +99,23 @@ const Carte = ({ navigation }) => {
             data={lieux}
             keyExtractor={(item) => item.lieu.id.toString()}
             renderItem={({ item }) => (
-            <Lieu lieuxData={item.lieu} onClick={navigateToDetailsLieu} />
-            )}
+              // console.log("ITEM ="+ JSON.stringify(item))
+              <Lieu lieuxData={item} onClick={navigateToDetailsLieu} />
+            )}           
             refreshing={isRefreshing}
-            onRefresh={searchRestaurants}
+            onRefresh={searchLieux}
         />
-
-    </Layout>
+     </Layout>
   );
 };
 
-export default Carte;
+const mapStateToProps = (state) => {
+  return {
+    allLieux: state.ajoutLieuxID
+  }
+}
+
+export default connect(mapStateToProps)(Carte);
 
 const styles = StyleSheet.create({
   container: {

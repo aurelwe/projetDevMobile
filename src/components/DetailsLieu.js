@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, ActivityIndicator } from 'react-native';
-import { getLieuDetails, deleteLieu } from '../data/RecupereData';
 import { Layout, Text, Button } from '@ui-kitten/components';
+import { connect } from 'react-redux';
+import Toast from 'react-native-root-toast';
 
 // function tagIcons(tags){
 //   const icons = []
@@ -19,38 +20,31 @@ import { Layout, Text, Button } from '@ui-kitten/components';
 //   return icons
 // }
 
-const DetailsLieu = ({ route, navigation }) => {
+const DetailsLieu = ({ route, navigation, allLieux, dispatch }) => {
 
-  const [isLoading, setIsLoading] = useState(true);
-  const [lieu, setLieu] = useState(null);
+  const [lieuDetails, setLieu] = useState([]);
   const [isError, setIsError] = useState(false);
 
-  useEffect(() => {
-    requestLieu();
-  }, []); // Uniquement à l'initialisation
-
-  const requestLieu = async () => {
+  // recupere les details du lieu correspondant
+  const requestLieu =  async () => {
     try {
-      const jsonLieuResult = await getLieuDetails(route.params.lieuID);
-      setLieu(jsonLieuResult);
-      setIsLoading(false);
+      // filtre par rapport a l'id du lieu
+      const lieuId = allLieux.ajoutLieuxID.filter(item => item.lieu.id == route.params.lieuID);
+      const mapLieu = lieuId.map(element => element.lieu);
+      
+      mapLieu.forEach(function (lieu) {
+        setLieu(lieu);
+      });
+
+      console.log("LIEU DETAILS ============" + JSON.stringify(lieuDetails));
     } catch (error) {
-      setIsError(true);
+        setIsError(true); 
     }
   }
-  // const tags = []
-  // for (let i = 0; i<= lieu.tag.size; i++) {
-  //   if (tags[i] === "Boire un coup"){
-  //     tags.push(<Icon name='cocktail' pack='fontawesome'/>)
-  //   }
-  //   if (tags[i] === "Manger"){
-  //     tapGestureHandlerProps.push(<Icon name='utensils' pack='fontawesome'/>)
-  //   }
-  //   if (tags[i] === "Visiter"){
-  //     tags.push(<Icon name='camera' pack='fontawesome'/>)
-  //   }
-  // }
-
+  
+  useEffect(() => {
+    requestLieu();
+  },[allLieux.ajoutLieuxID]); // Uniquement à l'initialisation
 
   const MangerIcon = (props) => (
     <Icon {...props} name='utensils' pack='fontawesome'/>
@@ -66,7 +60,7 @@ const DetailsLieu = ({ route, navigation }) => {
 
   // supprimer un lieu
   const supprimerLieu = () => {
-    deleteLieu(route.params.lieuID);
+    // deleteLieu(route.params.lieuID);
     navigateToCarte();
   }
 
@@ -75,51 +69,85 @@ const DetailsLieu = ({ route, navigation }) => {
     navigation.navigate("Carte");
   };
 
+     // On pourrait définir les actions dans un fichier à part
+     const saveLieu = async () => {
+      const action = { type: 'ADD_LIEUX', value: route.params.lieuID };
+      dispatch(action);
+      let toast = Toast.show('lieu ajouté ', {
+        duration: Toast.durations.LONG,
+      });
+    }
+
+  const displaySaveRestaurant = () => {
+    // if (allLieux.findIndex(i => i === route.params.lieuID) !== -1) {
+    //   // Le restaurant est sauvegardé
+    //   return (
+    //     <Button >Retirer des favoris</Button>
+    //   );
+    // }
+    // // Le restaurant n'est pas sauvegardé
+    // return (
+    //   <Button onPress={saveLieu}>Ajouter aux favoris</Button>
+    // );
+  }
+
+  
+  const deleteLieu = async () => {
+    const action = { type: 'DELETE_LIEU', value: route.params.lieuID };
+    dispatch(action);
+  }
+
 
   return (
     <Layout style={styles.container}>
-      {isError ?
-        (<DisplayError message='Impossible de récupérer les données du lieu' />) :
-        (isLoading ?   
-          (<View style={styles.containerLoading}>
-            <ActivityIndicator size="large" />
-          </View>
-          ) : (
+      {
+        (
               <React.Fragment>
                 <View>
                   <Text>
-                    {lieu.name}
+                    {lieuDetails.name}
                   </Text>
                 </View>
-                <View style={styles.location}>
-                  <Text>
-                    {lieu.location.address}
+                <View>
+                  {/* <Text>
+                    {lieuDetails.location.address}
+                  </Text> */}
+                  {/* <Text>
+                    {lieuDetails.location.zipcode}{lieuDetails.location.city}
                   </Text>
                   <Text>
-                    {lieu.location.zipcode}{lieu.location.city}
-                  </Text>
-                  <Text>
-                    {lieu.country_name}
-                  </Text>
+                    {lieuDetails.country_name}
+                  </Text> */}
                 </View>
                 <Text>
-                  {lieu.description}
+                  {lieuDetails.description}
                 </Text>
 
                 <View style={styles.tag}>
-                  <Text>{lieu.tag}</Text>
+                  {/* <Text>{lieuDetails.tag}</Text> */}
                 </View>
-                <Button onPress={supprimerLieu}>Supprimer</Button>
+                {/* <Button onPress={supprimerLieu}>Supprimer</Button> */}
+                <Button onPress={deleteLieu}>Supprimer</Button>
+                
+
+                {/* {displaySaveRestaurant()} */}
 
               </React.Fragment>
             )
-        )
+        
       }
-    </Layout>
+    </Layout> 
   );
 };
 
-export default DetailsLieu;
+const mapStateToProps = (state) => {
+  return {
+    allLieux: state
+  }
+}
+
+export default connect(mapStateToProps)(DetailsLieu);
+
 
 const styles = StyleSheet.create({
   containerLoading: {

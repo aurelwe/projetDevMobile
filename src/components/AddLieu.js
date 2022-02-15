@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Keyboard, Alert } from 'react-native';
 import { Input, Layout, Icon, Button } from '@ui-kitten/components';
-import { addLieu, getTags } from '../data/RecupereData';
 import SelectBox from 'react-native-multi-selectbox';
 import { xorBy } from 'lodash';
+import { connect } from 'react-redux';
 import Toast from 'react-native-root-toast';
 
-const AddLieu  = () => {
+
+const AddLieu  = ({ route, allLieux, dispatch}) => {
 
 
   const [tags, setTags] = useState([]);
@@ -18,21 +19,35 @@ const AddLieu  = () => {
   const [city, setVille] = useState("");
   const [zipCode, setCp] = useState("");
   const [country, setCounrty] = useState("");
-  const [id, setId] = useState("5");
+  const [id, setId] = useState(0);
+
+  const [lieux, setLieux] = useState([]);
+
+  
 
   // recupere la liste des tags
   const searchTags = async () => {
     try {
-      const jsonSearchResultTags= await getTags();
-      setTagsList(jsonSearchResultTags);
+      setTagsList(allLieux.tagListe);
+      console.log("All LIEUX +++++" , tagsList);
     } catch (error) {
       // TO DO
     }
   }
 
+  // const searchTags = async () => {
+  //   try {
+  //     const jsonSearchResultTags= await getTags();
+  //     setTagsList(jsonSearchResultTags);
+  //     console.log("All LIEUX +++++" , tagsList);
+  //   } catch (error) {
+  //     // TO DO
+  //   }
+  // }
+
   
-  // ajoute le nouveau lieu
-  const addNewLieu = () => {
+  // verification des champs du formulaire
+  const verificationFormulaire = () => {
 
     // verification des champs
     if(isNaN(zipCode) || zipCode.trim() ==0)
@@ -55,17 +70,12 @@ const AddLieu  = () => {
       Alert.alert('Les catégories sont obligatoires');
     }
     else{
-      setId(id+1);
-      addLieu(id, name, description, adress, city, zipCode, country, tags);
-      let toast = Toast.show('Restaurant ajouté aux favoris', {
-        duration: Toast.durations.LONG,
-      });
+      sauvegarderLieu();
+     
     } 
   }
 
-  useEffect(() => {
-    searchTags();
-  }, []); // Uniquement à l'initialisation
+  
 
   function onMultiChange() {
     return (item) => setTags(xorBy(tags, [item]));
@@ -82,6 +92,57 @@ const AddLieu  = () => {
   const NoteIcon = (props) => (
     <Icon {...props} name='star' pack='fontawesome'/>
   );
+  
+  // recupere l'id courant et set le nouvel id
+  const getId = async () => {
+    // si allLieux ne contient pas de lieu donc vide
+    if(Object.keys(allLieux.ajoutLieuxID).length == 0){
+      setId(id+1);
+    }
+    // sinon si il existe des lieux
+    else if (Object.keys(allLieux.ajoutLieuxID).length > 0){
+      // on recupere le plus grand id qu'il existe
+      var dernierID = Math.max(...allLieux.ajoutLieuxID.map(item => item.lieu.id));
+      // et id = plus grand id + 1
+      setId(dernierID+1);
+    }
+  };
+
+  // sauvegarde un nouveau lieu
+  const sauvegarderLieu = async () => {
+    // construction du nouveau lieu
+    const data = {
+      "lieu": {
+        "id": id,
+        "name": name,
+        "description": description,
+        "tag": tags,
+        "location": {
+        "address": adress,
+        "city": city,
+        "zipcode": zipCode,
+        "latitude": 49.12122366832059, 
+        "longitude": 6.164740424626361
+        },
+        "country_name": country
+      }
+    }
+    // sauvegarde redux
+    const action = { type: 'ADD_LIEUX', data};
+    dispatch(action);
+    // sauvegarde les lieux dans la variable
+    setLieux(allLieux.ajoutLieuxID);
+    // notification que lieu bien enregistre
+    let toast = Toast.show('Le lieu est bien sauvegardé', {
+    duration: Toast.durations.LONG,
+    });
+  }
+
+  useEffect(() => {
+    searchTags();
+    getId();
+  }, [lieux]); // quand la liste des lieux change
+  
 
    return (
 
@@ -139,15 +200,16 @@ const AddLieu  = () => {
               isMulti
             />
             </View>
-           <View style={styles.rowContainer}>
+           {/* <View style={styles.rowContainer}>
           <Input
             style={styles.inputRow}
             placeholder='Note'
             accessoryLeft={NoteIcon}
             onChangeText={(rate) => setNote(rate)}
           />
-        </View>
-        <Button onPress={addNewLieu}>Ajouter</Button>
+        </View> */}
+
+        <Button onPress={verificationFormulaire}>Ajouter le lieu</Button>
 
       </Layout>
     </React.Fragment>
@@ -155,8 +217,14 @@ const AddLieu  = () => {
   );
 }
 
+const mapStateToProps = (state) => {
+  return {
+    allLieux: state
+  }
+}
 
-export default AddLieu;
+export default connect(mapStateToProps)(AddLieu);
+
 
 const styles = StyleSheet.create({
   container: {
