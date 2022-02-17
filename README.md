@@ -1,17 +1,17 @@
-Page de recherche d’un lieu enregistré
+Page de recherche d’un lieu enregistré:
 L’utilisateur peut effectuer une recherche par:
 ● location (parmi la liste des villes des enregistrement OU en utilisant la position du téléphone) + rayon
 Par défaut, la liste contient tous les enregistrements. Les résultats peuvent être triés par distance ou par date d’ajout.
 
-Page carte
+Page carte:
 L’utilisateur doit être capable d’identifier la catégorie du lieu en fonction du marqueur.
 La liste contient uniquement les lieux présents sur la carte (dans la vue). Si l’utilisateur déplace la vue de la carte, cette liste est mise à jour.
 Un bouton est présent sur chaque entrée de la liste pour centrer la vue de la carte sur la position du lieu en question.
 
-Ajouter un lieu
+Ajouter un lieu:
 La location peut être saisie en utilisant la position de l’utilisateur
 
-Page d’un lieu
+Page d’un lieu:
 Cette page contient les détails d’un lieu enregistré (position sur la carte)
 L’utilisateur doit pouvoir modifier le lieu
 
