@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import MapView, { Marker } from 'react-native-maps';
 import { StyleSheet, Dimensions, Button, Text, TouchableOpacity } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
-import {Layout, List, Divider } from '@ui-kitten/components';
+import {Layout, List, Divider, TopNavigationAction, TopNavigation, Icon  } from '@ui-kitten/components';
 
 import Lieu from '../components/Lieu';
 import { getPositionActuelle } from '../data/RecupereData';
@@ -66,31 +66,40 @@ const Carte = ({ navigation, allLieux }) => {
       getPosition();
   },[allLieux]);
 
+  const AddIcon = (props) => (
+    <Icon {...props} name='plus' pack='fontawesome'/>
+  );
+
   // pour passer a la page de details d'un lieu
   const navigateToDetailsLieu = (lieuID) => {
     navigation.navigate("Details", {lieuID});
   };
 
-  // const renderItem = ({ item }) => (
-  //   console.log("ITEM ="+ (item))
-  //   // <Lieu lieuxData={item} onClick={navigateToDetailsLieu} />
-  // );
+  const navigateToAddLieu = () => {
+    navigation.navigate("Nouveau lieu");
+  };
+
+  const renderAddAction = () => (
+    <TopNavigationAction icon={AddIcon}/>
+  );
 
   return (
     <Layout style={styles.container}>
+
+      <TopNavigation onTouchEnd={navigateToAddLieu} accessoryRight={renderAddAction}/>
 
         <MapView style={styles.map}  
          initialRegion={positionActuelle} 
          onRegionChangeComplete={(coordonneesDeplacement)=>{console.log(coordonneesDeplacement); }}
         >
-          {/* {lieux.map((listeLieux) => (   
+          {lieux.map((listeLieux) => (   
             <Marker
               key={listeLieux.lieu.id}
               pinColor={"blue"}
-              coordinate= {{latitude: listeLieux.lieu.location.latitude, longitude: listeLieux.lieu.location.longitude}}
+              coordinate= {{latitude: listeLieux.lieu.latitude, longitude: listeLieux.lieu.longitude}}
               title={listeLieux.lieu.name}
             />           
-          ))} */}
+          ))}
         </MapView>
 
         <List

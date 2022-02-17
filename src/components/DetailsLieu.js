@@ -31,12 +31,10 @@ const DetailsLieu = ({ route, navigation, allLieux, dispatch }) => {
       // filtre par rapport a l'id du lieu
       const lieuId = allLieux.ajoutLieuxID.filter(item => item.lieu.id == route.params.lieuID);
       const mapLieu = lieuId.map(element => element.lieu);
-      
+      // set la variable lieuDetails 
       mapLieu.forEach(function (lieu) {
         setLieu(lieu);
       });
-
-      console.log("LIEU DETAILS ============" + JSON.stringify(lieuDetails));
     } catch (error) {
         setIsError(true); 
     }
@@ -44,7 +42,7 @@ const DetailsLieu = ({ route, navigation, allLieux, dispatch }) => {
   
   useEffect(() => {
     requestLieu();
-  },[allLieux.ajoutLieuxID]); // Uniquement à l'initialisation
+  },[allLieux]); // Uniquement à l'initialisation
 
   const MangerIcon = (props) => (
     <Icon {...props} name='utensils' pack='fontawesome'/>
@@ -109,22 +107,22 @@ const DetailsLieu = ({ route, navigation, allLieux, dispatch }) => {
                   </Text>
                 </View>
                 <View>
-                  {/* <Text>
-                    {lieuDetails.location.address}
-                  </Text> */}
-                  {/* <Text>
-                    {lieuDetails.location.zipcode}{lieuDetails.location.city}
+                  <Text>
+                    {lieuDetails.address}
+                  </Text> 
+                  <Text>
+                    {lieuDetails.zipcode}{lieuDetails.city}
                   </Text>
                   <Text>
                     {lieuDetails.country_name}
-                  </Text> */}
+                  </Text>
                 </View>
                 <Text>
                   {lieuDetails.description}
                 </Text>
 
                 <View style={styles.tag}>
-                  {/* <Text>{lieuDetails.tag}</Text> */}
+                  <Text>{lieuDetails.tag}</Text>
                 </View>
                 {/* <Button onPress={supprimerLieu}>Supprimer</Button> */}
                 <Button onPress={deleteLieu}>Supprimer</Button>

@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { Input, Layout, Select, SelectItem, Icon, List, Divider, Button, IndexPath } from '@ui-kitten/components';
 import { View, StyleSheet } from 'react-native';
 import Lieu from '../components/Lieu';
-import { getLieux, getVilles, getTags, getPositionActuelleVille} from '../data/RecupereData';
 import {Picker} from '@react-native-picker/picker';
 import MultiSelect from 'react-native-multiple-select';
 import SelectBox from 'react-native-multi-selectbox';
 import { xorBy } from 'lodash';
+import { connect } from 'react-redux';
+import { getVilles } from '../data/RecupereData';
 
 
 
@@ -22,7 +23,7 @@ function getSelectValue(selectedIndexPaths, options) {
   }
 }
 
-const Search = ({ navigation }) => {
+const Search = ({ navigation, allLieux }) => {
     
     // liste des lieux
     const [lieux, setLieux] = useState([]);
@@ -40,11 +41,17 @@ const Search = ({ navigation }) => {
     const [km, setKm] = useState([]);
     const kmList = ["5 km", "10 km", "20 km", "30 km", "40 km", "+50 km"];
 
-    // recupere les lieux correspondants au terme de recherhce
+    // recupere les lieux correspondants au terme de recherche
     const searchLieu = async () => {
-      try {
-        const jsonSearchResult = await getLieux(searchTermNom, ville, tags);
-        setLieux(jsonSearchResult);
+      try {      
+        // filtre sur le nom et la ville
+        var result = allLieux.ajoutLieuxID.filter(item => item.lieu.name.toLowerCase().includes(searchTermNom.toLowerCase()))
+                              .filter(item => item.lieu.city.toLowerCase().includes(ville.toLowerCase()));                      
+        // filtre sur les tags si il y en a
+        if(tags != ""){
+          result = result.filter(item => tags.some(el => item.lieu.tag.includes(el.item)));
+        }   
+        setLieux(result);
       } catch (error) {
         // TO DO
       }
@@ -52,9 +59,16 @@ const Search = ({ navigation }) => {
     
     // recupere la liste des villes
     const searchVilles = async () => {
-      try {
-        const jsonSearchResultVilles = await getVilles();
-        setVillesList(jsonSearchResultVilles);
+      try {           
+        var listeVilles=[];
+        listeVilles.push("");
+        // parcours allLieux pour recuperer les villes
+        for (let value of allLieux.ajoutLieuxID) {
+          listeVilles.push(value.lieu.city);
+        }
+        // return la liste des villes sans doublons
+        const listeVillesSansDoublons = [...new Set(listeVilles)];
+        setVillesList(listeVillesSansDoublons);
       } catch (error) {
         // TO DO
       }
@@ -63,8 +77,7 @@ const Search = ({ navigation }) => {
     // recupere la liste des tags
     const searchTags = async () => {
       try {
-        const jsonSearchResultTags= await getTags();
-        setTagsList(jsonSearchResultTags);
+        setTagsList(allLieux.tagListe);
       } catch (error) {
         // TO DO
       }
@@ -73,7 +86,7 @@ const Search = ({ navigation }) => {
     useEffect(() => {
       searchVilles();
       searchTags();
-    }, []); // Uniquement à l'initialisation
+    }, [allLieux]); // Uniquement à l'initialisation
 
     const SearchIcon = (props) => (
       <Icon {...props} name='search' pack='fontawesome'/>
@@ -153,7 +166,7 @@ const Search = ({ navigation }) => {
             data={lieux}
             keyExtractor={(item) => item.lieu.id.toString()}
             renderItem={({ item }) => (
-            <Lieu lieuxData={item.lieu} onClick={navigateToDetailsLieu} />
+            <Lieu lieuxData={item} onClick={navigateToDetailsLieu} />
             )}
           />
 
@@ -162,8 +175,13 @@ const Search = ({ navigation }) => {
     );
 }
 
+const mapStateToProps = (state) => {
+  return {
+    allLieux: state
+  }
+}
 
-export default Search;
+export default connect(mapStateToProps)(Search);
 
 const styles = StyleSheet.create({
   container: {

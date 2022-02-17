@@ -1,8 +1,8 @@
-// import * as Location from 'expo-location';
-// const API_KEY_POSITION_STACK = '8f04313167a956f65a0316786139ca3e'; 
-// const data = require('../data/data.json');
+import * as Location from 'expo-location';
+const API_KEY_POSITION_STACK = '8f04313167a956f65a0316786139ca3e'; 
+const data = require('../data/data.json');
 
-// var res= data;
+var res= data;
 
 // // recupere les details d'un lieu en fonction de son id
 // // export async function getLieuDetails(lieuID) {
@@ -24,16 +24,16 @@
 // // };
 
   
-//   // recupere la position actuelle de l'utilisateur
-//   export async function getPositionActuelle() {
-//     try {
-//       var positionActuelleUser = Location.getCurrentPositionAsync({});
-//       return positionActuelleUser;
-//     } catch (error) {
-//       console.log(`Error with function getPositionActuelle ${error.message}`);
-//       throw error;
-//     }
-//   }
+  // recupere la position actuelle de l'utilisateur
+  export async function getPositionActuelle() {
+    try {
+      var positionActuelleUser = Location.getCurrentPositionAsync({});
+      return positionActuelleUser;
+    } catch (error) {
+      console.log(`Error with function getPositionActuelle ${error.message}`);
+      throw error;
+    }
+  }
 
 //     // TEST MAIS API DOWN ....
 //     export async function getPositionActuelleVille() {
@@ -62,7 +62,7 @@
 //   }
 // };
 
-// // recupere toutes les villes
+// // // recupere toutes les villes
 // export async function getVilles() {
 //   try {
 //     var dataLieux = res.lieux;

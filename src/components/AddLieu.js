@@ -5,12 +5,14 @@ import SelectBox from 'react-native-multi-selectbox';
 import { xorBy } from 'lodash';
 import { connect } from 'react-redux';
 import Toast from 'react-native-root-toast';
+import * as Location from 'expo-location';
 
 
 const AddLieu  = ({ route, allLieux, dispatch}) => {
 
 
   const [tags, setTags] = useState([]);
+  const [tagsOk, setTagsOk] = useState([]);
   const [tagsList, setTagsList] = useState([]);
   const [name, setNom] = useState("");
   const [adress, setAdresse] = useState("");
@@ -79,6 +81,7 @@ const AddLieu  = ({ route, allLieux, dispatch}) => {
 
   function onMultiChange() {
     return (item) => setTags(xorBy(tags, [item]));
+    
   }
 
   const TagsIcon = (props) => (
@@ -108,6 +111,18 @@ const AddLieu  = ({ route, allLieux, dispatch}) => {
     }
   };
 
+  // met les tags au bon format pour sauvegarder
+  const tagsOK = async () => {
+      // met les tags au bon format dans notre json
+      var listeTags=[];
+      var tagsSelect = tags;
+      console.log(tagsSelect)
+      for (let value of tagsSelect) {
+        listeTags.push(value.item);
+      }
+      setTagsOk(listeTags);
+    }
+
   // sauvegarde un nouveau lieu
   const sauvegarderLieu = async () => {
     // construction du nouveau lieu
@@ -116,14 +131,12 @@ const AddLieu  = ({ route, allLieux, dispatch}) => {
         "id": id,
         "name": name,
         "description": description,
-        "tag": tags,
-        "location": {
+        "tag": tagsOk,
         "address": adress,
         "city": city,
         "zipcode": zipCode,
         "latitude": 49.12122366832059, 
-        "longitude": 6.164740424626361
-        },
+        "longitude": 6.164740424626361,
         "country_name": country
       }
     }
@@ -141,7 +154,8 @@ const AddLieu  = ({ route, allLieux, dispatch}) => {
   useEffect(() => {
     searchTags();
     getId();
-  }, [lieux]); // quand la liste des lieux change
+    tagsOK();
+  }, [lieux, tags]); // quand la liste des lieux change et quand les tags selectionne changent
   
 
    return (
