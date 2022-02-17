@@ -27,3 +27,5 @@ mes lieux visités / mes lieux à visiter ,
 barre en bas: accueil, recherche, favoris, ajouter
 
 A FAIRE: gestion des erreurs, clavier qui se baisse tout seul, design, bouton ok sur clavier valide, image a la place des noms des tags 
+
+Remarques: la page d'ajout d'un lieu garde les champs rempli, même quand on change de page ... et la lat et long se mettent a jour quand on choisis un tag
