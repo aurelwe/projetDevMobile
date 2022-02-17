@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Keyboard, Alert } from 'react-native';
+import { View, StyleSheet, Keyboard, Alert, Text } from 'react-native';
 import { Input, Layout, Icon, Button } from '@ui-kitten/components';
 import SelectBox from 'react-native-multi-selectbox';
 import { xorBy } from 'lodash';
@@ -10,9 +10,11 @@ import * as Location from 'expo-location';
 
 const AddLieu  = ({ route, allLieux, dispatch}) => {
 
-
+  // tags choisis dans le select
   const [tags, setTags] = useState([]);
+  // tags choisis dans le select au bon format pour ajouter
   const [tagsOk, setTagsOk] = useState([]);
+  // liste de tous les tags pour le select
   const [tagsList, setTagsList] = useState([]);
   const [name, setNom] = useState("");
   const [adress, setAdresse] = useState("");
@@ -21,7 +23,12 @@ const AddLieu  = ({ route, allLieux, dispatch}) => {
   const [city, setVille] = useState("");
   const [zipCode, setCp] = useState("");
   const [country, setCounrty] = useState("");
+  // id du lieu qu'on ajoute
   const [id, setId] = useState(0);
+  const [latitude, setLatitude] = useState(null);
+  const [longitude, setLongitude] = useState(null);
+  // date d'ajout d'un lieu
+  const [date, setDate] = useState(null);
 
   const [lieux, setLieux] = useState([]);
 
@@ -36,17 +43,6 @@ const AddLieu  = ({ route, allLieux, dispatch}) => {
       // TO DO
     }
   }
-
-  // const searchTags = async () => {
-  //   try {
-  //     const jsonSearchResultTags= await getTags();
-  //     setTagsList(jsonSearchResultTags);
-  //     console.log("All LIEUX +++++" , tagsList);
-  //   } catch (error) {
-  //     // TO DO
-  //   }
-  // }
-
   
   // verification des champs du formulaire
   const verificationFormulaire = () => {
@@ -72,12 +68,11 @@ const AddLieu  = ({ route, allLieux, dispatch}) => {
       Alert.alert('Les catégories sont obligatoires');
     }
     else{
+      convertAdressToCoords();
       sauvegarderLieu();
      
     } 
   }
-
-  
 
   function onMultiChange() {
     return (item) => setTags(xorBy(tags, [item]));
@@ -123,6 +118,13 @@ const AddLieu  = ({ route, allLieux, dispatch}) => {
       setTagsOk(listeTags);
     }
 
+    // recupere la date du jour pour avoir la date d'ajout pour le tri
+    const getDateJour = async () => {
+      let today = new Date();
+      let date = today.getDate() + "-" + (today.getMonth()+1) + '-' + today.getFullYear();
+      setDate(date);
+    }
+
   // sauvegarde un nouveau lieu
   const sauvegarderLieu = async () => {
     // construction du nouveau lieu
@@ -135,9 +137,10 @@ const AddLieu  = ({ route, allLieux, dispatch}) => {
         "address": adress,
         "city": city,
         "zipcode": zipCode,
-        "latitude": 49.12122366832059, 
-        "longitude": 6.164740424626361,
-        "country_name": country
+        "latitude": latitude, 
+        "longitude": longitude,
+        "country_name": country,
+        "date_ajout" : date
       }
     }
     // sauvegarde redux
@@ -151,10 +154,42 @@ const AddLieu  = ({ route, allLieux, dispatch}) => {
     });
   }
 
+
+  // const [location, setLocation] = useState(null);
+ 
+  //  const testPosition = async () => {
+  //   try {
+  //   let location = await Location.getCurrentPositionAsync({});
+  //   setLocation(location);
+  //   // setLatitude(location.coords.latitude);
+  //   // console.log(location.coords.latitude);
+  //   } catch (error) {
+  //     // TO DO
+  //   }
+  // }
+
+  // recuperer la latitude et la longitude avec l'adresse saisie 
+  const convertAdressToCoords = async () => {
+    try {
+      // recupere la latitude et longitude en fonction de l'adresse saisie
+      let locationCoords = await Location.geocodeAsync(adress + " " + zipCode + " " + city + " " + country);
+      // parcours les informations recuperer lat et long par rapport a l'adresse
+      locationCoords.find((element) => {
+        setLatitude(element.latitude);
+        setLongitude(element.longitude);
+      });
+    } catch (error) {
+      // TO DO
+    }
+  }
+
+
   useEffect(() => {
     searchTags();
     getId();
     tagsOK();
+    convertAdressToCoords();
+    getDateJour();
   }, [lieux, tags]); // quand la liste des lieux change et quand les tags selectionne changent
   
 

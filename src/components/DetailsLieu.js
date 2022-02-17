@@ -95,6 +95,10 @@ const DetailsLieu = ({ route, navigation, allLieux, dispatch }) => {
     dispatch(action);
   }
 
+  const updateLieu = async () => {
+    
+  }
+
 
   return (
     <Layout style={styles.container}>
@@ -124,8 +128,8 @@ const DetailsLieu = ({ route, navigation, allLieux, dispatch }) => {
                 <View style={styles.tag}>
                   <Text>{lieuDetails.tag}</Text>
                 </View>
-                {/* <Button onPress={supprimerLieu}>Supprimer</Button> */}
                 <Button onPress={deleteLieu}>Supprimer</Button>
+                <Button onPress={updateLieu}>Modifier</Button>
                 
 
                 {/* {displaySaveRestaurant()} */}

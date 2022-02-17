@@ -105,11 +105,22 @@ const Search = ({ navigation, allLieux }) => {
       navigation.navigate("Details", { lieuID });
     };
 
-   
+    // trie par date la flatlist
+    const trierParDate = () => {
+      lieux.sort(function(obj1, obj2) {
+        // Ascending: first id less than the previous
+        console.log("obj====" + JSON.stringify(obj1));
+        return obj1.id - obj2.id;
+    });
+  }
+
+  
   
     function onMultiChange() {
       return (item) => setTags(xorBy(tags, [item]));
     }
+
+    
 
     return (
       <React.Fragment>
@@ -159,6 +170,7 @@ const Search = ({ navigation, allLieux }) => {
           </View>
 
           <Button onPress={searchLieu}>Rechercher</Button>
+          <Button onPress={() => trierParDate()}>Trier par date</Button>
 
           <List
             style={styles.list}
