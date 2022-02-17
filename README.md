@@ -4,7 +4,7 @@
 
 L’utilisateur peut effectuer une recherche par:
 
-location (parmi la liste des villes des enregistrement OU en utilisant la position du téléphone) + rayon
+location (en utilisant la position du téléphone) + rayon
 
 Par défaut, la liste contient tous les enregistrements. Les résultats peuvent être triés par distance ou par date d’ajout.
 
