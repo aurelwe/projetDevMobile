@@ -16,14 +16,14 @@ Cette page contient les détails d’un lieu enregistré (position sur la carte)
 L’utilisateur doit pouvoir modifier le lieu
 
 NOS PLUS A NOUS:
-lieu en favoris / onglet en bas 
-page d'accueil avec les lieux les mieux notés / meilleurs resto, musée ... 
-itinéraire google maps
-appels téléphone
-favoris autre couleur
-partager lieu sms ....
-lien vers site internet lieu
-mes lieux visités / mes lieux à visiter 
+lieu en favoris / onglet en bas, 
+page d'accueil avec les lieux les mieux notés / meilleurs resto, musée ... ,
+itinéraire google maps,
+appels téléphone,
+favoris autre couleur,
+partager lieu sms ....,
+lien vers site internet lieu,
+mes lieux visités / mes lieux à visiter ,
 barre en bas: accueil, recherche, favoris, ajouter
 
-A FAIRE: gestion des erreurs, clavier qui se baisse tout seul, design, bouton ok sur clavier valide 
+A FAIRE: gestion des erreurs, clavier qui se baisse tout seul, design, bouton ok sur clavier valide, image a la place des noms des tags 
