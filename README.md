@@ -54,4 +54,4 @@ gestion des erreurs, clavier qui se baisse tout seul, design, bouton ok sur clav
 
 # Remarques: 
 
-la page d'ajout d'un lieu garde les champs rempli, même quand on change de page ... et la lat et long se mettent a jour quand on choisis un tag
+la lat et long se mettent a jour quand on choisis un tag
