@@ -12,7 +12,7 @@ Par défaut, la liste contient tous les enregistrements. Les résultats peuvent 
 
 ## Page carte:
 
-L’utilisateur doit être capable d’identifier la catégorie du lieu en fonction du marqueur.
+L’utilisateur doit être capable d’identifier la catégorie du lieu en fonction du marqueur ?????????
 La liste contient uniquement les lieux présents sur la carte (dans la vue). Si l’utilisateur déplace la vue de la carte, cette liste est mise à jour.
 Un bouton est présent sur chaque entrée de la liste pour centrer la vue de la carte sur la position du lieu en question.
 
@@ -23,7 +23,7 @@ La location peut être saisie en utilisant la position de l’utilisateur
 
 ## Page d’un lieu:
 
-Cette page contient les détails d’un lieu enregistré (position sur la carte)
+Cette page contient les détails d’un lieu enregistré (position sur la carte ?????????)
 L’utilisateur doit pouvoir modifier le lieu
 
 
