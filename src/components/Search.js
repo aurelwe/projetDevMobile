@@ -170,7 +170,7 @@ const Search = ({ navigation, allLieux }) => {
           </View>
 
           <Button onPress={searchLieu}>Rechercher</Button>
-          <Button onPress={() => trierParDate()}>Trier par date</Button>
+          {/* <Button onPress={ trierParDate}>Trier par date</Button> */}
 
           <List
             style={styles.list}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { ListItem, Text  } from '@ui-kitten/components';
+import { ListItem, Text, Button  } from '@ui-kitten/components';
 import { TouchableOpacity,View, StyleSheet } from 'react-native';
 //LIEU EST DANS LA FLATLIST, UTILISE POUR AVOIR LA LISTE DES LIEUX
 
@@ -16,18 +16,12 @@ const Lieu = ({onClick, lieuxData }) => {
           <Text style={styles.title}>
             {lieuxData.lieu.name}
           </Text>
+          
+          {/* <Button>
+            Centrer
+          </Button> */}
         </View>
-        </View>
-    {/* <ListItem 
-      title={lieuxData.lieu.name}
-      description={lieuxData.lieu.location.city}
-      // accessoryRight={renderItemAccessory}
-      onPress={() => { onClick(lieuxData.lieu.id) }}
-    />    */}
-      {/* <Text>
-          {allLieux}
-      </Text> */}
-
+      </View>
     </TouchableOpacity>
 
   );

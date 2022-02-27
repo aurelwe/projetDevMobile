@@ -70,9 +70,21 @@ const AddLieu  = ({ route, allLieux, dispatch}) => {
     else{
       convertAdressToCoords();
       sauvegarderLieu();
-     
+      clearFormulaire();
     } 
   }
+
+  // vide les inputs du formulaire apres la validation
+  const clearFormulaire = () => {
+    setNom("");
+    setTags([]);
+    setAdresse("");
+    setDescritpion("");
+    setVille("");
+    setCp("");
+    setCounrty("");
+  }
+
 
   function onMultiChange() {
     return (item) => setTags(xorBy(tags, [item]));
@@ -199,12 +211,14 @@ const AddLieu  = ({ route, allLieux, dispatch}) => {
       <Layout style={styles.container} level='1'>
         <Input
           style={styles.input}
+          value={name}
           placeholder='Nom du lieu'
           onChangeText={(n) => setNom(n)}
         />
 
         <Input
           style={styles.input}
+          value={adress}
           accessoryLeft={VilleIcon}
           placeholder='Adresse'
           onChangeText={(a) => setAdresse(a)}
@@ -212,12 +226,14 @@ const AddLieu  = ({ route, allLieux, dispatch}) => {
         <View style={styles.rowContainer}>
           <Input
             style={styles.inputRow}
+            value={city}
             accessoryLeft={VilleIcon}
             placeholder='Ville'
             onChangeText={(v) => setVille(v)}
           />
           <Input
             style={styles.inputRow}
+            value={zipCode}
             placeholder='Code postal'
             onChangeText={(cp) => setCp(cp)}
           />
@@ -225,6 +241,7 @@ const AddLieu  = ({ route, allLieux, dispatch}) => {
         <View style={styles.rowContainer}>
           <Input
             style={styles.inputRow}
+            value={country}
             accessoryLeft={VilleIcon}
             placeholder='Pays'
             onChangeText={(c) => setCounrty(c)}
@@ -233,6 +250,7 @@ const AddLieu  = ({ route, allLieux, dispatch}) => {
         
         <Input
           style={styles.input}
+          value={description}
           multiline={true}
           textStyle={{ minHeight: 64 }}
           placeholder='Description'
