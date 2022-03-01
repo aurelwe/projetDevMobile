@@ -2,9 +2,7 @@
 
 ## Page de recherche d’un lieu enregistré:
 
-L’utilisateur peut effectuer une recherche par:
-
-location (en utilisant la position du téléphone) + rayon
+L’utilisateur peut effectuer une recherche par: rayon
 
 Par défaut, la liste contient tous les enregistrements. Les résultats peuvent être triés par distance ou par date d’ajout.
 
@@ -49,7 +47,9 @@ gestion des erreurs
 
 clavier qui se baisse tout seul
 
-design, bouton ok sur clavier valide
+design
+
+bouton ok sur clavier valide
 
 image a la place des noms des tags 
 
