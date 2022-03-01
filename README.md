@@ -16,11 +16,6 @@ L’utilisateur doit être capable d’identifier la catégorie du lieu en fonct
 La liste contient uniquement les lieux présents sur la carte (dans la vue). Si l’utilisateur déplace la vue de la carte, cette liste est mise à jour.
 Un bouton est présent sur chaque entrée de la liste pour centrer la vue de la carte sur la position du lieu en question.
 
-
-## Ajouter un lieu:
-
-La location peut être saisie en utilisant la position de l’utilisateur
-
 ## Page d’un lieu:
 
 Cette page contient les détails d’un lieu enregistré (position sur la carte ?????????)
@@ -50,7 +45,15 @@ barre en bas: accueil, recherche, favoris, ajouter
 
 # A FAIRE:
 
-gestion des erreurs, clavier qui se baisse tout seul, design, bouton ok sur clavier valide, image a la place des noms des tags 
+gestion des erreurs
+
+clavier qui se baisse tout seul
+
+design, bouton ok sur clavier valide
+
+image a la place des noms des tags 
+
+dans la page add lieu, quand on prend la position actuelle ca met un peu de temps a charger. Peut etre afficher un symbole que ca charge ?
 
 # Remarques: 
 
