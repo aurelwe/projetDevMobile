@@ -25,7 +25,7 @@ function allLieux (state = initialState, action) {
         ...state,
         ajoutLieuxID: [...state.ajoutLieuxID, action.data]
       };
-      return nextState || state;
+       return nextState || state;
       // return initialState; 
 
       case 'DELETE_LIEU': // supprimer un lieu a l'aide de son id

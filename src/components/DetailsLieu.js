@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, ActivityIndicator , Share} from 'react-native';
 import { Layout, Text, Button } from '@ui-kitten/components';
 import { connect } from 'react-redux';
 import Toast from 'react-native-root-toast';
@@ -39,6 +39,17 @@ const DetailsLieu = ({ route, navigation, allLieux, dispatch }) => {
         setIsError(true); 
     }
   }
+
+  // partage l'adresse du lieu 
+  const onShare = async () => {
+    try {
+      const result = await Share.share({
+        message: lieuDetails.address + " " + lieuDetails.zipcode + " " +lieuDetails.city + " " + lieuDetails.country_name
+      });
+    } catch (error) {
+      alert(error.message);
+    }
+  };
   
   useEffect(() => {
     requestLieu();
@@ -67,37 +78,28 @@ const DetailsLieu = ({ route, navigation, allLieux, dispatch }) => {
     navigation.navigate("Carte");
   };
 
-     // On pourrait définir les actions dans un fichier à part
-     const saveLieu = async () => {
+    // On pourrait définir les actions dans un fichier à part
+    const saveLieu = async () => {
       const action = { type: 'ADD_LIEUX', value: route.params.lieuID };
       dispatch(action);
       let toast = Toast.show('lieu ajouté ', {
         duration: Toast.durations.LONG,
       });
     }
-
-  const displaySaveRestaurant = () => {
-    // if (allLieux.findIndex(i => i === route.params.lieuID) !== -1) {
-    //   // Le restaurant est sauvegardé
-    //   return (
-    //     <Button >Retirer des favoris</Button>
-    //   );
-    // }
-    // // Le restaurant n'est pas sauvegardé
-    // return (
-    //   <Button onPress={saveLieu}>Ajouter aux favoris</Button>
-    // );
-  }
-
   
   const deleteLieu = async () => {
     const action = { type: 'DELETE_LIEU', value: route.params.lieuID };
     dispatch(action);
+    navigateToCarte();
+    let toast = Toast.show('Le lieu est supprimé', {
+      duration: Toast.durations.LONG,
+      });
   }
 
-  const updateLieu = async () => {
-    
-  }
+  const navigateToEditLieu = (lieuID) => {
+    console.log(lieuID);
+    navigation.navigate("Edit lieu", {lieuID});
+  };
 
 
   return (
@@ -129,10 +131,8 @@ const DetailsLieu = ({ route, navigation, allLieux, dispatch }) => {
                   <Text>{lieuDetails.tag}</Text>
                 </View>
                 <Button onPress={deleteLieu}>Supprimer</Button>
-                <Button onPress={updateLieu}>Modifier</Button>
-                
-
-                {/* {displaySaveRestaurant()} */}
+                <Button onPress={() => navigateToEditLieu(lieuDetails.id)}>Modifier</Button>
+                <Button onPress={onShare}>Partager le lieu</Button>
 
               </React.Fragment>
             )

@@ -8,6 +8,7 @@ import SelectBox from 'react-native-multi-selectbox';
 import { xorBy } from 'lodash';
 import { connect } from 'react-redux';
 import { getVilles } from '../data/RecupereData';
+import * as Location from 'expo-location';
 
 
 
@@ -56,12 +57,30 @@ const Search = ({ navigation, allLieux }) => {
         // TO DO
       }
     }
+
+    
+  // recupere la position actuelle de l'utilisateur (lat + long) et recupere l'adresse
+  const getAdressPositionActuelle = async () => {
+    try {
+      // recupere la lat et long actuelle de l'utilisateur
+      let location = await Location.getCurrentPositionAsync({});
+      // avec la lat et long, recupere l'adresse complete
+      let adresseActuelle = await Location.reverseGeocodeAsync(location.coords);
+      // parcours les donnees de l'adresse
+      adresseActuelle.find((element) => {
+        // set la ville pour le select
+        setVille(element.city); 
+      });
+    } catch (error) {
+      // TO DO
+    }
+  }
     
     // recupere la liste des villes
     const searchVilles = async () => {
       try {           
         var listeVilles=[];
-        listeVilles.push("");
+        listeVilles.push("Choisir une ville");
         // parcours allLieux pour recuperer les villes
         for (let value of allLieux.ajoutLieuxID) {
           listeVilles.push(value.lieu.city);
@@ -143,6 +162,7 @@ const Search = ({ navigation, allLieux }) => {
                 <Picker.Item key={value} label={value} value={value}/>
               )}
             </Picker>
+            <Button onPress={getAdressPositionActuelle}>Position Actuelle</Button>
           </View>
 
           <View style={styles.rowContainer}>
