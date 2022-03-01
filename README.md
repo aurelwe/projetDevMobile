@@ -26,13 +26,13 @@ lieu en favoris / onglet en bas
 
 page d'accueil avec les lieux les mieux notés / meilleurs resto, musée ... 
 
-itinéraire google maps
+OK ? itinéraire google maps
 
 appels téléphone
 
 favoris autre couleur
 
-partager lieu sms ....
+OK: partager lieu sms .... 
 
 lien vers site internet lieu
 
