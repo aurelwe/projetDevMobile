@@ -54,4 +54,3 @@ gestion des erreurs, clavier qui se baisse tout seul, design, bouton ok sur clav
 
 # Remarques: 
 
-la lat et long se mettent a jour quand on choisis un tag
