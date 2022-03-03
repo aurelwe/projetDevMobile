@@ -10,7 +10,6 @@ Par défaut, la liste contient tous les enregistrements. Les résultats peuvent 
 
 ## Page carte:
 
-L’utilisateur doit être capable d’identifier la catégorie du lieu en fonction du marqueur ?????????
 La liste contient uniquement les lieux présents sur la carte (dans la vue). Si l’utilisateur déplace la vue de la carte, cette liste est mise à jour.
 Un bouton est présent sur chaque entrée de la liste pour centrer la vue de la carte sur la position du lieu en question.
 
@@ -50,8 +49,6 @@ clavier qui se baisse tout seul
 design
 
 bouton ok sur clavier valide
-
-image a la place des noms des tags 
 
 dans la page add lieu, quand on prend la position actuelle ca met un peu de temps a charger. Peut etre afficher un symbole que ca charge ?
 
