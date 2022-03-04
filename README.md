@@ -53,4 +53,4 @@ bouton ok sur clavier valide
 dans la page add lieu, quand on prend la position actuelle ca met un peu de temps a charger. Peut etre afficher un symbole que ca charge ?
 
 # Remarques: 
-
+continuer edit un lieu. Fonctionne a moitié, change deux lieux en même temps
