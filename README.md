@@ -28,7 +28,7 @@ page d'accueil avec les lieux les mieux notés / meilleurs resto, musée ...
 
 OK ? itinéraire google maps
 
-appels téléphone
+OK: appels téléphone
 
 favoris autre couleur
 
@@ -43,7 +43,7 @@ barre en bas: accueil, recherche, favoris, ajouter
 
 # A FAIRE:
 
-gestion des erreurs
+gestion des erreurs partout
 
 clavier qui se baisse tout seul
 
@@ -52,6 +52,8 @@ design
 bouton ok sur clavier valide
 
 dans la page add lieu, quand on prend la position actuelle ca met un peu de temps a charger. Peut etre afficher un symbole que ca charge ?
+
+qu'on puisse scroll dans la page d'ajout d'un lieu
 
 # Remarques: 
 continuer edit un lieu. Fonctionne a moitié, change deux lieux en même temps
