@@ -5,28 +5,22 @@ import Assets from '../definitions/Assets';
 
 const Lieu = ({onClick, lieuxData }) => {
 
-  // const renderItemAccessory = (props) => (
-  //   // <Text size='s1'>{tag}</Text>
-  // );
-
   // recupere les lieux correspondants au terme de recherche
   const imagesTags = () => {
+    var img = [];
     try {
+      // si le tag = visiter
       if(lieuxData.lieu.tag.includes("Visiter")){
-        return (
-        <Image style={styles.icon} source={Assets.icons.visiter} />
-        )
+        // on ajoute l'image de visiter a la liste
+        img.push(<View key={1}><Image style={styles.icon} source={Assets.icons.visiter} /></View>);
       } 
       if(lieuxData.lieu.tag.includes("Manger")){
-        return (
-        <Image style={styles.icon} source={Assets.icons.manger} />
-        )
+        img.push(<View key={2}><Image style={styles.icon} source={Assets.icons.manger} /></View>);
       }
       if(lieuxData.lieu.tag.includes("Boire un coup")){
-        return (
-        <Image style={styles.icon} source={Assets.icons.boire} />
-        )
+        img.push(<View key={3}><Image style={styles.icon} source={Assets.icons.boire} /></View>);
       }   
+      return (img);
     } catch (error) {
       // TO DO
     }
@@ -39,7 +33,9 @@ const Lieu = ({onClick, lieuxData }) => {
           <Text style={styles.title}>
             {lieuxData.lieu.name}
           </Text>
-          <View>{imagesTags()}</View>          
+          <View style={{flexDirection:'row', alignItems:'center'}}>
+            {imagesTags()}
+          </View>          
           {/* <Button>
             Centrer
           </Button> */}

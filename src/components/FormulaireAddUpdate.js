@@ -41,8 +41,9 @@ const FormulaireAddUpdate  = ({ route, allLieux, dispatch, buttonName, lieuId}) 
   }
 
   // 
-  const editMode = async () => {
+  const editMode = () => {
     try {
+      console.log("LIEU ID EDIT MODE ===" + lieuId)
       const lieuIdd = allLieux.ajoutLieuxID.filter(item => item.lieu.id == lieuId);
       const mapLieu = lieuIdd.map(element => element.lieu);
       mapLieu.forEach(function (lieu) {
@@ -52,9 +53,13 @@ const FormulaireAddUpdate  = ({ route, allLieux, dispatch, buttonName, lieuId}) 
         setCp(lieu.zipcode);
         setCounrty(lieu.country_name);
         setDescritpion(lieu.description);
+        console.log(lieu.tag)
         // setTags(lieu.tag);
       });
-    ;
+
+      const mapTag = lieuIdd.map(element => element.lieu.tag);
+      console.log("mapTag==" + mapTag)
+    
     } catch (error) {
       // TO DO
     }
@@ -69,8 +74,9 @@ const FormulaireAddUpdate  = ({ route, allLieux, dispatch, buttonName, lieuId}) 
       let adresseActuelle = await Location.reverseGeocodeAsync(location.coords);
       // parcours les donnees de l'adresse
       adresseActuelle.find((element) => {
+        console.log(JSON.stringify(element));
         // set les elements qui nous interessent pour afficher dans le formulaire
-        setAdresse(element.street);
+        setAdresse(element.streetNumber + " " + element.street);
         setVille(element.city);
         setCp(element.postalCode);
         setCounrty(element.country);  
@@ -96,33 +102,79 @@ const FormulaireAddUpdate  = ({ route, allLieux, dispatch, buttonName, lieuId}) 
   }
 
   // verification des champs du formulaire
-  const verificationFormulaire = () => {
-    // verification des champs
-    if(isNaN(zipCode) || zipCode.trim() ==0)
+  const addUpdate = () => 
+  {
+    if(buttonName=="Modifier le lieu")
     {
-      Alert.alert("Le code postal est obligatoire et doit comporter uniquement des chiffres");
+      if(verifFormulaire() == "OK"){
+        updateLieu();
+      }
+      console.log("dans modifier lieu btn");
     }
-    else if (name.trim() ==0) { 
-      Alert.alert('Le nom est obligatoire');
+
+    else if(buttonName=="Ajouter un nouveau lieu")
+    {
+      // si tous les champs sont ok
+      if(verifFormulaire() == "OK"){
+        // on ajoute le lieu et on vide le formulaire
+        sauvegarderLieu();
+        clearFormulaire();
+      }
     }
-    else if (adress.trim() ==0) {
-      Alert.alert('L adresse est obligatoire');
-    }
-    else if (city.trim() ==0) {
-      Alert.alert('La ville est obligatoire');
-    }
-    else if (country.trim() ==0) {
-      Alert.alert('Le pays est obligatoire');
-    }
-    else if (tags.length == 0) {
-      Alert.alert('Les catégories sont obligatoires');
-    }
-    else{ // si tous les champs sont corrects
-      // on sauvegarde le lieu et on vide le formulaire
-      sauvegarderLieu();
-      clearFormulaire();
-    } 
+    // CODE DE BASE MARCHE OK
+    // verification des champs
+    // if(isNaN(zipCode) || zipCode.trim() ==0)
+    // {
+    //   Alert.alert("Le code postal est obligatoire et doit comporter uniquement des chiffres");
+    // }
+    // else if (name.trim() ==0) { 
+    //   Alert.alert('Le nom est obligatoire');
+    // }
+    // else if (adress.trim() ==0) {
+    //   Alert.alert('L adresse est obligatoire');
+    // }
+    // else if (city.trim() ==0) {
+    //   Alert.alert('La ville est obligatoire');
+    // }
+    // else if (country.trim() ==0) {
+    //   Alert.alert('Le pays est obligatoire');
+    // }
+    // else if (tags.length == 0) {
+    //   Alert.alert('Les catégories sont obligatoires');
+    // }
+    // else{ // si tous les champs sont corrects
+    //   // on sauvegarde le lieu et on vide le formulaire
+    //   sauvegarderLieu();
+    //   clearFormulaire();
+    // } 
   }
+
+
+    // 
+    const verifFormulaire = () => {
+      // verification des champs
+      if(isNaN(zipCode) || zipCode.trim() ==0)
+      {
+        Alert.alert("Le code postal est obligatoire et doit comporter uniquement des chiffres");
+      }
+      else if (name.trim() ==0) { 
+        Alert.alert('Le nom est obligatoire');
+      }
+      else if (adress.trim() ==0) {
+        Alert.alert('L adresse est obligatoire');
+      }
+      else if (city.trim() ==0) {
+        Alert.alert('La ville est obligatoire');
+      }
+      else if (country.trim() ==0) {
+        Alert.alert('Le pays est obligatoire');
+      }
+      else if (tags.length == 0) {
+        Alert.alert('Les catégories sont obligatoires');
+      }
+      else 
+        return "OK";
+    }
 
   // vide les inputs du formulaire apres la validation
   const clearFormulaire = () => {
@@ -139,10 +191,6 @@ const FormulaireAddUpdate  = ({ route, allLieux, dispatch, buttonName, lieuId}) 
   function onMultiChange() {
     return (item) => setTags(xorBy(tags, [item]));
   }
-
-  const TagsIcon = (props) => (
-    <Icon {...props} name='tag' pack='fontawesome'/>
-  );
 
   const VilleIcon = (props) => (
     <Icon {...props} name='pin'/>
@@ -185,6 +233,35 @@ const FormulaireAddUpdate  = ({ route, allLieux, dispatch, buttonName, lieuId}) 
       setDate(date);
     }
 
+    // sauvegarde un nouveau lieu
+  const updateLieu = async () => {
+    // construction du nouveau lieu
+    const data = {
+      "lieu": {
+        "id": id,
+        "name": name,
+        "description": description,
+        "tag": tagsOk,
+        "address": adress,
+        "city": city,
+        "zipcode": zipCode,
+        "latitude": latitude, 
+        "longitude": longitude,
+        "country_name": country,
+        "date_ajout" : date
+      }
+    }
+    // sauvegarde redux
+    const action = { type: 'UPDATE_LIEU', data};
+    dispatch(action);
+    // sauvegarde les lieux dans la variable
+    setLieux(allLieux.ajoutLieuxID);
+    // notification que lieu bien enregistre
+    let toast = Toast.show('Le lieu est bien modifié', {
+    duration: Toast.durations.LONG,
+    });
+  }
+
   // sauvegarde un nouveau lieu
   const sauvegarderLieu = async () => {
     // construction du nouveau lieu
@@ -221,6 +298,11 @@ const FormulaireAddUpdate  = ({ route, allLieux, dispatch, buttonName, lieuId}) 
       convertAdressToCoords();
       getDateJour();
    },[adress, city, zipCode, country, tags])
+
+   useEffect(()=>{   
+    editMode();
+    console.log("lieuId===" + JSON.stringify(lieuId));
+ },[lieuId])
 
    return (
 
@@ -296,7 +378,7 @@ const FormulaireAddUpdate  = ({ route, allLieux, dispatch, buttonName, lieuId}) 
           />
         </View> */}
 
-        <Button onPress={verificationFormulaire}>{buttonName}</Button>
+        <Button onPress={addUpdate}>{buttonName}</Button>
 
       </Layout>
     </React.Fragment>

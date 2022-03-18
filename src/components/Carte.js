@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import MapView, { Marker } from 'react-native-maps';
-import { StyleSheet, Dimensions, Button, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, Dimensions} from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import {Layout, List, Divider, TopNavigationAction, TopNavigation, Icon  } from '@ui-kitten/components';
 
 import Lieu from '../components/Lieu';
 import { getPositionActuelle } from '../data/RecupereData';
 import { connect, useSelector } from 'react-redux';
-
-
 
 
 const Carte = ({ navigation, allLieux }) => {
