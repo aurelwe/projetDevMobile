@@ -55,7 +55,7 @@ dans la page add lieu, quand on prend la position actuelle ca met un peu de temp
 
 qu'on puisse scroll dans la page d'ajout d'un lieu
 
-regex pour que l'adresse du site comment par https:// obligatoirement
+regex pour que l'adresse du site commence par https:// obligatoirement
 
 # Remarques: 
 continuer edit un lieu. Fonctionne a moitié, change deux lieux en même temps
