@@ -21,6 +21,8 @@ L’utilisateur doit pouvoir modifier le lieu
 
 # NOS PLUS A NOUS:
 
+api google
+
 lieu en favoris / onglet en bas
 
 page d'accueil avec les lieux les mieux notés / meilleurs resto, musée ... 
