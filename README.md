@@ -34,7 +34,7 @@ favoris autre couleur
 
 OK: partager lieu sms .... 
 
-lien vers site internet lieu
+OK: lien vers site internet lieu
 
 mes lieux visités / mes lieux à visiter 
 
@@ -54,6 +54,8 @@ bouton ok sur clavier valide
 dans la page add lieu, quand on prend la position actuelle ca met un peu de temps a charger. Peut etre afficher un symbole que ca charge ?
 
 qu'on puisse scroll dans la page d'ajout d'un lieu
+
+regex pour que l'adresse du site comment par https:// obligatoirement
 
 # Remarques: 
 continuer edit un lieu. Fonctionne a moitié, change deux lieux en même temps
