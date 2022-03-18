@@ -15,7 +15,6 @@ Un bouton est présent sur chaque entrée de la liste pour centrer la vue de la 
 
 ## Page d’un lieu:
 
-Cette page contient les détails d’un lieu enregistré (position sur la carte ?????????)
 L’utilisateur doit pouvoir modifier le lieu
 
 
