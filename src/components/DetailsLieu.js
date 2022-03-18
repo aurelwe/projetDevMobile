@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, ActivityIndicator , Share, Image, Dimensions} from 'react-native';
+import { View, StyleSheet, ActivityIndicator , Share, Image, Dimensions, TouchableOpacity} from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import { Layout, Text, Button } from '@ui-kitten/components';
 import Assets from '../definitions/Assets';
 import { connect } from 'react-redux';
 import Toast from 'react-native-root-toast';
+import Communications from 'react-native-communications';
 
 const DetailsLieu = ({ route, navigation, allLieux, dispatch }) => {
 
@@ -148,7 +149,6 @@ const DetailsLieu = ({ route, navigation, allLieux, dispatch }) => {
                     {lieuDetails.name}
                   </Text>
                 </View>
-                <View>
                   <Text>
                     {lieuDetails.address}
                   </Text> 
@@ -158,7 +158,20 @@ const DetailsLieu = ({ route, navigation, allLieux, dispatch }) => {
                   <Text>
                     {lieuDetails.country_name}
                   </Text>
-                </View>
+                  { lieuDetails.telephone != ""  ? 
+                    <TouchableOpacity onPress={() => Communications.phonecall(lieuDetails.telephone, true)}>
+                      <View>
+                        <Text>Appeler ce lieu</Text>
+                      </View>
+                    </TouchableOpacity> 
+                : null }
+                { lieuDetails.site != ""  ? 
+                <TouchableOpacity onPress={() => Communications.web(lieuDetails.site)}>
+                  <View style={styles.holder}>
+                    <Text style={styles.text}>Ouvrir le site internet de {lieuDetails.name}</Text>
+                  </View>
+                </TouchableOpacity>
+                : null }                
                 <Text>
                   {lieuDetails.description}
                 </Text>

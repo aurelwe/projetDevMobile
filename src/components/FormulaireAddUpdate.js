@@ -28,6 +28,9 @@ const FormulaireAddUpdate  = ({ route, allLieux, dispatch, buttonName, lieuId}) 
   const [longitude, setLongitude] = useState(0);
   // date d'ajout d'un lieu
   const [date, setDate] = useState(null);
+  const [telephone, setTelephone] = useState("");
+  const [site, setSite] = useState("");
+
 
   const [lieux, setLieux] = useState([]);
 
@@ -152,6 +155,7 @@ const FormulaireAddUpdate  = ({ route, allLieux, dispatch, buttonName, lieuId}) 
 
     // 
     const verifFormulaire = () => {
+      //const emailRegex = new RegExp("#(https?|ftp|ssh|mailto):\/\/[a-z0-9\/:%_+.,\#?!@&=-]+#i");
       // verification des champs
       if(isNaN(zipCode) || zipCode.trim() ==0)
       {
@@ -172,6 +176,9 @@ const FormulaireAddUpdate  = ({ route, allLieux, dispatch, buttonName, lieuId}) 
       else if (tags.length == 0) {
         Alert.alert('Les catégories sont obligatoires');
       }
+      // else if(!emailRegex.test(site)){
+      //   Alert.alert('Les sites !!');
+      // }
       else 
         return "OK";
     }
@@ -185,6 +192,8 @@ const FormulaireAddUpdate  = ({ route, allLieux, dispatch, buttonName, lieuId}) 
     setVille("");
     setCp("");
     setCounrty("");
+    setTelephone("");
+    setSite("");
   }
 
 
@@ -271,6 +280,8 @@ const FormulaireAddUpdate  = ({ route, allLieux, dispatch, buttonName, lieuId}) 
         "name": name,
         "description": description,
         "tag": tagsOk,
+        "telephone": telephone,
+        "site": site,
         "address": adress,
         "city": city,
         "zipcode": zipCode,
@@ -349,6 +360,22 @@ const FormulaireAddUpdate  = ({ route, allLieux, dispatch, buttonName, lieuId}) 
         <Text>Ou</Text>
         <View style={styles.rowContainer}>
           <Button onPress={getAdressPositionActuelle}>Position Actuelle</Button>
+        </View>
+        <View style={styles.rowContainer}>
+          <Input
+            style={styles.input}
+            value={telephone}
+            placeholder='Numéro de téléphone'
+            onChangeText={(t) => setTelephone(t)}
+          />
+        </View>
+        <View style={styles.rowContainer}>
+          <Input
+            style={styles.input}
+            value={site}
+            placeholder='Site internet'
+            onChangeText={(s) => setSite(s)}
+          />
         </View>
         <Input
           style={styles.input}
