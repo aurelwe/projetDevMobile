@@ -152,16 +152,18 @@ const Search = ({ navigation, allLieux }) => {
             onChangeText={(text) => setSearchTermNom(text)}
           />
 
-          <View>
-            <Picker
-              selectedValue={ville}
-              style={{ height: 50, width: 150 }}
-              onValueChange={(itemValue, itemIndex) => setVille(itemValue)}
-            >
-              {villeList.map(value=> 
-                <Picker.Item key={value} label={value} value={value}/>
-              )}
-            </Picker>
+          <View style={styles.rowContainer}>
+            <View style={styles.viewPicker}>
+              <Picker
+                selectedValue={ville}
+                style={styles.picker}
+                onValueChange={(itemValue, itemIndex) => setVille(itemValue)}
+              >
+                {villeList.map(value=> 
+                  <Picker.Item key={value} label={value} value={value}/>
+                )}
+              </Picker>
+            </View>
             <Button onPress={getAdressPositionActuelle}>Position Actuelle</Button>
           </View>
 
@@ -230,6 +232,7 @@ const styles = StyleSheet.create({
   rowContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    padding: 10,
   },
   inputRow: {
     margin: 2,
@@ -238,5 +241,15 @@ const styles = StyleSheet.create({
   selectRow: {
     margin: 2,
     flex: 1,
+  },
+  viewPicker: {
+    borderWidth: 1,
+    borderRadius: 10
+  },
+  picker: { 
+    height: 50, 
+    width: 200, 
+    borderWidth: 1,
+    paddingRight: 10
   }
 });

@@ -13,7 +13,7 @@ const Carte = ({ navigation, allLieux }) => {
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: 'Carte',
+      headerTitle: 'Carte test',
       headerRight: () => (
         <Icon name='plus' type='font-awesome' onPress={navigateToAddLieu}/>
       ),
@@ -87,14 +87,14 @@ const Carte = ({ navigation, allLieux }) => {
     navigation.navigate("Nouveau lieu");
   };
 
-  // const renderAddAction = () => (
-  //   <TopNavigationAction icon={AddIcon}/>
-  // );
+  const renderAddAction = () => (
+    <TopNavigationAction icon={AddIcon}/>
+  );
 
   return (
     <Layout style={styles.container}>
 
-      {/* <TopNavigation onTouchEnd={navigateToAddLieu} accessoryRight={renderAddAction}/> */}
+      <TopNavigation onTouchEnd={navigateToAddLieu} accessoryRight={renderAddAction}/>
 
         <MapView style={styles.map}  
          initialRegion={positionActuelle} 

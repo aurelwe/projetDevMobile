@@ -183,6 +183,14 @@ const FormulaireAddUpdate  = ({ route, navigation, allLieux, dispatch, buttonNam
   const NoteIcon = (props) => (
     <Icon {...props} name='star' pack='fontawesome'/>
   );
+
+  const TelIcon = (props) => (
+    <Icon {...props} name='phone' pack='fontawesome'/>
+  );
+
+  const LinkIcon = (props) => (
+    <Icon {...props} name='link' pack='fontawesome'/>
+  );
   
   // recupere l'id courant et set le nouvel id
   const getId = async () => {
@@ -299,74 +307,84 @@ const FormulaireAddUpdate  = ({ route, navigation, allLieux, dispatch, buttonNam
 
     <React.Fragment>
       <Layout style={styles.container} level='1'>
-        <Input
-          style={styles.input}
-          value={name}
-          placeholder='Nom du lieu'
-          onChangeText={(n) => setNom(n)}
-        />
-        <Text>Saisir une adresse</Text>
-        <Input
-          style={styles.input}
-          value={adress}
-          accessoryLeft={VilleIcon}
-          placeholder='Adresse'
-          onChangeText={(a) => setAdresse(a)}
-        />
-        <View style={styles.rowContainer}>
+
+        <View style={styles.section}>
+          <Text style={styles.textAdresse}>Saisir un nom de lieu</Text>
+                  <Input
+                    style={styles.input}
+                    value={name}
+                    placeholder='Nom du lieu'
+                    onChangeText={(n) => setNom(n)}
+                  />
+        </View>        
+
+        <View style={styles.section}>
+          <Text style={styles.textAdresse}>Saisir une adresse</Text>
           <Input
-            style={styles.inputRow}
-            value={city}
+            style={styles.input}
+            value={adress}
             accessoryLeft={VilleIcon}
-            placeholder='Ville'
-            onChangeText={(v) => setVille(v)}
+            placeholder='Adresse'
+            onChangeText={(a) => setAdresse(a)}
           />
-          <Input
-            style={styles.inputRow}
-            value={zipCode}
-            placeholder='Code postal'
-            onChangeText={(cp) => setCp(cp)}
-          />
+          <View style={styles.rowContainer}>
+            <Input
+              style={styles.inputRow}
+              value={city}
+              accessoryLeft={VilleIcon}
+              placeholder='Ville'
+              onChangeText={(v) => setVille(v)}
+            />
+            <Input
+              style={styles.inputRow}
+              value={zipCode}
+              placeholder='Code postal'
+              onChangeText={(cp) => setCp(cp)}
+            />
+          </View>
+          <View style={styles.rowContainer}>
+            <Input
+              style={styles.inputRow}
+              value={country}
+              accessoryLeft={VilleIcon}
+              placeholder='Pays'
+              onChangeText={(c) => setCounrty(c)}
+            />
+          </View>
+
+          <View>
+            <Text style={styles.text}>Ou</Text>        
+            <Button onPress={getAdressPositionActuelle}>Position Actuelle</Button>
+          </View>
         </View>
-        <View style={styles.rowContainer}>
-          <Input
-            style={styles.inputRow}
-            value={country}
-            accessoryLeft={VilleIcon}
-            placeholder='Pays'
-            onChangeText={(c) => setCounrty(c)}
-          />
-        </View>
-        <Text>Ou</Text>
-        <View style={styles.rowContainer}>
-          <Button onPress={getAdressPositionActuelle}>Position Actuelle</Button>
-        </View>
-        <View style={styles.rowContainer}>
+        
+        <View style={styles.section}>
+          <Text style={styles.textAdresse}>Autres informations</Text>
           <Input
             style={styles.input}
             value={telephone}
+            accessoryLeft={TelIcon}
             placeholder='Numéro de téléphone'
             onChangeText={(t) => setTelephone(t)}
           />
-        </View>
-        <View style={styles.rowContainer}>
           <Input
             style={styles.input}
             value={site}
+            accessoryLeft={LinkIcon}
             placeholder='Site internet'
             onChangeText={(s) => setSite(s)}
           />
-        </View>
-        <Input
-          style={styles.input}
-          value={description}
-          multiline={true}
-          textStyle={{ minHeight: 64 }}
-          placeholder='Description'
-          onChangeText={(d) => setDescritpion(d)}
-        />
 
-        <View style={styles.rowContainer}>
+          <Input
+            style={styles.input}
+            value={description}
+            multiline={true}
+            textStyle={{ minHeight: 64 }}
+            placeholder='Description'
+            onChangeText={(d) => setDescritpion(d)}
+          />
+
+          <View style={{paddingTop: 5}}>
             <SelectBox
               label="Choisir une ou plusieurs catégorie(s) "
               options={tagsList}
@@ -374,9 +392,10 @@ const FormulaireAddUpdate  = ({ route, navigation, allLieux, dispatch, buttonNam
               onMultiSelect={onMultiChange()}
               onTapClose={onMultiChange()}
               isMulti
-            />
-            </View>
-
+          />
+          </View>
+        </View>
+        
         <Button onPress={addUpdate}>{buttonName}</Button>
 
       </Layout>
@@ -417,5 +436,17 @@ const styles = StyleSheet.create({
   selectRow: {
     margin: 2,
     flex: 1,
+  },
+  text: {
+    alignSelf: 'center',
+    fontWeight: 'bold',
+    fontSize: 16
+  },
+  textAdresse:{
+    fontWeight: 'bold',
+    fontSize: 16
+  },
+  section: {
+    paddingBottom: 15
   }
 });
