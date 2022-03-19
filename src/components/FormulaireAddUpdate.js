@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import Toast from 'react-native-root-toast';
 import * as Location from 'expo-location';
 
-const FormulaireAddUpdate  = ({ route, allLieux, dispatch, buttonName, lieuId}) => {
+const FormulaireAddUpdate  = ({ route, navigation, allLieux, dispatch, buttonName, lieuId}) => {
 
   // tags choisis dans le select
   const [tags, setTags] = useState([]);
@@ -18,7 +18,6 @@ const FormulaireAddUpdate  = ({ route, allLieux, dispatch, buttonName, lieuId}) 
   const [name, setNom] = useState("");
   const [adress, setAdresse] = useState("");
   const [description, setDescritpion] = useState("");
-  // const [note, setNote] = useState([]);
   const [city, setVille] = useState("");
   const [zipCode, setCp] = useState("");
   const [country, setCounrty] = useState("");
@@ -31,7 +30,6 @@ const FormulaireAddUpdate  = ({ route, allLieux, dispatch, buttonName, lieuId}) 
   const [telephone, setTelephone] = useState("");
   const [site, setSite] = useState("");
 
-
   const [lieux, setLieux] = useState([]);
 
   // recupere la liste des tags
@@ -43,25 +41,28 @@ const FormulaireAddUpdate  = ({ route, allLieux, dispatch, buttonName, lieuId}) 
     }
   }
 
-  // 
+  // récupère les données pour les afficher dans le formulaire de modification
   const editMode = () => {
     try {
       console.log("LIEU ID EDIT MODE ===" + lieuId)
       const lieuIdd = allLieux.ajoutLieuxID.filter(item => item.lieu.id == lieuId);
       const mapLieu = lieuIdd.map(element => element.lieu);
       mapLieu.forEach(function (lieu) {
+        setId(lieu.id);
         setNom(lieu.name);
         setAdresse(lieu.address);
         setVille(lieu.city);
         setCp(lieu.zipcode);
         setCounrty(lieu.country_name);
         setDescritpion(lieu.description);
-        console.log(lieu.tag)
+        setTelephone(lieu.telephone);
+        setSite(lieu.site);
+        //console.log(lieu.tag)
         // setTags(lieu.tag);
       });
 
       const mapTag = lieuIdd.map(element => element.lieu.tag);
-      console.log("mapTag==" + mapTag)
+      //console.log("mapTag==" + mapTag)
     
     } catch (error) {
       // TO DO
@@ -124,36 +125,10 @@ const FormulaireAddUpdate  = ({ route, allLieux, dispatch, buttonName, lieuId}) 
         clearFormulaire();
       }
     }
-    // CODE DE BASE MARCHE OK
-    // verification des champs
-    // if(isNaN(zipCode) || zipCode.trim() ==0)
-    // {
-    //   Alert.alert("Le code postal est obligatoire et doit comporter uniquement des chiffres");
-    // }
-    // else if (name.trim() ==0) { 
-    //   Alert.alert('Le nom est obligatoire');
-    // }
-    // else if (adress.trim() ==0) {
-    //   Alert.alert('L adresse est obligatoire');
-    // }
-    // else if (city.trim() ==0) {
-    //   Alert.alert('La ville est obligatoire');
-    // }
-    // else if (country.trim() ==0) {
-    //   Alert.alert('Le pays est obligatoire');
-    // }
-    // else if (tags.length == 0) {
-    //   Alert.alert('Les catégories sont obligatoires');
-    // }
-    // else{ // si tous les champs sont corrects
-    //   // on sauvegarde le lieu et on vide le formulaire
-    //   sauvegarderLieu();
-    //   clearFormulaire();
-    // } 
   }
 
 
-    // 
+    // vérifie que les champs obligatoires sont bien remplis
     const verifFormulaire = () => {
       //const emailRegex = new RegExp("#(https?|ftp|ssh|mailto):\/\/[a-z0-9\/:%_+.,\#?!@&=-]+#i");
       // verification des champs
@@ -242,12 +217,18 @@ const FormulaireAddUpdate  = ({ route, allLieux, dispatch, buttonName, lieuId}) 
       setDate(date);
     }
 
-    // sauvegarde un nouveau lieu
+    // update un lieu
   const updateLieu = async () => {
+    let idUpdate=0;
+    const lieuIdd = allLieux.ajoutLieuxID.filter(item => item.lieu.id == lieuId);
+    const mapLieu = lieuIdd.map(element => element.lieu);
+    mapLieu.forEach(function (lieu) {
+      idUpdate=lieu.id;
+    });
     // construction du nouveau lieu
     const data = {
       "lieu": {
-        "id": id,
+        "id": idUpdate,
         "name": name,
         "description": description,
         "tag": tagsOk,
@@ -265,7 +246,7 @@ const FormulaireAddUpdate  = ({ route, allLieux, dispatch, buttonName, lieuId}) 
     dispatch(action);
     // sauvegarde les lieux dans la variable
     setLieux(allLieux.ajoutLieuxID);
-    // notification que lieu bien enregistre
+    // notification que lieu bien modifie
     let toast = Toast.show('Le lieu est bien modifié', {
     duration: Toast.durations.LONG,
     });
@@ -312,7 +293,6 @@ const FormulaireAddUpdate  = ({ route, allLieux, dispatch, buttonName, lieuId}) 
 
    useEffect(()=>{   
     editMode();
-    console.log("lieuId===" + JSON.stringify(lieuId));
  },[lieuId])
 
    return (
@@ -396,14 +376,6 @@ const FormulaireAddUpdate  = ({ route, allLieux, dispatch, buttonName, lieuId}) 
               isMulti
             />
             </View>
-           {/* <View style={styles.rowContainer}>
-          <Input
-            style={styles.inputRow}
-            placeholder='Note'
-            accessoryLeft={NoteIcon}
-            onChangeText={(rate) => setNote(rate)}
-          />
-        </View> */}
 
         <Button onPress={addUpdate}>{buttonName}</Button>
 
