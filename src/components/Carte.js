@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import MapView, { Marker } from 'react-native-maps';
-import { StyleSheet, Dimensions} from 'react-native';
+import { StyleSheet, Dimensions, View} from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
-import {Layout, List, Divider, TopNavigationAction, TopNavigation, Icon  } from '@ui-kitten/components';
+import {Layout, List, Divider, TopNavigationAction, TopNavigation, Icon, Button  } from '@ui-kitten/components';
 
 import Lieu from '../components/Lieu';
 import { getPositionActuelle } from '../data/RecupereData';
@@ -15,6 +15,8 @@ const Carte = ({ navigation, allLieux }) => {
   
   // position actuelle de l'utilisateur
   const [positionActuelle, setPosition] = useState(null);
+  // position du lieu a centrer
+  const [positionAcentrer, setPositionAcentrer] = useState(null);
 
   // position actuelle de l'utilisateur
   const [colorMarquer, setColor] = useState('red');
@@ -47,9 +49,23 @@ const Carte = ({ navigation, allLieux }) => {
               longitudeDelta: 0.0421,
             });
     } catch (error) {
-
+      // TO DO
     }
   }  
+
+    // recupere la position du lieu a centrer
+    const setPositionLieuCentrer =  (latitude, longitude) => {
+      try {
+        setPositionAcentrer({
+                latitude: latitude,
+                longitude: longitude,
+                latitudeDelta: 0.0922 *0.1,
+                longitudeDelta: 0.0421 * 0.1 ,
+              });
+      } catch (error) {
+        //TO DO
+      }
+    }  
 
   const amIaFavRestaurant = (lieuID) => {
     if (allLieux.findIndex(i => i === lieuID) !== -1) {
@@ -88,7 +104,7 @@ const Carte = ({ navigation, allLieux }) => {
 
         <MapView style={styles.map}  
          initialRegion={positionActuelle} 
-         onRegionChangeComplete={(coordonneesDeplacement)=>{console.log(coordonneesDeplacement); }}
+         region={positionAcentrer}
         >
           {lieux.map((listeLieux) => (   
             <Marker
@@ -106,8 +122,12 @@ const Carte = ({ navigation, allLieux }) => {
             data={lieux}
             keyExtractor={(item) => item.lieu.id.toString()}
             renderItem={({ item }) => (
-              // console.log("ITEM ="+ JSON.stringify(item))
-              <Lieu lieuxData={item} onClick={navigateToDetailsLieu} />
+              //console.log("ITEM ="+ JSON.stringify(item))
+              <View>
+                <Lieu lieuxData={item} onClick={navigateToDetailsLieu} />
+                <Button onPress={() => setPositionLieuCentrer(item.lieu.latitude, item.lieu.longitude)}>Centrer</Button>
+              </View>
+              
             )}           
             refreshing={isRefreshing}
             onRefresh={searchLieux}

@@ -61,8 +61,8 @@ const FormulaireAddUpdate  = ({ route, navigation, allLieux, dispatch, buttonNam
         // setTags(lieu.tag);
       });
 
-      const mapTag = lieuIdd.map(element => element.lieu.tag);
-      //console.log("mapTag==" + mapTag)
+      const mapTag = allLieux.tagListe.map(element => element);
+      console.log("mapTag==" + JSON.stringify(mapTag));
     
     } catch (error) {
       // TO DO
@@ -289,10 +289,12 @@ const FormulaireAddUpdate  = ({ route, navigation, allLieux, dispatch, buttonNam
       tagsOK();
       convertAdressToCoords();
       getDateJour();
+      console.log("TAGS ============" + JSON.stringify(tags));
    },[adress, city, zipCode, country, tags])
 
    useEffect(()=>{   
     editMode();
+    console.log("TAGS ============" + tags);
  },[lieuId])
 
    return (

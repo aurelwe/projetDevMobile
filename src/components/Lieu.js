@@ -35,10 +35,7 @@ const Lieu = ({onClick, lieuxData }) => {
           </Text>
           <View style={{flexDirection:'row', alignItems:'center'}}>
             {imagesTags()}
-          </View>          
-          {/* <Button>
-            Centrer
-          </Button> */}
+          </View>        
         </View>
       </View>
     </TouchableOpacity>
