@@ -11,7 +11,6 @@ Par défaut, la liste contient tous les enregistrements. Les résultats peuvent 
 ## Page carte:
 
 La liste contient uniquement les lieux présents sur la carte (dans la vue). Si l’utilisateur déplace la vue de la carte, cette liste est mise à jour.
-Un bouton est présent sur chaque entrée de la liste pour centrer la vue de la carte sur la position du lieu en question.
 
 ## Page d’un lieu:
 
