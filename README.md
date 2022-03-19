@@ -57,5 +57,9 @@ qu'on puisse scroll dans la page d'ajout d'un lieu
 
 regex pour que l'adresse du site commence par https:// obligatoirement
 
+quand on edit un lieu, revenir direct sur la carte ?
+
+quand on clique sur la carte dans la barre en bas, il faut qu'on arrive a chaque fois sur la carte et pas sur le détails d'un lieu parfois
+
 # Remarques: 
-continuer edit un lieu. Fonctionne a moitié, change deux lieux en même temps
+
