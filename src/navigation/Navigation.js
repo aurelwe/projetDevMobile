@@ -37,7 +37,6 @@ const BottomTabBar = ({ navigation, state }) => (
     <BottomNavigationTab title="Accueil" icon={AccueilIcon}/>
     <BottomNavigationTab title="Carte" icon={MapIcon}/>
     <BottomNavigationTab title="Search" icon={SearchIcon}/>
-    <BottomNavigationTab title="AddLieu" icon={AddIcon}/>
   </BottomNavigation>
 );
 

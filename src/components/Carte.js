@@ -10,6 +10,16 @@ import { connect, useSelector } from 'react-redux';
 
 
 const Carte = ({ navigation, allLieux }) => {
+
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: 'Carte',
+      headerRight: () => (
+        <Icon name='plus' type='font-awesome' onPress={navigateToAddLieu}/>
+      ),
+    });
+  }, [navigation]);
+  
   // liste de lieux
   const [lieux, setLieux] = useState([]);
   
@@ -77,14 +87,14 @@ const Carte = ({ navigation, allLieux }) => {
     navigation.navigate("Nouveau lieu");
   };
 
-  const renderAddAction = () => (
-    <TopNavigationAction icon={AddIcon}/>
-  );
+  // const renderAddAction = () => (
+  //   <TopNavigationAction icon={AddIcon}/>
+  // );
 
   return (
     <Layout style={styles.container}>
 
-      <TopNavigation onTouchEnd={navigateToAddLieu} accessoryRight={renderAddAction}/>
+      {/* <TopNavigation onTouchEnd={navigateToAddLieu} accessoryRight={renderAddAction}/> */}
 
         <MapView style={styles.map}  
          initialRegion={positionActuelle} 
