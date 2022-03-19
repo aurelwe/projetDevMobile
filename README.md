@@ -15,7 +15,7 @@ Un bouton est présent sur chaque entrée de la liste pour centrer la vue de la 
 
 ## Page d’un lieu:
 
-L’utilisateur doit pouvoir modifier le lieu
+L’utilisateur doit pouvoir modifier le lieu (il reste plus que les tags a faire)
 
 
 # NOS PLUS A NOUS:
