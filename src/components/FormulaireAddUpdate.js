@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Keyboard, Alert, Text } from 'react-native';
+import { View, StyleSheet, Keyboard, Alert, Text, FlatList } from 'react-native';
 import { Input, Layout, Icon, Button } from '@ui-kitten/components';
 import SelectBox from 'react-native-multi-selectbox';
 import { xorBy } from 'lodash';
@@ -311,101 +311,105 @@ const FormulaireAddUpdate  = ({ route, navigation, allLieux, dispatch, buttonNam
    return (
 
     <React.Fragment>
-      <ScrollView>
+      
       <Layout style={styles.container} level='1'>
+        <FlatList ListHeaderComponent={
+          <>
+            <View style={styles.section}>
+              <Text style={styles.textAdresse}>Saisir un nom de lieu</Text>
+                <Input
+                  style={styles.input}
+                  value={name}
+                  placeholder='Nom du lieu'
+                  onChangeText={(n) => setNom(n)}
+                />
+            </View> 
 
-        <View style={styles.section}>
-          <Text style={styles.textAdresse}>Saisir un nom de lieu</Text>
-            <Input
-              style={styles.input}
-              value={name}
-              placeholder='Nom du lieu'
-              onChangeText={(n) => setNom(n)}
-            />
-        </View>        
+            <View style={styles.section}>
+              <Text style={styles.textAdresse}>Saisir une adresse</Text>
+              <Input
+                style={styles.input}
+                value={adress}
+                accessoryLeft={VilleIcon}
+                placeholder='Adresse'
+                onChangeText={(a) => setAdresse(a)}
+              />
+              <View style={styles.rowContainer}>
+                <Input
+                  style={styles.inputRow}
+                  value={city}
+                  accessoryLeft={VilleIcon}
+                  placeholder='Ville'
+                  onChangeText={(v) => setVille(v)}
+                />
+                <Input
+                  style={styles.inputRow}
+                  value={zipCode}
+                  placeholder='Code postal'
+                  onChangeText={(cp) => setCp(cp)}
+                />
+              </View>
+              <View style={styles.rowContainer}>
+                <Input
+                  style={styles.inputRow}
+                  value={country}
+                  accessoryLeft={VilleIcon}
+                  placeholder='Pays'
+                  onChangeText={(c) => setCounrty(c)}
+                />
+              </View>
 
-        <View style={styles.section}>
-          <Text style={styles.textAdresse}>Saisir une adresse</Text>
-          <Input
-            style={styles.input}
-            value={adress}
-            accessoryLeft={VilleIcon}
-            placeholder='Adresse'
-            onChangeText={(a) => setAdresse(a)}
-          />
-          <View style={styles.rowContainer}>
-            <Input
-              style={styles.inputRow}
-              value={city}
-              accessoryLeft={VilleIcon}
-              placeholder='Ville'
-              onChangeText={(v) => setVille(v)}
-            />
-            <Input
-              style={styles.inputRow}
-              value={zipCode}
-              placeholder='Code postal'
-              onChangeText={(cp) => setCp(cp)}
-            />
-          </View>
-          <View style={styles.rowContainer}>
-            <Input
-              style={styles.inputRow}
-              value={country}
-              accessoryLeft={VilleIcon}
-              placeholder='Pays'
-              onChangeText={(c) => setCounrty(c)}
-            />
-          </View>
+              <View>
+                <Text style={styles.text}>Ou</Text>        
+                <Button onPress={getAdressPositionActuelle}>Position Actuelle</Button>
+              </View>
+            </View>
+            
+            <View style={styles.section}>
+              <Text style={styles.textAdresse}>Autres informations</Text>
+              <Input
+                style={styles.input}
+                value={telephone}
+                accessoryLeft={TelIcon}
+                placeholder='Numéro de téléphone'
+                onChangeText={(t) => setTelephone(t)}
+              />
+              <Input
+                style={styles.input}
+                value={site}
+                accessoryLeft={LinkIcon}
+                placeholder='Site internet'
+                onChangeText={(s) => setSite(s)}
+              />
 
-          <View>
-            <Text style={styles.text}>Ou</Text>        
-            <Button onPress={getAdressPositionActuelle}>Position Actuelle</Button>
-          </View>
-        </View>
-        
-        <View style={styles.section}>
-          <Text style={styles.textAdresse}>Autres informations</Text>
-          <Input
-            style={styles.input}
-            value={telephone}
-            accessoryLeft={TelIcon}
-            placeholder='Numéro de téléphone'
-            onChangeText={(t) => setTelephone(t)}
-          />
-          <Input
-            style={styles.input}
-            value={site}
-            accessoryLeft={LinkIcon}
-            placeholder='Site internet'
-            onChangeText={(s) => setSite(s)}
-          />
+              <Input
+                style={styles.input}
+                value={description}
+                multiline={true}
+                textStyle={{ minHeight: 64 }}
+                placeholder='Description'
+                onChangeText={(d) => setDescritpion(d)}
+              />
 
-          <Input
-            style={styles.input}
-            value={description}
-            multiline={true}
-            textStyle={{ minHeight: 64 }}
-            placeholder='Description'
-            onChangeText={(d) => setDescritpion(d)}
-          />
+              <View style={{paddingTop: 5}}>
+                <SelectBox
+                  label="Choisir une ou plusieurs catégorie(s) "
+                  options={tagsList}
+                  selectedValues={tags}
+                  onMultiSelect={onMultiChange()}
+                  onTapClose={onMultiChange()}
+                  isMulti
+              />
+              </View>
+            </View>
+            
+            <Button onPress={addUpdate}>{buttonName}</Button>
 
-          <View style={{paddingTop: 5}}>
-            <SelectBox
-              label="Choisir une ou plusieurs catégorie(s) "
-              options={tagsList}
-              selectedValues={tags}
-              onMultiSelect={onMultiChange()}
-              onTapClose={onMultiChange()}
-              isMulti
-          />
-          </View>
-        </View>
-        
-        <Button onPress={addUpdate}>{buttonName}</Button>
-
+          </>
+        }>
+        </FlatList>
       </Layout>
-      </ScrollView>
+      
     </React.Fragment>
             
   );
