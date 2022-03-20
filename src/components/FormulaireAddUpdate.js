@@ -6,6 +6,7 @@ import { xorBy } from 'lodash';
 import { connect } from 'react-redux';
 import Toast from 'react-native-root-toast';
 import * as Location from 'expo-location';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const FormulaireAddUpdate  = ({ route, navigation, allLieux, dispatch, buttonName, lieuId}) => {
 
@@ -310,16 +311,17 @@ const FormulaireAddUpdate  = ({ route, navigation, allLieux, dispatch, buttonNam
    return (
 
     <React.Fragment>
+      <ScrollView>
       <Layout style={styles.container} level='1'>
 
         <View style={styles.section}>
           <Text style={styles.textAdresse}>Saisir un nom de lieu</Text>
-                  <Input
-                    style={styles.input}
-                    value={name}
-                    placeholder='Nom du lieu'
-                    onChangeText={(n) => setNom(n)}
-                  />
+            <Input
+              style={styles.input}
+              value={name}
+              placeholder='Nom du lieu'
+              onChangeText={(n) => setNom(n)}
+            />
         </View>        
 
         <View style={styles.section}>
@@ -403,6 +405,7 @@ const FormulaireAddUpdate  = ({ route, navigation, allLieux, dispatch, buttonNam
         <Button onPress={addUpdate}>{buttonName}</Button>
 
       </Layout>
+      </ScrollView>
     </React.Fragment>
             
   );

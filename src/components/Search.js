@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Input, Layout, Select, SelectItem, Icon, List, Divider, Button, IndexPath } from '@ui-kitten/components';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
 import Lieu from '../components/Lieu';
 import {Picker} from '@react-native-picker/picker';
 import MultiSelect from 'react-native-multiple-select';
@@ -80,7 +80,7 @@ const Search = ({ navigation, allLieux }) => {
     const searchVilles = async () => {
       try {           
         var listeVilles=[];
-        listeVilles.push("Choisir une ville");
+        listeVilles.push("");
         // parcours allLieux pour recuperer les villes
         for (let value of allLieux.ajoutLieuxID) {
           listeVilles.push(value.lieu.city);
@@ -144,6 +144,9 @@ const Search = ({ navigation, allLieux }) => {
     return (
       <React.Fragment>
         <Layout style={styles.container} level='1'>
+        <View style={styles.section}>
+          <Text style={styles.text}>Nom du lieu</Text>
+          </View>
           <Input
             style={styles.input}
             accessoryLeft={SearchIcon}
@@ -152,24 +155,31 @@ const Search = ({ navigation, allLieux }) => {
             onChangeText={(text) => setSearchTermNom(text)}
           />
 
-          <View style={styles.rowContainer}>
-            <View style={styles.viewPicker}>
-              <Picker
-                selectedValue={ville}
-                style={styles.picker}
-                onValueChange={(itemValue, itemIndex) => setVille(itemValue)}
-              >
-                {villeList.map(value=> 
-                  <Picker.Item key={value} label={value} value={value}/>
-                )}
-              </Picker>
+          <View style={styles.section}>
+            <Text style={styles.text}>Ville</Text>
+            <View style={styles.rowContainer}>
+              <View style={styles.viewPicker}>
+                <Picker
+                  selectedValue={ville}
+                  style={styles.picker}
+                  onValueChange={(itemValue, itemIndex) => setVille(itemValue)}
+                >
+                  {villeList.map(value=> 
+                    <Picker.Item key={value} label={value} value={value}/>
+                  )}
+                </Picker>
+              </View>
             </View>
-            <Button onPress={getAdressPositionActuelle}>Position Actuelle</Button>
+
+            <View style={styles.section}>
+              <Text style={styles.textOu}>Ou</Text>   
+              <Button onPress={getAdressPositionActuelle}>Position Actuelle</Button>
+            </View>
           </View>
 
           <View style={styles.rowContainer}>
             <SelectBox
-              label="Select tags"
+              label="Choisir une ou plusieurs catégorie(s)"
               options={tagsList}
               selectedValues={tags}
               onMultiSelect={onMultiChange()}
@@ -248,8 +258,20 @@ const styles = StyleSheet.create({
   },
   picker: { 
     height: 50, 
-    width: 200, 
+    width: 350, 
     borderWidth: 1,
-    paddingRight: 10
-  }
+    paddingRight: 10,
+  },
+  text:{
+    fontWeight: 'bold',
+    fontSize: 16
+  },
+  section: {
+    paddingBottom: 15
+  },
+  textOu: {
+    alignSelf: 'center',
+    fontWeight: 'bold',
+    fontSize: 16
+  },
 });

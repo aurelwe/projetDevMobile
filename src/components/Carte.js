@@ -135,7 +135,10 @@ const Carte = ({ navigation, allLieux }) => {
               //console.log("ITEM ="+ JSON.stringify(item))
               <View>
                 <Lieu lieuxData={item} onClick={navigateToDetailsLieu} />
-                <Button onPress={() => setPositionLieuCentrer(item.lieu.latitude, item.lieu.longitude)}>Centrer</Button>
+                <Button 
+                  onPress={() => setPositionLieuCentrer(item.lieu.latitude, item.lieu.longitude)}
+                  accessoryLeft={AddIcon}>
+                </Button>
               </View>
               
             )}           
