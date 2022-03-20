@@ -166,22 +166,19 @@ const Search = ({ navigation, allLieux }) => {
             </View>
             <Button onPress={getAdressPositionActuelle}>Position Actuelle</Button>
           </View>
-          
+
           <View style={styles.rowContainer}>
-            <View style={styles.viewSelect}>
-              <SelectBox
-                style={styles.selectRow}
-                options={tagsList}
-                selectedValues={tags}
-                onMultiSelect={onMultiChange()}
-                onTapClose={onMultiChange()}
-                isMulti
-              />
-            </View>
+            <SelectBox
+              label="Select tags"
+              options={tagsList}
+              selectedValues={tags}
+              onMultiSelect={onMultiChange()}
+              onTapClose={onMultiChange()}
+              isMulti
+            />
           </View>
 
           <View style={styles.rowContainer}>
-            
             <Select
               style={styles.selectRow}
               selectedIndex={km}
