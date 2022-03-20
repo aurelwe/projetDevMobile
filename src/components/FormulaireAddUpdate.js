@@ -232,6 +232,8 @@ const FormulaireAddUpdate  = ({ route, navigation, allLieux, dispatch, buttonNam
         "name": name,
         "description": description,
         "tag": tagsOk,
+        "telephone": telephone,
+        "site": site,
         "address": adress,
         "city": city,
         "zipcode": zipCode,
