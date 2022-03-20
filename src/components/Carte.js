@@ -10,6 +10,16 @@ import { connect, useSelector } from 'react-redux';
 
 
 const Carte = ({ navigation, allLieux }) => {
+
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: 'Carte test',
+      headerRight: () => (
+        <Icon name='plus' type='font-awesome' onPress={navigateToAddLieu}/>
+      ),
+    });
+  }, [navigation]);
+  
   // liste de lieux
   const [lieux, setLieux] = useState([]);
   

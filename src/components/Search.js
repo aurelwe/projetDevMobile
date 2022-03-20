@@ -151,17 +151,19 @@ const Search = ({ navigation, allLieux }) => {
             // value={lieux}
             onChangeText={(text) => setSearchTermNom(text)}
           />
-        
-          <View style={styles.viewPicker}>
-            <Picker
-              selectedValue={ville}
-              style={styles.picker}
-              onValueChange={(itemValue, itemIndex) => setVille(itemValue)}
+
+          <View style={styles.rowContainer}>
+            <View style={styles.viewPicker}>
+              <Picker
+                selectedValue={ville}
+                style={styles.picker}
+                onValueChange={(itemValue, itemIndex) => setVille(itemValue)}
               >
-              {villeList.map(value=> 
-                <Picker.Item key={value} label={value} value={value}/>
-              )}
-            </Picker>
+                {villeList.map(value=> 
+                  <Picker.Item key={value} label={value} value={value}/>
+                )}
+              </Picker>
+            </View>
             <Button onPress={getAdressPositionActuelle}>Position Actuelle</Button>
           </View>
           
@@ -233,6 +235,7 @@ const styles = StyleSheet.create({
   rowContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    padding: 10,
   },
   inputRow: {
     margin: 2,
@@ -242,24 +245,14 @@ const styles = StyleSheet.create({
     margin: 2,
     flex: 1,
   },
-  viewSelect: {
-    flex: 1,
-    marginTop: 10,
-    borderWidth: 1,
-    padding: 5,
-    borderRadius: 4,
-    backgroundColor: '#f0f7fe',
-    borderColor: 'lightgrey',
-    
-  },
   viewPicker: {
-    borderColor: 'lightgrey',
-    backgroundColor: '#f0f7fe',
     borderWidth: 1,
-    marginTop: 10,
-    borderRadius: 4
+    borderRadius: 10
   },
-  picker: {
-    color: "grey"
+  picker: { 
+    height: 50, 
+    width: 200, 
+    borderWidth: 1,
+    paddingRight: 10
   }
 });

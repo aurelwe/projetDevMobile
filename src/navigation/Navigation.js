@@ -51,7 +51,7 @@ function map() {
       initialRouteName="ViewCarte" > 
       <MapNavigation.Screen name="Carte" component={Carte} />           
       <MapNavigation.Screen name="Details" component={DetailsLieu}/>
-      <SearchNavigation.Screen name="Nouveau lieu" component={AddLieu}/>
+      <MapNavigation.Screen name="Nouveau lieu" component={AddLieu}/>
     </MapNavigation.Navigator>
   )
 };
@@ -72,6 +72,7 @@ const TabNavigator = () => (
     <Screen name="Accueil" component={Accueil} />
     <Screen name="Map" component={map} options={{headerShown: false}}/>
     <Screen name="Recherche" component={search} options={{headerShown: false}}/>
+    {/* <Screen name="Nouveau lieu" component={AddLieu}/> */}
     <Screen name="Edit lieu" component={EditLieu}/>
   </Navigator>
 );
