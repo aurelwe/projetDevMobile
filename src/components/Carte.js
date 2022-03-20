@@ -1,14 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import MapView, { Marker } from 'react-native-maps';
-import { StyleSheet, Dimensions, Button } from 'react-native';
+import { StyleSheet, Dimensions} from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
-import {Layout, List, Divider, TopNavigation, TopNavigationAction, Icon } from '@ui-kitten/components';
+import {Layout, List, Divider, TopNavigationAction, TopNavigation, Icon  } from '@ui-kitten/components';
+
 
 import Lieu from '../components/Lieu';
-import { getLieux, getPositionActuelle } from '../data/RecupereData';
+import { getPositionActuelle } from '../data/RecupereData';
+import { connect, useSelector } from 'react-redux';
 
 
-const Carte = ({ navigation }) => {
+const Carte = ({ navigation, allLieux }) => {
+
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: 'Carte test',
+      headerRight: () => (
+        <Icon name='plus' type='font-awesome' onPress={navigateToAddLieu}/>
+      ),
+    });
+  }, [navigation]);
+  
   // liste de lieux
   const [lieux, setLieux] = useState([]);
   
@@ -17,20 +29,24 @@ const Carte = ({ navigation }) => {
 
   // position actuelle de l'utilisateur
   const [colorMarquer, setColor] = useState('red');
+
+  const [isRefreshing, setIsRefreshing] = useState(false);
   
   // test au changement de page
   const isFocused = useIsFocused();
 
   // recherche tous les lieux enregistrés
   const searchLieux = async () => {
+    setIsRefreshing(true);
       try {
-        const dataSearchResult = await getLieux();
-        setLieux(dataSearchResult);   
+        setLieux(allLieux);
+        console.log("SET LIEUX CARTE ===="+  JSON.stringify(lieux));
       } catch (error) {
         // TO DO
       }
+      setIsRefreshing(false);
     }
-
+    
   // recupere la position actuelle de l'utilisateur
   const getPosition = async () => {
     try {
@@ -46,20 +62,27 @@ const Carte = ({ navigation }) => {
     }
   }  
 
+  const amIaFavRestaurant = (lieuID) => {
+    if (allLieux.findIndex(i => i === lieuID) !== -1) {
+      return true;
+    }
+    return false;
+  };
+
   // initialisation de la page
   useEffect(() => {
       searchLieux();
       getPosition();
-  },[isFocused]);
-
-  // pour passer a la page de details d'un lieu
-  const navigateToDetailsLieu = (lieuID) => {
-    navigation.navigate("Details", { lieuID });
-  };
+  },[allLieux]);
 
   const AddIcon = (props) => (
     <Icon {...props} name='plus' pack='fontawesome'/>
   );
+
+  // pour passer a la page de details d'un lieu
+  const navigateToDetailsLieu = (lieuID) => {
+    navigation.navigate("Details", {lieuID});
+  };
 
   const navigateToAddLieu = () => {
     navigation.navigate("Nouveau lieu");
@@ -81,8 +104,8 @@ const Carte = ({ navigation }) => {
           {lieux.map((listeLieux) => (   
             <Marker
               key={listeLieux.lieu.id}
-              pinColor={colorMarquer}
-              coordinate= {{latitude: listeLieux.lieu.location.latitude, longitude: listeLieux.lieu.location.longitude}}
+              pinColor={"blue"}
+              coordinate= {{latitude: listeLieux.lieu.latitude, longitude: listeLieux.lieu.longitude}}
               title={listeLieux.lieu.name}
             />           
           ))}
@@ -94,15 +117,23 @@ const Carte = ({ navigation }) => {
             data={lieux}
             keyExtractor={(item) => item.lieu.id.toString()}
             renderItem={({ item }) => (
-            <Lieu lieuxData={item.lieu} onClick={navigateToDetailsLieu} />
-            )}
+              // console.log("ITEM ="+ JSON.stringify(item))
+              <Lieu lieuxData={item} onClick={navigateToDetailsLieu} />
+            )}           
+            refreshing={isRefreshing}
+            onRefresh={searchLieux}
         />
-
-    </Layout>
+     </Layout>
   );
 };
 
-export default Carte;
+const mapStateToProps = (state) => {
+  return {
+    allLieux: state.ajoutLieuxID
+  }
+}
+
+export default connect(mapStateToProps)(Carte);
 
 const styles = StyleSheet.create({
   container: {

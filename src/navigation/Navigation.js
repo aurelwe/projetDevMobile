@@ -8,6 +8,7 @@ import DetailsLieu from '../components/DetailsLieu';
 import Accueil from '../components/Accueil';
 import Search from '../components/Search';
 import AddLieu from '../components/AddLieu';
+import EditLieu from '../components/EditLieu';
 
 const {Navigator, Screen} = createBottomTabNavigator();
 const MapNavigation = createStackNavigator();
@@ -50,7 +51,7 @@ function map() {
       initialRouteName="ViewCarte" > 
       <MapNavigation.Screen name="Carte" component={Carte} />           
       <MapNavigation.Screen name="Details" component={DetailsLieu}/>
-      <SearchNavigation.Screen name="Nouveau lieu" component={AddLieu}/>
+      <MapNavigation.Screen name="Nouveau lieu" component={AddLieu}/>
     </MapNavigation.Navigator>
   )
 };
@@ -70,6 +71,8 @@ const TabNavigator = () => (
     <Screen name="Accueil" component={Accueil} />
     <Screen name="Map" component={map} options={{headerShown: false}}/>
     <Screen name="Recherche" component={search} options={{headerShown: false}}/>
+    {/* <Screen name="Nouveau lieu" component={AddLieu}/> */}
+    <Screen name="Edit lieu" component={EditLieu}/>
   </Navigator>
 );
 
