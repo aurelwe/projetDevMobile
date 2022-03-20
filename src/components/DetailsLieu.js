@@ -1,56 +1,81 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, ActivityIndicator } from 'react-native';
-import { getLieuDetails } from '../data/RecupereData';
-import { Layout, Text } from '@ui-kitten/components';
+import { View, StyleSheet, ActivityIndicator , Share, Image, Dimensions, TouchableOpacity} from 'react-native';
+import MapView, { Marker } from 'react-native-maps';
+import { Layout, Text, Button } from '@ui-kitten/components';
+import Assets from '../definitions/Assets';
+import { connect } from 'react-redux';
+import Toast from 'react-native-root-toast';
+import Communications from 'react-native-communications';
 
-// function tagIcons(tags){
-//   const icons = []
-//   for (let i = 0; i<= tags.size; i++) {
-//     if (tags[i] === "Boire un coup"){
-//      icons[i].push(<Icon name='cocktail' pack='fontawesome'/>)
-//     }
-//     if (tags[i] === "Manger"){
-//       icons[i].push(<Icon name='utensils' pack='fontawesome'/>)
-//     }
-//     if (tags[i] === "Visiter"){
-//       icons[i].push(<Icon name='camera' pack='fontawesome'/>)
-//     }
-//   }
-//   return icons
-// }
+const DetailsLieu = ({ route, navigation, allLieux, dispatch }) => {
 
-const DetailsLieu = ({ route }) => {
-
-  const [isLoading, setIsLoading] = useState(true);
-  const [lieu, setLieu] = useState(null);
+  const [lieuDetails, setLieu] = useState([]);
+  const [coordMap, setCoordMap] = useState(null);
   const [isError, setIsError] = useState(false);
 
-  useEffect(() => {
-    requestLieu();
-  }, []); // Uniquement à l'initialisation
+    // remplace les noms des tags par des images 
+    const imagesTags = () => {
+      var img = [];
+      try {
+        // parcours les lieux avec l'id du lieu choisis et recupere les tags
+        const lieuId = allLieux.ajoutLieuxID.filter(item => item.lieu.id == route.params.lieuID);
+        const mapLieu = lieuId.map(element => element.lieu.tag);
+        // set la variable lieuDetails 
+        mapLieu.forEach(function (lieu) {
+          if(lieu.includes("Visiter")){
+            // on ajoute l'image de visiter a la liste
+            img.push(<View key={1}><Image style={styles.icon} source={Assets.icons.visiter} /></View>);
+          } 
+          if(lieu.includes("Manger")){
+            img.push(<View key={2}><Image style={styles.icon} source={Assets.icons.manger} /></View>);
+          }
+          if(lieu.includes("Boire un coup")){
+            img.push(<View key={3}><Image style={styles.icon} source={Assets.icons.boire} /></View>);
+          }  
+        }); 
+        return (img);
+      } catch (error) {
+        // TO DO
+      }
+    }
 
-  const requestLieu = async () => {
+  // recupere les details du lieu correspondant
+  const requestLieu =  () => {
     try {
-      const jsonLieuResult = await getLieuDetails(route.params.lieuID);
-      setLieu(jsonLieuResult);
-      setIsLoading(false);
+      // filtre par rapport a l'id du lieu
+      const lieuId = allLieux.ajoutLieuxID.filter(item => item.lieu.id == route.params.lieuID);
+      const mapLieu = lieuId.map(element => element.lieu);
+      // set la variable lieuDetails 
+      mapLieu.forEach(function (lieu) {
+        setLieu(lieu);
+        setCoordMap({
+          latitude: lieu.latitude,
+          longitude: lieu.longitude,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421,
+        });
+      });
+      console.log("lieu details ===" + JSON.stringify(lieuDetails))
+      
     } catch (error) {
-      setIsError(true);
+        setIsError(true); 
     }
   }
-  // const tags = []
-  // for (let i = 0; i<= lieu.tag.size; i++) {
-  //   if (tags[i] === "Boire un coup"){
-  //     tags.push(<Icon name='cocktail' pack='fontawesome'/>)
-  //   }
-  //   if (tags[i] === "Manger"){
-  //     tapGestureHandlerProps.push(<Icon name='utensils' pack='fontawesome'/>)
-  //   }
-  //   if (tags[i] === "Visiter"){
-  //     tags.push(<Icon name='camera' pack='fontawesome'/>)
-  //   }
-  // }
 
+  // partage l'adresse du lieu 
+  const onShare = async () => {
+    try {
+      const result = await Share.share({
+        message: lieuDetails.address + " " + lieuDetails.zipcode + " " +lieuDetails.city + " " + lieuDetails.country_name
+      });
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+  
+  useEffect(() => {
+    requestLieu();
+  },[lieuDetails]);
 
   const MangerIcon = (props) => (
     <Icon {...props} name='utensils' pack='fontawesome'/>
@@ -64,47 +89,115 @@ const DetailsLieu = ({ route }) => {
     <Icon {...props} name='camera' pack='fontawesome'/>
   );
 
+  // supprimer un lieu
+  const supprimerLieu = () => {
+    // deleteLieu(route.params.lieuID);
+    navigateToCarte();
+  }
+
+  // pour passer a la carte apres la suppression
+  const navigateToCarte = () => {
+    navigation.navigate("Carte");
+  };
+
+    // On pourrait définir les actions dans un fichier à part
+    const saveLieu = async () => {
+      const action = { type: 'ADD_LIEUX', value: route.params.lieuID };
+      dispatch(action);
+      let toast = Toast.show('lieu ajouté ', {
+        duration: Toast.durations.LONG,
+      });
+    }
+  
+  const deleteLieu = async () => {
+    const action = { type: 'DELETE_LIEU', value: route.params.lieuID };
+    dispatch(action);
+    navigateToCarte();
+    let toast = Toast.show('Le lieu est supprimé', {
+      duration: Toast.durations.LONG,
+      });
+  }
+
+  const navigateToEditLieu = (lieuID) => {
+    console.log(lieuID);
+    navigation.navigate("Edit lieu", {lieuID});
+  };
+
 
   return (
     <Layout style={styles.container}>
-      {isError ?
-        (<DisplayError message='Impossible de récupérer les données du restaurants' />) :
-        (isLoading ?   
-          (<View style={styles.containerLoading}>
-            <ActivityIndicator size="large" />
-          </View>
-          ) : (
+      {
+        (
               <React.Fragment>
-                <View style={styles.location}>
-                  <Text>
-                    {lieu.location.address}
-                  </Text>
-                  <Text>
-                    {lieu.location.city}
-                  </Text>
-                  <Text>
-                    {lieu.location.zip}
-                  </Text>
-                </View>
-                <Text>
-                  {lieu.description}
-                </Text>
+              {               
+              <MapView style={styles.map}  
+              initialRegion={coordMap} 
+              >
+                { lieuDetails.latitude != null && lieuDetails.longitude != null ?  
+                <Marker
+                  key={lieuDetails.id}
+                  pinColor={"blue"}
+                  coordinate= {{latitude: lieuDetails.latitude, longitude: lieuDetails.longitude}}
+                  title={lieuDetails.name}
+                />  
+                : null }
+              </MapView> }
+              
 
-                <View style={styles.tag}>
-                  {/* {lieu.tag.map((item) => (
-                    tagIcons(item)
-                  ))} */}
-                  <Text>{lieu.tag}</Text>
+                <View>
+                  <Text>
+                    {lieuDetails.name}
+                  </Text>
                 </View>
+                  <Text>
+                    {lieuDetails.address}
+                  </Text> 
+                  <Text>
+                    {lieuDetails.zipcode}{lieuDetails.city}
+                  </Text>
+                  <Text>
+                    {lieuDetails.country_name}
+                  </Text>
+                  { lieuDetails.telephone != ""  ? 
+                    <TouchableOpacity onPress={() => Communications.phonecall(lieuDetails.telephone, true)}>
+                      <View>
+                        <Text>Appeler ce lieu</Text>
+                      </View>
+                    </TouchableOpacity> 
+                : null }
+                { lieuDetails.site != ""  ? 
+                <TouchableOpacity onPress={() => Communications.web(lieuDetails.site)}>
+                  <View style={styles.holder}>
+                    <Text style={styles.text}>Ouvrir le site internet de {lieuDetails.name}</Text>
+                  </View>
+                </TouchableOpacity>
+                : null }                
+                <Text>
+                  {lieuDetails.description}
+                </Text>
+                <View style={{flexDirection:'row', alignItems:'center'}}>
+                  {imagesTags()}
+                </View>  
+                <Button onPress={deleteLieu}>Supprimer</Button>
+                <Button onPress={() => navigateToEditLieu(lieuDetails.id)}>Modifier</Button>
+                <Button onPress={onShare}>Partager le lieu</Button>
+
               </React.Fragment>
             )
-        )
+        
       }
-    </Layout>
+    </Layout> 
   );
 };
 
-export default DetailsLieu;
+const mapStateToProps = (state) => {
+  return {
+    allLieux: state
+  }
+}
+
+export default connect(mapStateToProps)(DetailsLieu);
+
 
 const styles = StyleSheet.create({
   containerLoading: {
@@ -118,5 +211,10 @@ const styles = StyleSheet.create({
   },
   tag: {
     
+  },
+  map: {
+    flex: 1,
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
   }
 });

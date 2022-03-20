@@ -8,6 +8,7 @@ import DetailsLieu from '../components/DetailsLieu';
 import Accueil from '../components/Accueil';
 import Search from '../components/Search';
 import AddLieu from '../components/AddLieu';
+import EditLieu from '../components/EditLieu';
 
 const {Navigator, Screen} = createBottomTabNavigator();
 const MapNavigation = createStackNavigator();
@@ -61,6 +62,7 @@ function search() {
       initialRouteName="ViewSearch" > 
       <SearchNavigation.Screen name="Search" component={Search} />
       <SearchNavigation.Screen name="Details" component={DetailsLieu}/>
+      
     </SearchNavigation.Navigator>
   )
 };
@@ -70,6 +72,7 @@ const TabNavigator = () => (
     <Screen name="Accueil" component={Accueil} />
     <Screen name="Map" component={map} options={{headerShown: false}}/>
     <Screen name="Recherche" component={search} options={{headerShown: false}}/>
+    <Screen name="Edit lieu" component={EditLieu}/>
   </Navigator>
 );
 
