@@ -94,6 +94,10 @@ const Carte = ({ navigation, allLieux }) => {
     <Icon {...props} name='plus' pack='fontawesome'/>
   );
 
+  const CentrerIcon = (props) => (
+    <Icon {...props} name='crosshairs' pack='fontawesome'/>
+  );
+
   // pour passer a la page de details d'un lieu
   const navigateToDetailsLieu = (lieuID) => {
     navigation.navigate("Details", {lieuID});
@@ -136,8 +140,9 @@ const Carte = ({ navigation, allLieux }) => {
               <View>
                 <Lieu lieuxData={item} onClick={navigateToDetailsLieu} />
                 <Button 
+                  style={styles.centrerBtn}
                   onPress={() => setPositionLieuCentrer(item.lieu.latitude, item.lieu.longitude)}
-                  accessoryLeft={AddIcon}>
+                  accessoryLeft={CentrerIcon}>
                 </Button>
               </View>
               
@@ -172,6 +177,11 @@ const styles = StyleSheet.create({
   },
   list: {
     flex: 1,
+  },
+  centrerBtn: {
+    width: 40,
+    marginLeft: 'auto',
+    marginRight: 20
   }
 });
 
