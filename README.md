@@ -4,7 +4,7 @@
 
 L’utilisateur peut effectuer une recherche par: rayon
 
-Par défaut, la liste contient tous les enregistrements. Les résultats peuvent être triés par distance ou par date d’ajout.
+Par défaut, la liste contient tous les enregistrements. Les résultats peuvent être triés par distance.
 
 
 
@@ -51,8 +51,6 @@ design
 bouton ok sur clavier valide
 
 dans la page add lieu, quand on prend la position actuelle ca met un peu de temps a charger. Peut etre afficher un symbole que ca charge ?
-
-qu'on puisse scroll dans la page d'ajout d'un lieu
 
 regex pour que l'adresse du site commence par https:// obligatoirement
 
