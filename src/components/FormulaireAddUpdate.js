@@ -313,7 +313,8 @@ const FormulaireAddUpdate  = ({ route, navigation, allLieux, dispatch, buttonNam
     <React.Fragment>
       
       <Layout style={styles.container} level='1'>
-        <FlatList ListHeaderComponent={
+        <FlatList listKey={moment().valueOf().toString()}
+          ListHeaderComponent={
           <>
             <View style={styles.section}>
               <Text style={styles.textAdresse}>Saisir un nom de lieu</Text>

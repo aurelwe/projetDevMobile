@@ -82,7 +82,7 @@ const DetailsLieu = ({ route, navigation, allLieux, dispatch }) => {
   );
 
   const ShareIcon = (props) => (
-    <Icon {...props} name='share'/>
+    <Icon {...props} name='share' />
   );
 
   const EditIcon = (props) => (
@@ -126,99 +126,91 @@ const DetailsLieu = ({ route, navigation, allLieux, dispatch }) => {
 
   return (
     <Layout style={styles.container}>
-      {
-        (
-          <React.Fragment>
-            {
-              <MapView style={styles.map}
-                initialRegion={coordMap}
-              >
-                {lieuDetails.latitude != null && lieuDetails.longitude != null ?
-                  <Marker
-                    key={lieuDetails.id}
-                    pinColor={"blue"}
-                    coordinate={{ latitude: lieuDetails.latitude, longitude: lieuDetails.longitude }}
-                    title={lieuDetails.name}
-                  />
-                  : null}
-              </MapView>}
+      <MapView style={styles.map}
+        initialRegion={coordMap}
+      >
+        {lieuDetails.latitude != null && lieuDetails.longitude != null ?
+          <Marker
+            key={lieuDetails.id}
+            pinColor={"blue"}
+            coordinate={{ latitude: lieuDetails.latitude, longitude: lieuDetails.longitude }}
+            title={lieuDetails.name}
+          />
+          : null}
+      </MapView>
 
 
-            <View style={styles.section}>
-              <View style={styles.row}>
-                <Text style={styles.text}>
-                  {lieuDetails.name}
-                </Text>
-                <Button accessoryLeft={ShareIcon} 
-                  onPress={onShare}
-                  style={styles.button}
-                  appearance={"ghost"}
-                  >
-                </Button>
-              </View>
-            </View>
+      <View style={styles.section}>
+        <View style={styles.row}>
+          <Text style={styles.text}>
+            {lieuDetails.name}
+          </Text>
+          <Button accessoryLeft={ShareIcon}
+            onPress={onShare}
+            style={styles.button}
+            appearance={"ghost"}
+          >
+          </Button>
+        </View>
+      </View>
 
-            <View style={styles.section}>
-              <Text style={styles.normalText}>
-                {lieuDetails.address}
-              </Text>
-              <Text style={styles.normalText}>
-                {lieuDetails.zipcode}{lieuDetails.city}
-              </Text>
-              <Text style={styles.normalText}>
-                {lieuDetails.country_name}
-              </Text>
-            </View>
+      <View style={styles.section}>
+        <Text style={styles.normalText}>
+          {lieuDetails.address}
+        </Text>
+        <Text style={styles.normalText}>
+          {lieuDetails.zipcode} {lieuDetails.city}
+        </Text>
+        <Text style={styles.normalText}>
+          {lieuDetails.country_name}
+        </Text>
+      </View>
 
-            {lieuDetails.telephone != "" ?
-            <View style={styles.section}>
-              <Text style={styles.normalText}>Téléphone : </Text>
-              <TouchableOpacity onPress={() => Communications.phonecall(lieuDetails.telephone, true)}>
-                <View style={styles.row}>
-                  <Icon name='phone' fill='black' width={24} height={24} />
-                  <Text> {lieuDetails.telephone}</Text>
-                </View>
-              </TouchableOpacity>
-            </View>
-            : null}
-
-            {lieuDetails.site != "" ?
-              <View style={styles.section}>
-                <Text style={styles.normalText}>Site internet :</Text>
-                <TouchableOpacity onPress={() => Communications.web(lieuDetails.site)}>
-                <View style={styles.row}>
-                  <Icon name='link' fill='black' width={24} height={24} />
-                  <Text> {lieuDetails.site}</Text>
-                </View>
-              </TouchableOpacity>
-              </View>
-              : null}
-
-            <View style={styles.section}>
-              <Text style={styles.normalText}>
-                {lieuDetails.description}
-              </Text>
-            </View>
-            
-
-            <View style={styles.section}>
-              <View style={styles.row}>
-                {imagesTags()}
-              </View>
-            </View>
-
+      {lieuDetails.telephone != "" ?
+        <View style={styles.section}>
+          <Text style={styles.normalText}>Téléphone : </Text>
+          <TouchableOpacity onPress={() => Communications.phonecall(lieuDetails.telephone, true)}>
             <View style={styles.row}>
-              <Button status={"danger"} accessoryLeft={DeleteIcon} onPress={deleteLieu}></Button>    
-              <Button style={styles.button}onPress={() => navigateToEditLieu(lieuDetails.id)}
-                accessoryLeft={EditIcon}>
-              </Button>          
+              <Icon name='phone' fill='black' width={24} height={24} />
+              <Text> {lieuDetails.telephone}</Text>
             </View>
-            
+          </TouchableOpacity>
+        </View>
+        : null}
 
-          </React.Fragment>
-        )
+      {lieuDetails.site != "" ?
+        <View style={styles.section}>
+          <Text style={styles.normalText}>Site internet :</Text>
+          <TouchableOpacity onPress={() => Communications.web(lieuDetails.site)}>
+            <View style={styles.row}>
+              <Icon name='link' fill='black' width={24} height={24} />
+              <Text> {lieuDetails.site}</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+        : null}
 
-      }
+      <View style={styles.section}>
+        <Text style={styles.normalText}>
+          {lieuDetails.description}
+        </Text>
+      </View>
+
+
+      <View style={styles.section}>
+        <View style={styles.row}>
+          {imagesTags()}
+        </View>
+      </View>
+
+      <View style={styles.section}>
+        <View style={styles.row}>
+          <Button status={"danger"} accessoryLeft={DeleteIcon} onPress={deleteLieu}></Button>
+          <Button style={styles.button} onPress={() => navigateToEditLieu(lieuDetails.id)}
+            accessoryLeft={EditIcon}>
+          </Button>
+        </View>
+      </View>
     </Layout>
   );
 };
@@ -240,7 +232,6 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    paddingHorizontal: 12,
   },
   row: {
     flexDirection: 'row',
@@ -255,7 +246,8 @@ const styles = StyleSheet.create({
     fontSize: 20
   },
   section: {
-    paddingBottom: 15
+    paddingBottom: 15,
+    paddingHorizontal: 12,
   },
   normalText: {
     fontSize: 16,

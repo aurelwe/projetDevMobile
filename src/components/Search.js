@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Input, Layout, Select, SelectItem, Icon, List, Divider, Button } from '@ui-kitten/components';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text, FlatList } from 'react-native';
 import Lieu from '../components/Lieu';
 import {Picker} from '@react-native-picker/picker';
 import SelectBox from 'react-native-multi-selectbox';
@@ -147,87 +147,91 @@ const Search = ({ navigation, allLieux }) => {
     return (
       <React.Fragment>
         <Layout style={styles.container} level='1'>
-        <View style={styles.section}>
-          <Text style={styles.text}>Nom du lieu</Text>
-          </View>
-          <Input
-            style={styles.input}
-            accessoryLeft={SearchIcon}
-            placeholder='Chercher un lieu'
-            onChangeText={(text) => setSearchTermNom(text)}
-          />
-
-          <View style={styles.section}>
-            <Text style={styles.text}>Ville</Text>
-            <View style={styles.rowContainer}>
-              <View style={styles.viewPicker}>
-                <Picker
-                  selectedValue={ville}
-                  style={styles.picker}
-                  onValueChange={(itemValue, itemIndex) => setVille(itemValue)}
-                >
-                  {villeList.map(value=> 
-                    <Picker.Item key={value} label={value} value={value}/>
-                  )}
-                </Picker>
+          <FlatList listKey="scroll"
+          ListHeaderComponent={
+            <>
+              <View style={styles.section}>
+                <Text style={styles.text}>Nom du lieu</Text>
               </View>
-            </View>
+              <Input
+                style={styles.input}
+                accessoryLeft={SearchIcon}
+                placeholder='Chercher un lieu'
+                onChangeText={(text) => setSearchTermNom(text)}
+              />
 
-            <View style={styles.section}>
-              <Text style={styles.textOu}>Ou</Text>   
-              <Button onPress={getAdressPositionActuelle}>Position Actuelle</Button>
-            </View>
-          </View>
+              <View style={styles.section}>
+                <Text style={styles.text}>Ville</Text>
+                <View style={styles.rowContainer}>
+                  <View style={styles.viewPicker}>
+                    <Picker
+                      selectedValue={ville}
+                      style={styles.picker}
+                      onValueChange={(itemValue, itemIndex) => setVille(itemValue)}
+                    >
+                      {villeList.map(value =>
+                        <Picker.Item key={value} label={value} value={value} />
+                      )}
+                    </Picker>
+                  </View>
+                  <Text style={styles.textOu}> Ou </Text>
+                  <Button onPress={getAdressPositionActuelle}>Position Actuelle</Button>
+                </View>
+              </View>
 
-          <View style={styles.rowContainer}>
-            <SelectBox
-              label="Choisir une ou plusieurs catégorie(s)"
-              options={tagsList}
-              selectedValues={tags}
-              onMultiSelect={onMultiChange()}
-              onTapClose={onMultiChange()}
-              isMulti
-            />
-          </View>
+              <View style={styles.rowContainer}>
+                <SelectBox
+                  label="Choisir une ou plusieurs catégorie(s)"
+                  options={tagsList}
+                  selectedValues={tags}
+                  onMultiSelect={onMultiChange()}
+                  onTapClose={onMultiChange()}
+                  isMulti
+                />
+              </View>
 
-          <View style={styles.rowContainer}>
-            <Select
-              style={styles.selectRow}
-              selectedIndex={km}
-              placeholder="Rayon"
-              onSelect={index => setKm(index)}
-              value={getSelectValue(km, kmList)}>
-                {kmList.map((value) => 
-                  <SelectItem title={value} key={value}/>
-                )}          
-            </Select>
-          </View>
+              <View style={styles.rowContainer}>
+                <Select
+                  style={styles.selectRow}
+                  selectedIndex={km}
+                  placeholder="Rayon"
+                  onSelect={index => setKm(index)}
+                  value={getSelectValue(km, kmList)}>
+                  {kmList.map((value) =>
+                    <SelectItem title={value} key={value} />
+                  )}
+                </Select>
+              </View>
 
-          <Button onPress={searchLieu}>Rechercher</Button>
+              <Button onPress={searchLieu}>Rechercher</Button>
 
-          <View style={styles.rowContainer}>
-            <Select
-              style={styles.selectRow}
-              selectedIndex={filtre}
-              placeholder="Filtrer par"
-              onSelect={index => filtrerPar(index)}
-              value={getSelectValue(filtre, filtresListe)}>
-               {filtresListe.map((value) => 
-                  <SelectItem title={value} key={value}/>
-                )}     
-            </Select>
-          </View>
-
-          <List
-            style={styles.list}
-            ItemSeparatorComponent={Divider}
-            data={lieux}
-            keyExtractor={(item) => item.lieu.id.toString()}
-            renderItem={({ item }) => (
-            <Lieu lieuxData={item} onClick={navigateToDetailsLieu} />
-            )}
-          />
-
+              <View style={styles.rowContainer}>
+                <Select
+                  style={styles.selectRow}
+                  selectedIndex={filtre}
+                  placeholder="Filtrer par"
+                  onSelect={index => filtrerPar(index)}
+                  value={getSelectValue(filtre, filtresListe)}>
+                  {filtresListe.map((value) =>
+                    <SelectItem title={value} key={value} />
+                  )}
+                </Select>
+              </View>
+            
+              <List
+                style={styles.list}
+                ItemSeparatorComponent={Divider}
+                data={lieux}
+                listKey={"liste lieux"}
+                keyExtractor={(item) => item.lieu.id.toString()}
+                renderItem={({ item }) => (
+                  <Lieu lieuxData={item} onClick={navigateToDetailsLieu} />
+                )}
+              />
+            </>
+          }>
+          </FlatList>
+            
         </Layout>
       </React.Fragment>
     );
@@ -272,9 +276,8 @@ const styles = StyleSheet.create({
   },
   picker: { 
     height: 50, 
-    width: 350, 
+    width: 180, 
     borderWidth: 1,
-    paddingRight: 10,
   },
   text:{
     fontWeight: 'bold',
