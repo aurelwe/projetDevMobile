@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Input, Layout, Select, SelectItem, Icon, List, Divider, Button, IndexPath } from '@ui-kitten/components';
+import { Input, Layout, Select, SelectItem, Icon, List, Divider, Button } from '@ui-kitten/components';
 import { View, StyleSheet, Text } from 'react-native';
 import Lieu from '../components/Lieu';
 import {Picker} from '@react-native-picker/picker';
-import MultiSelect from 'react-native-multiple-select';
 import SelectBox from 'react-native-multi-selectbox';
 import { xorBy } from 'lodash';
 import { connect } from 'react-redux';
-import { getVilles } from '../data/RecupereData';
 import * as Location from 'expo-location';
 
 
-
+// permet d'afficher dans le input la valeur choisie dans le select (sinon "Option1")
 function getSelectValue(selectedIndexPaths, options) {
   if (selectedIndexPaths.length) {
     // multiSelect
@@ -38,6 +36,9 @@ const Search = ({ navigation, allLieux }) => {
     const [tagsList, setTagsList] = useState([]);
     // tags choisis
     const [tags, setTags] = useState([]);
+    // filtre
+    const [filtre, setFiltre] = useState([]);
+    const filtresListe = ["Ne pas filtrer","Par date d'ajout"];
 
     const [km, setKm] = useState([]);
     const kmList = ["5 km", "10 km", "20 km", "30 km", "40 km", "+50 km"];
@@ -102,44 +103,46 @@ const Search = ({ navigation, allLieux }) => {
       }
     }
 
+    // filtre la liste avec le filtre choisi
+    const filtrerPar = async (filtre) => {
+    try {
+      // row=1 correspond a "par date d'ajout"
+      if(filtre.row == 1)
+      {
+        // trie en fonction de la date
+        const sorted = lieux.sort((a, b) => a.lieu.date_ajout > b.lieu.date_ajout);
+        setLieux(sorted);
+        setFiltre(filtre);
+      }
+      else if(filtre.row == 0)// 0="ne pas filtrer"
+      {
+        searchLieu();
+        setFiltre(filtre);
+      }
+      
+    } catch (error) {
+      // TO DO
+    }
+  }
+
     useEffect(() => {
       searchVilles();
       searchTags();
-    }, [allLieux]); // Uniquement à l'initialisation
+    }, [allLieux]);
 
+    // icon de recherche
     const SearchIcon = (props) => (
       <Icon {...props} name='search' pack='fontawesome'/>
     );
 
-    const TagsIcon = (props) => (
-      <Icon {...props} name='tag' pack='fontawesome'/>
-    );
-
-    const VilleIcon = (props) => (
-      <Icon {...props} name='pin'/>
-    );
-
-     // pour passer a la page de details d'un lieu
+    // pour passer a la page de details d'un lieu
     const navigateToDetailsLieu = (lieuID) => {
       navigation.navigate("Details", { lieuID });
     };
-
-    // trie par date la flatlist
-    const trierParDate = () => {
-      lieux.sort(function(obj1, obj2) {
-        // Ascending: first id less than the previous
-        console.log("obj====" + JSON.stringify(obj1));
-        return obj1.id - obj2.id;
-    });
-  }
-
-  
   
     function onMultiChange() {
       return (item) => setTags(xorBy(tags, [item]));
     }
-
-    
 
     return (
       <React.Fragment>
@@ -151,7 +154,6 @@ const Search = ({ navigation, allLieux }) => {
             style={styles.input}
             accessoryLeft={SearchIcon}
             placeholder='Chercher un lieu'
-            // value={lieux}
             onChangeText={(text) => setSearchTermNom(text)}
           />
 
@@ -202,7 +204,19 @@ const Search = ({ navigation, allLieux }) => {
           </View>
 
           <Button onPress={searchLieu}>Rechercher</Button>
-          {/* <Button onPress={ trierParDate}>Trier par date</Button> */}
+
+          <View style={styles.rowContainer}>
+            <Select
+              style={styles.selectRow}
+              selectedIndex={filtre}
+              placeholder="Filtrer par"
+              onSelect={index => filtrerPar(index)}
+              value={getSelectValue(filtre, filtresListe)}>
+               {filtresListe.map((value) => 
+                  <SelectItem title={value} key={value}/>
+                )}     
+            </Select>
+          </View>
 
           <List
             style={styles.list}
