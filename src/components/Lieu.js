@@ -33,7 +33,7 @@ const Lieu = ({onClick, lieuxData }) => {
           <Text style={styles.title}>
             {lieuxData.lieu.name}
           </Text>
-          <View style={{flexDirection:'row', alignItems:'center'}}>
+          <View style={{flexDirection:'row', marginLeft: 'auto', paddingRight: 12}}>
             {imagesTags()}
           </View>        
         </View>
