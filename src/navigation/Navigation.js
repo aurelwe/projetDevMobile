@@ -13,6 +13,7 @@ import EditLieu from '../components/EditLieu';
 const {Navigator, Screen} = createBottomTabNavigator();
 const MapNavigation = createStackNavigator();
 const SearchNavigation = createStackNavigator();
+const DetailNavigation = createStackNavigator();
 
 const AccueilIcon = (props) => (
   <Icon {...props} name='home' pack='fontawesome'/>
@@ -52,9 +53,11 @@ function map() {
       <MapNavigation.Screen name="Carte" component={Carte} />           
       <MapNavigation.Screen name="Details" component={DetailsLieu}/>
       <MapNavigation.Screen name="Nouveau lieu" component={AddLieu}/>
+      <MapNavigation.Screen name="Edit lieu" component={EditLieu}/>
     </MapNavigation.Navigator>
   )
 };
+
 
 function search() {
   return (
@@ -62,7 +65,6 @@ function search() {
       initialRouteName="ViewSearch" > 
       <SearchNavigation.Screen name="Search" component={Search} />
       <SearchNavigation.Screen name="Details" component={DetailsLieu}/>
-      
     </SearchNavigation.Navigator>
   )
 };
@@ -72,8 +74,8 @@ const TabNavigator = () => (
     <Screen name="Accueil" component={Accueil} />
     <Screen name="Map" component={map} options={{headerShown: false}}/>
     <Screen name="Recherche" component={search} options={{headerShown: false}}/>
-    {/* <Screen name="Nouveau lieu" component={AddLieu}/> */}
-    <Screen name="Edit lieu" component={EditLieu}/>
+    {/* <Screen name="Nouveau lieu" component={DetailsLieu}/> */}
+    {/* <Screen name="Edit lieu" component={EditLieu}/> */}
   </Navigator>
 );
 

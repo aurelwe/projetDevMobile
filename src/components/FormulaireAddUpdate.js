@@ -313,7 +313,7 @@ const FormulaireAddUpdate  = ({ route, navigation, allLieux, dispatch, buttonNam
     <React.Fragment>
       
       <Layout style={styles.container} level='1'>
-        <FlatList listKey={moment().valueOf().toString()}
+        <FlatList listKey={"form"}
           ListHeaderComponent={
           <>
             <View style={styles.section}>
