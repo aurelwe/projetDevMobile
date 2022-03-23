@@ -57,7 +57,7 @@ const FormulaireAddUpdate  = ({ route, navigation, allLieux, dispatch, buttonNam
         setCounrty(lieu.country_name);
         setDescritpion(lieu.description);
         setTelephone(lieu.telephone);
-        setSite(lieu.site);
+        setSite("http://" + lieu.site);
         //console.log(lieu.tag)
         // setTags(lieu.tag);
       });

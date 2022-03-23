@@ -158,6 +158,7 @@ const Search = ({ navigation, allLieux }) => {
                 accessoryLeft={SearchIcon}
                 placeholder='Chercher un lieu'
                 onChangeText={(text) => setSearchTermNom(text)}
+                onSubmitEditing={searchLieu}
               />
 
               <View style={styles.section}>
