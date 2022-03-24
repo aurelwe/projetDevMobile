@@ -57,7 +57,7 @@ const FormulaireAddUpdate  = ({ route, navigation, allLieux, dispatch, buttonNam
         setCounrty(lieu.country_name);
         setDescritpion(lieu.description);
         setTelephone(lieu.telephone);
-        setSite("http://" + lieu.site);
+        setSite(lieu.site);
         //console.log(lieu.tag)
         // setTags(lieu.tag);
       });
@@ -113,6 +113,7 @@ const FormulaireAddUpdate  = ({ route, navigation, allLieux, dispatch, buttonNam
     {
       if(verifFormulaire() == "OK"){
         updateLieu();
+        // navigateToCarte();
       }
       console.log("dans modifier lieu btn");
     }
@@ -124,9 +125,14 @@ const FormulaireAddUpdate  = ({ route, navigation, allLieux, dispatch, buttonNam
         // on ajoute le lieu et on vide le formulaire
         sauvegarderLieu();
         clearFormulaire();
+        // navigateToCarte();
       }
     }
   }
+
+  const navigateToCarte = () => {
+    navigation.navigate("Carte");
+  };
 
 
     // vérifie que les champs obligatoires sont bien remplis
@@ -273,7 +279,7 @@ const FormulaireAddUpdate  = ({ route, navigation, allLieux, dispatch, buttonNam
         "description": description,
         "tag": tagsOk,
         "telephone": telephone,
-        "site": site,
+        "site": "http://" + site,
         "address": adress,
         "city": city,
         "zipcode": zipCode,
