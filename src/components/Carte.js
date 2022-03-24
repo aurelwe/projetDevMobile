@@ -20,8 +20,6 @@ const Carte = ({ navigation, allLieux }) => {
 
   // liste de lieux pour afficher les markers
   const [lieux, setLieux] = useState([]);
-  // liste des lieux de la liste qui va être mise à jour
-  const [lieuxList, setLieuxList] = useState([]);
   // permet de récupérer les coordonnées de la map qui est affichée
   const [mapRef, updateMapRef] = useState(null);
   // position actuelle de l'utilisateur
@@ -29,19 +27,19 @@ const Carte = ({ navigation, allLieux }) => {
   // position du lieu a centrer
   const [positionAcentrer, setPositionAcentrer] = useState(null);
   // rafraichir la page
-  const [isRefreshing, setIsRefreshing] = useState(false);
+  // const [isRefreshing, setIsRefreshing] = useState(false);
 
   // recherche tous les lieux enregistrés
-  const searchLieux = async () => {
-    setIsRefreshing(true);
-    try {
-      setLieux(allLieux);
-      console.log("SET LIEUX CARTE ====" + JSON.stringify(lieux));
-    } catch (error) {
-      // TO DO
-    }
-    setIsRefreshing(false);
-  }
+  // const searchLieux = async () => {
+  //   setIsRefreshing(true);
+  //   try {
+  //     setLieux(allLieux);
+  //     console.log("SET LIEUX CARTE ====" + JSON.stringify(lieux));
+  //   } catch (error) {
+  //     // TO DO
+  //   }
+  //   setIsRefreshing(false);
+  // }
 
   // recupere la position actuelle de l'utilisateur
   const getPosition = async () => {
@@ -64,8 +62,8 @@ const Carte = ({ navigation, allLieux }) => {
       setPositionAcentrer({
         latitude: latitude,
         longitude: longitude,
-        latitudeDelta: 0.0922 * 0.1,
-        longitudeDelta: 0.0421 * 0.1,
+        latitudeDelta: 0.0922 * 0.05,
+        longitudeDelta: 0.0421 * 0.05,
       });
     } catch (error) {
       //TO DO
@@ -92,22 +90,19 @@ const Carte = ({ navigation, allLieux }) => {
     let southEastLat = coordsBoundaries.southWest.latitude;
 
     mapLieu.forEach(function (lieu) {
-      console.log("dans fct map ===="+ JSON.stringify(lieu))
       // vérifie que les coordonnées du lieu sont bien compris dans ceux de la map
       if ((lieu.lieu.latitude < northEast.latitude) && (lieu.lieu.latitude > southWest.latitude) && (lieu.lieu.longitude > southWest.longitude)
         && (lieu.lieu.longitude < northEast.longitude)) {
         list.push(lieu);
       }
     });
-    console.log("LISTE a afficher = " + JSON.stringify(list));
-
     // met a jour la liste des lieux contenus sur la map
-    // setLieuxList(list);
     setLieux(list);
+    // enleve la region associée à la map afin de pouvoir rebouger sur la map
+    setPositionAcentrer(null);
   }
 
   useEffect(() => {
-    //searchLieux();
     getPosition();
   }, [allLieux]);
 
@@ -140,9 +135,10 @@ const Carte = ({ navigation, allLieux }) => {
 
       <MapView style={styles.map}
         initialRegion={positionActuelle}
-        region={positionAcentrer}
-        onRegionChangeComplete={(coordonneesDeplacement) => onRegionChange(coordonneesDeplacement)}
         ref={(ref) => updateMapRef(ref)}
+        onRegionChangeComplete={(coordonneesDeplacement) => onRegionChange(coordonneesDeplacement)}
+        region={positionAcentrer}
+        
       >
         {lieux.map((listeLieux) => (
           <Marker
@@ -170,8 +166,8 @@ const Carte = ({ navigation, allLieux }) => {
           </View>
 
         )}
-        refreshing={isRefreshing}
-        onRefresh={searchLieux}
+        // refreshing={isRefreshing}
+        // onRefresh={searchLieux}
       />
     </Layout>
   );
