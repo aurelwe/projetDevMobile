@@ -6,9 +6,8 @@ import { xorBy } from 'lodash';
 import { connect } from 'react-redux';
 import Toast from 'react-native-root-toast';
 import * as Location from 'expo-location';
-import { ScrollView } from 'react-native-gesture-handler';
 
-const FormulaireAddUpdate  = ({ route, navigation, allLieux, dispatch, buttonName, lieuId}) => {
+const FormulaireAddUpdate = ({ route, navigation, allLieux, dispatch, buttonName, lieuId }) => {
 
   // tags choisis dans le select
   const [tags, setTags] = useState([]);
@@ -48,6 +47,7 @@ const FormulaireAddUpdate  = ({ route, navigation, allLieux, dispatch, buttonNam
       console.log("LIEU ID EDIT MODE ===" + lieuId)
       const lieuIdd = allLieux.ajoutLieuxID.filter(item => item.lieu.id == lieuId);
       const mapLieu = lieuIdd.map(element => element.lieu);
+      let tagsTest = "";
       mapLieu.forEach(function (lieu) {
         setId(lieu.id);
         setNom(lieu.name);
@@ -58,13 +58,33 @@ const FormulaireAddUpdate  = ({ route, navigation, allLieux, dispatch, buttonNam
         setDescritpion(lieu.description);
         setTelephone(lieu.telephone);
         setSite(lieu.site);
-        //console.log(lieu.tag)
-        // setTags(lieu.tag);
+        // console.log(lieu.tag)
+        tagsTest=lieu.tag;
       });
 
-      const mapTag = allLieux.tagListe.map(element => element);
-      console.log("mapTag==" + JSON.stringify(mapTag));
-    
+      // const mapTag = allLieux.tagListe.map(tagInfos => console.log("tagInfos== " + JSON.stringify(tagInfos.item)));
+      // const test = tagsTest.map(tagInfos => console.log("tagInfos== " + JSON.stringify(tagInfos)));
+      // console.log("tags test====" + JSON.stringify(tagsTest));
+      // const mapTag = allLieux.tagListe.filter(itemm => (itemm.item.includes(tagsTest)));
+      // console.log("mapTag==" + JSON.stringify(mapTag));
+      // console.log("tagsList=========" + JSON.stringify(tagsList));
+
+      // const test = tagsTest.map(function(item){console.log("item== " + JSON.stringify(item))});
+      // console.log("tags test====" + JSON.stringify(test));
+
+
+      // const mapTag = allLieux.tagListe.map(tagInfos => console.log("tagInfos== " + JSON.stringify(tagInfos.item)));
+      // const test = tagsTest.foreach(tag => console.log("tag== " + tag));
+     
+      // const mapTag = allLieux.tagListe.filter(itemm => (itemm.item.includes(tagsTest)));
+
+      // REMPLACER MANGER PAR LES TAGS DU LIEU
+      // const filterTag = allLieux.tagListe.filter(itemm => (itemm.item.includes("Manger")));
+
+      // const filterTag = allLieux.tagListe.filter(itemm => (itemm.item.includes(tagsTest)));
+      // console.log("filterTag test====" + JSON.stringify(filterTag));
+
+     
     } catch (error) {
       // TO DO
     }
@@ -84,15 +104,15 @@ const FormulaireAddUpdate  = ({ route, navigation, allLieux, dispatch, buttonNam
         setAdresse(element.streetNumber + " " + element.street);
         setVille(element.city);
         setCp(element.postalCode);
-        setCounrty(element.country);  
+        setCounrty(element.country);
       });
     } catch (error) {
       // TO DO
     }
   }
 
-   // recuperer la latitude et la longitude avec l'adresse saisie 
-   const convertAdressToCoords = async () => {
+  // recuperer la latitude et la longitude avec l'adresse saisie 
+  const convertAdressToCoords = async () => {
     try {
       // recupere la latitude et longitude en fonction de l'adresse saisie
       let locationCoords = await Location.geocodeAsync(adress + " " + zipCode + " " + city + " " + country);
@@ -107,20 +127,17 @@ const FormulaireAddUpdate  = ({ route, navigation, allLieux, dispatch, buttonNam
   }
 
   // verification des champs du formulaire
-  const addUpdate = () => 
-  {
-    if(buttonName=="Modifier le lieu")
-    {
-      if(verifFormulaire() == "OK"){
+  const addUpdate = () => {
+    if (buttonName == "Modifier le lieu") {
+      if (verifFormulaire() == "OK") {
         updateLieu();
       }
       console.log("dans modifier lieu btn");
     }
 
-    else if(buttonName=="Ajouter un nouveau lieu")
-    {
+    else if (buttonName == "Ajouter un nouveau lieu") {
       // si tous les champs sont ok
-      if(verifFormulaire() == "OK"){
+      if (verifFormulaire() == "OK") {
         // on ajoute le lieu et on vide le formulaire
         sauvegarderLieu();
         clearFormulaire();
@@ -129,35 +146,34 @@ const FormulaireAddUpdate  = ({ route, navigation, allLieux, dispatch, buttonNam
   }
 
 
-    // vérifie que les champs obligatoires sont bien remplis
-    const verifFormulaire = () => {
-      //const emailRegex = new RegExp("#(https?|ftp|ssh|mailto):\/\/[a-z0-9\/:%_+.,\#?!@&=-]+#i");
-      // verification des champs
-      if(isNaN(zipCode) || zipCode.trim() ==0)
-      {
-        Alert.alert("Le code postal est obligatoire et doit comporter uniquement des chiffres");
-      }
-      else if (name.trim() ==0) { 
-        Alert.alert('Le nom est obligatoire');
-      }
-      else if (adress.trim() ==0) {
-        Alert.alert('L adresse est obligatoire');
-      }
-      else if (city.trim() ==0) {
-        Alert.alert('La ville est obligatoire');
-      }
-      else if (country.trim() ==0) {
-        Alert.alert('Le pays est obligatoire');
-      }
-      else if (tags.length == 0) {
-        Alert.alert('Les catégories sont obligatoires');
-      }
-      // else if(!emailRegex.test(site)){
-      //   Alert.alert('Les sites !!');
-      // }
-      else 
-        return "OK";
+  // vérifie que les champs obligatoires sont bien remplis
+  const verifFormulaire = () => {
+    //const emailRegex = new RegExp("#(https?|ftp|ssh|mailto):\/\/[a-z0-9\/:%_+.,\#?!@&=-]+#i");
+    // verification des champs
+    if (isNaN(zipCode) || zipCode.trim() == 0) {
+      Alert.alert("Le code postal est obligatoire et doit comporter uniquement des chiffres");
     }
+    else if (name.trim() == 0) {
+      Alert.alert('Le nom est obligatoire');
+    }
+    else if (adress.trim() == 0) {
+      Alert.alert('L adresse est obligatoire');
+    }
+    else if (city.trim() == 0) {
+      Alert.alert('La ville est obligatoire');
+    }
+    else if (country.trim() == 0) {
+      Alert.alert('Le pays est obligatoire');
+    }
+    else if (tags.length == 0) {
+      Alert.alert('Les catégories sont obligatoires');
+    }
+    // else if(!emailRegex.test(site)){
+    //   Alert.alert('Les sites !!');
+    // }
+    else
+      return "OK";
+  }
 
   // vide les inputs du formulaire apres la validation
   const clearFormulaire = () => {
@@ -178,61 +194,61 @@ const FormulaireAddUpdate  = ({ route, navigation, allLieux, dispatch, buttonNam
   }
 
   const VilleIcon = (props) => (
-    <Icon {...props} name='pin'/>
+    <Icon {...props} name='pin' />
   );
 
   const NoteIcon = (props) => (
-    <Icon {...props} name='star' pack='fontawesome'/>
+    <Icon {...props} name='star' pack='fontawesome' />
   );
 
   const TelIcon = (props) => (
-    <Icon {...props} name='phone' pack='fontawesome'/>
+    <Icon {...props} name='phone' pack='fontawesome' />
   );
 
   const LinkIcon = (props) => (
-    <Icon {...props} name='link' pack='fontawesome'/>
+    <Icon {...props} name='link' pack='fontawesome' />
   );
-  
+
   // recupere l'id courant et set le nouvel id
   const getId = async () => {
     // si allLieux ne contient pas de lieu donc vide
-    if(Object.keys(allLieux.ajoutLieuxID).length == 0){
-      setId(id+1);
+    if (Object.keys(allLieux.ajoutLieuxID).length == 0) {
+      setId(id + 1);
     }
     // sinon si il existe des lieux
-    else if (Object.keys(allLieux.ajoutLieuxID).length > 0){
+    else if (Object.keys(allLieux.ajoutLieuxID).length > 0) {
       // on recupere le plus grand id qu'il existe
       var dernierID = Math.max(...allLieux.ajoutLieuxID.map(item => item.lieu.id));
       // et id = plus grand id + 1
-      setId(dernierID+1);
+      setId(dernierID + 1);
     }
   };
 
   // met les tags au bon format pour sauvegarder
   const tagsOK = async () => {
-      // met les tags au bon format dans notre json
-      var listeTags=[];
-      var tagsSelect = tags;
-      for (let value of tagsSelect) {
-        listeTags.push(value.item);
-      }
-      setTagsOk(listeTags);
+    // met les tags au bon format dans notre json
+    var listeTags = [];
+    var tagsSelect = tags;
+    for (let value of tagsSelect) {
+      listeTags.push(value.item);
     }
+    setTagsOk(listeTags);
+  }
 
-    // recupere la date du jour pour avoir la date d'ajout pour le tri
-    const getDateJour = async () => {
-      let today = new Date();
-      let date = today.getDate() + "-" + (today.getMonth()+1) + '-' + today.getFullYear();
-      setDate(date);
-    }
+  // recupere la date du jour pour avoir la date d'ajout pour le tri
+  const getDateJour = async () => {
+    let today = new Date();
+    let date = today.getDate() + "-" + (today.getMonth() + 1) + '-' + today.getFullYear();
+    setDate(date);
+  }
 
-    // update un lieu
+  // update un lieu
   const updateLieu = async () => {
-    let idUpdate=0;
+    let idUpdate = 0;
     const lieuIdd = allLieux.ajoutLieuxID.filter(item => item.lieu.id == lieuId);
     const mapLieu = lieuIdd.map(element => element.lieu);
     mapLieu.forEach(function (lieu) {
-      idUpdate=lieu.id;
+      idUpdate = lieu.id;
     });
     // construction du nouveau lieu
     const data = {
@@ -246,20 +262,20 @@ const FormulaireAddUpdate  = ({ route, navigation, allLieux, dispatch, buttonNam
         "address": adress,
         "city": city,
         "zipcode": zipCode,
-        "latitude": latitude, 
+        "latitude": latitude,
         "longitude": longitude,
         "country_name": country,
-        "date_ajout" : date
+        "date_ajout": date
       }
     }
     // sauvegarde redux
-    const action = { type: 'UPDATE_LIEU', data};
+    const action = { type: 'UPDATE_LIEU', data };
     dispatch(action);
     // sauvegarde les lieux dans la variable
     setLieux(allLieux.ajoutLieuxID);
     // notification que lieu bien modifie
     let toast = Toast.show('Le lieu est bien modifié', {
-    duration: Toast.durations.LONG,
+      duration: Toast.durations.LONG,
     });
   }
 
@@ -277,142 +293,142 @@ const FormulaireAddUpdate  = ({ route, navigation, allLieux, dispatch, buttonNam
         "address": adress,
         "city": city,
         "zipcode": zipCode,
-        "latitude": latitude, 
+        "latitude": latitude,
         "longitude": longitude,
         "country_name": country,
-        "date_ajout" : date
+        "date_ajout": date
       }
     }
     // sauvegarde redux
-    const action = { type: 'ADD_LIEUX', data};
+    const action = { type: 'ADD_LIEUX', data };
     dispatch(action);
     // sauvegarde les lieux dans la variable
     setLieux(allLieux.ajoutLieuxID);
     // notification que lieu bien enregistre
     let toast = Toast.show('Le lieu est bien sauvegardé', {
-    duration: Toast.durations.LONG,
+      duration: Toast.durations.LONG,
     });
   }
 
-  useEffect(()=>{
-      searchTags();
-      getId();
-      tagsOK();
-      convertAdressToCoords();
-      getDateJour();
-      console.log("TAGS ============" + JSON.stringify(tags));
-   },[adress, city, zipCode, country, tags])
+  useEffect(() => {
+    searchTags();
+    getId();
+    tagsOK();
+    convertAdressToCoords();
+    getDateJour();
+    console.log("TAGS ============" + JSON.stringify(tags));
+  }, [adress, city, zipCode, country, tags])
 
-   useEffect(()=>{   
+  useEffect(() => {
     editMode();
-    console.log("TAGS ============" + tags);
- },[lieuId])
+    // console.log("TAGS ============" + tags);
+  }, [lieuId])
 
-   return (
+  return (
 
     <React.Fragment>
-      
+
       <Layout style={styles.container} level='1'>
         <FlatList listKey={"form"}
           ListHeaderComponent={
-          <>
-            <View style={styles.section}>
-              <Text style={styles.textAdresse}>Saisir un nom de lieu</Text>
+            <>
+              <View style={styles.section}>
+                <Text style={styles.textAdresse}>Saisir un nom de lieu</Text>
                 <Input
                   style={styles.input}
                   value={name}
                   placeholder='Nom du lieu'
                   onChangeText={(n) => setNom(n)}
                 />
-            </View> 
+              </View>
 
-            <View style={styles.section}>
-              <Text style={styles.textAdresse}>Saisir une adresse</Text>
-              <Input
-                style={styles.input}
-                value={adress}
-                accessoryLeft={VilleIcon}
-                placeholder='Adresse'
-                onChangeText={(a) => setAdresse(a)}
-              />
-              <View style={styles.rowContainer}>
+              <View style={styles.section}>
+                <Text style={styles.textAdresse}>Saisir une adresse</Text>
                 <Input
-                  style={styles.inputRow}
-                  value={city}
+                  style={styles.input}
+                  value={adress}
                   accessoryLeft={VilleIcon}
-                  placeholder='Ville'
-                  onChangeText={(v) => setVille(v)}
+                  placeholder='Adresse'
+                  onChangeText={(a) => setAdresse(a)}
+                />
+                <View style={styles.rowContainer}>
+                  <Input
+                    style={styles.inputRow}
+                    value={city}
+                    accessoryLeft={VilleIcon}
+                    placeholder='Ville'
+                    onChangeText={(v) => setVille(v)}
+                  />
+                  <Input
+                    style={styles.inputRow}
+                    value={zipCode}
+                    placeholder='Code postal'
+                    onChangeText={(cp) => setCp(cp)}
+                  />
+                </View>
+                <View style={styles.rowContainer}>
+                  <Input
+                    style={styles.inputRow}
+                    value={country}
+                    accessoryLeft={VilleIcon}
+                    placeholder='Pays'
+                    onChangeText={(c) => setCounrty(c)}
+                  />
+                </View>
+
+                <View>
+                  <Text style={styles.text}>Ou</Text>
+                  <Button onPress={getAdressPositionActuelle}>Position Actuelle</Button>
+                </View>
+              </View>
+
+              <View style={styles.section}>
+                <Text style={styles.textAdresse}>Autres informations</Text>
+                <Input
+                  style={styles.input}
+                  value={telephone}
+                  accessoryLeft={TelIcon}
+                  placeholder='Numéro de téléphone'
+                  onChangeText={(t) => setTelephone(t)}
                 />
                 <Input
-                  style={styles.inputRow}
-                  value={zipCode}
-                  placeholder='Code postal'
-                  onChangeText={(cp) => setCp(cp)}
+                  style={styles.input}
+                  value={site}
+                  accessoryLeft={LinkIcon}
+                  placeholder='Site internet'
+                  onChangeText={(s) => setSite(s)}
                 />
-              </View>
-              <View style={styles.rowContainer}>
+
                 <Input
-                  style={styles.inputRow}
-                  value={country}
-                  accessoryLeft={VilleIcon}
-                  placeholder='Pays'
-                  onChangeText={(c) => setCounrty(c)}
+                  style={styles.input}
+                  value={description}
+                  multiline={true}
+                  textStyle={{ minHeight: 64 }}
+                  placeholder='Description'
+                  onChangeText={(d) => setDescritpion(d)}
                 />
+
+                <View style={{ paddingTop: 5 }}>
+                  <SelectBox
+                    label="Choisir une ou plusieurs catégorie(s) "
+                    options={tagsList}
+                    selectedValues={tags}
+                    onMultiSelect={onMultiChange()}
+                    onTapClose={onMultiChange()}
+                    isMulti
+                  />
+                </View>
               </View>
 
-              <View>
-                <Text style={styles.text}>Ou</Text>        
-                <Button onPress={getAdressPositionActuelle}>Position Actuelle</Button>
-              </View>
-            </View>
-            
-            <View style={styles.section}>
-              <Text style={styles.textAdresse}>Autres informations</Text>
-              <Input
-                style={styles.input}
-                value={telephone}
-                accessoryLeft={TelIcon}
-                placeholder='Numéro de téléphone'
-                onChangeText={(t) => setTelephone(t)}
-              />
-              <Input
-                style={styles.input}
-                value={site}
-                accessoryLeft={LinkIcon}
-                placeholder='Site internet'
-                onChangeText={(s) => setSite(s)}
-              />
+              <Button onPress={addUpdate}>{buttonName}</Button>
 
-              <Input
-                style={styles.input}
-                value={description}
-                multiline={true}
-                textStyle={{ minHeight: 64 }}
-                placeholder='Description'
-                onChangeText={(d) => setDescritpion(d)}
-              />
-
-              <View style={{paddingTop: 5}}>
-                <SelectBox
-                  label="Choisir une ou plusieurs catégorie(s) "
-                  options={tagsList}
-                  selectedValues={tags}
-                  onMultiSelect={onMultiChange()}
-                  onTapClose={onMultiChange()}
-                  isMulti
-              />
-              </View>
-            </View>
-            
-            <Button onPress={addUpdate}>{buttonName}</Button>
-
-          </>
-        }>
+            </>
+          }>
         </FlatList>
       </Layout>
-      
+
     </React.Fragment>
-            
+
   );
 }
 
@@ -454,7 +470,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 16
   },
-  textAdresse:{
+  textAdresse: {
     fontWeight: 'bold',
     fontSize: 16
   },
