@@ -9,11 +9,11 @@ import Accueil from '../components/Accueil';
 import Search from '../components/Search';
 import AddLieu from '../components/AddLieu';
 import EditLieu from '../components/EditLieu';
+import MesListes from '../components/MesListes';
 
 const {Navigator, Screen} = createBottomTabNavigator();
 const MapNavigation = createStackNavigator();
 const SearchNavigation = createStackNavigator();
-const DetailNavigation = createStackNavigator();
 
 const AccueilIcon = (props) => (
   <Icon {...props} name='home' pack='fontawesome'/>
@@ -31,6 +31,10 @@ const AddIcon = (props) => (
   <Icon {...props} name='plus' pack='fontawesome'/>
 );
 
+const ListesIcon = (props) => (
+  <Icon {...props} name='star' pack='fontawesome'/>
+);
+
 const renderAddAction = () => (
   <TopNavigationAction icon={AddIcon}/>
 );
@@ -42,6 +46,7 @@ const BottomTabBar = ({ navigation, state }) => (
     <BottomNavigationTab title="Accueil" icon={AccueilIcon}/>
     <BottomNavigationTab title="Carte" icon={MapIcon}/>
     <BottomNavigationTab title="Search" icon={SearchIcon}/>
+    <BottomNavigationTab title="Mes Listes" icon={ListesIcon}/>
   </BottomNavigation>
 );
 
@@ -74,6 +79,7 @@ const TabNavigator = () => (
     <Screen name="Accueil" component={Accueil} />
     <Screen name="Map" component={map} options={{headerShown: false}}/>
     <Screen name="Recherche" component={search} options={{headerShown: false}}/>
+    <Screen name="Mes Listes" component={MesListes}/>
     {/* <Screen name="Nouveau lieu" component={DetailsLieu}/> */}
     {/* <Screen name="Edit lieu" component={EditLieu}/> */}
   </Navigator>

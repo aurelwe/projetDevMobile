@@ -131,6 +131,7 @@ const FormulaireAddUpdate = ({ route, navigation, allLieux, dispatch, buttonName
     if (buttonName == "Modifier le lieu") {
       if (verifFormulaire() == "OK") {
         updateLieu();
+        // navigateToCarte();
       }
       console.log("dans modifier lieu btn");
     }
@@ -141,9 +142,14 @@ const FormulaireAddUpdate = ({ route, navigation, allLieux, dispatch, buttonName
         // on ajoute le lieu et on vide le formulaire
         sauvegarderLieu();
         clearFormulaire();
+        // navigateToCarte();
       }
     }
   }
+
+  const navigateToCarte = () => {
+    navigation.navigate("Carte");
+  };
 
 
   // vérifie que les champs obligatoires sont bien remplis
@@ -289,7 +295,7 @@ const FormulaireAddUpdate = ({ route, navigation, allLieux, dispatch, buttonName
         "description": description,
         "tag": tagsOk,
         "telephone": telephone,
-        "site": site,
+        "site": "http://" + site,
         "address": adress,
         "city": city,
         "zipcode": zipCode,
