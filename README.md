@@ -5,12 +5,10 @@
 L’utilisateur peut effectuer une recherche par: rayon
 
 Par défaut, la liste contient tous les enregistrements. Les résultats peuvent être triés par distance.
+Le filtre par date bug ??
 
 
 
-## Page carte:
-
-La liste contient uniquement les lieux présents sur la carte (dans la vue). Si l’utilisateur déplace la vue de la carte, cette liste est mise à jour.
 
 ## Page d’un lieu:
 
@@ -50,7 +48,7 @@ design
 
 bouton ok sur clavier valide
 
-dans la page add lieu, quand on prend la position actuelle ca met un peu de temps a charger. Peut etre afficher un symbole que ca charge ?
+dans la page add lieu, quand on prend la position actuelle ca met un peu de temps a charger. Peut etre afficher un symbole que ca charge comme dans le cours?
 
 regex pour que l'adresse du site commence par https:// obligatoirement
 
