@@ -151,16 +151,14 @@ const Search = ({ navigation, allLieux }) => {
           ListHeaderComponent={
             <>
               <View style={styles.section}>
-                <Text style={styles.text}>Nom du lieu</Text>
+                <Input
+                  style={styles.input}
+                  accessoryLeft={SearchIcon}
+                  placeholder='Chercher un lieu'
+                  onChangeText={(text) => setSearchTermNom(text)}
+                  onSubmitEditing={searchLieu}
+                />
               </View>
-              <Input
-                style={styles.input}
-                accessoryLeft={SearchIcon}
-                placeholder='Chercher un lieu'
-                onChangeText={(text) => setSearchTermNom(text)}
-                onSubmitEditing={searchLieu}
-              />
-
               <View style={styles.section}>
                 <Text style={styles.text}>Ville</Text>
                 <View style={styles.rowContainer}>

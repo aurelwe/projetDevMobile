@@ -1,10 +1,10 @@
 import React from 'react';
 import FormulaireAddUpdate from './FormulaireAddUpdate';
 
-const EditLieu  = ({ route }) => {
-
+const EditLieu  = ({ route, navigation }) => {
    return (
-    <FormulaireAddUpdate buttonName={"Modifier le lieu"} lieuId={route.params.lieuID} />            
+    <FormulaireAddUpdate navigation={navigation} buttonName={"Modifier le lieu"} lieuId={route.params.lieuID} />
+               
   );
 }
 

@@ -106,6 +106,10 @@ const FormulaireAddUpdate  = ({ route, navigation, allLieux, dispatch, buttonNam
     }
   }
 
+  const navigateToCarte = () => {
+    navigation.navigate("Carte");
+  };
+
   // verification des champs du formulaire
   const addUpdate = () => 
   {
@@ -113,7 +117,6 @@ const FormulaireAddUpdate  = ({ route, navigation, allLieux, dispatch, buttonNam
     {
       if(verifFormulaire() == "OK"){
         updateLieu();
-        // navigateToCarte();
       }
       console.log("dans modifier lieu btn");
     }
@@ -125,15 +128,9 @@ const FormulaireAddUpdate  = ({ route, navigation, allLieux, dispatch, buttonNam
         // on ajoute le lieu et on vide le formulaire
         sauvegarderLieu();
         clearFormulaire();
-        // navigateToCarte();
       }
     }
   }
-
-  const navigateToCarte = () => {
-    navigation.navigate("Carte");
-  };
-
 
     // vérifie que les champs obligatoires sont bien remplis
     const verifFormulaire = () => {
@@ -263,6 +260,7 @@ const FormulaireAddUpdate  = ({ route, navigation, allLieux, dispatch, buttonNam
     dispatch(action);
     // sauvegarde les lieux dans la variable
     setLieux(allLieux.ajoutLieuxID);
+    navigateToCarte();
     // notification que lieu bien modifie
     let toast = Toast.show('Le lieu est bien modifié', {
     duration: Toast.durations.LONG,
@@ -294,6 +292,7 @@ const FormulaireAddUpdate  = ({ route, navigation, allLieux, dispatch, buttonNam
     dispatch(action);
     // sauvegarde les lieux dans la variable
     setLieux(allLieux.ajoutLieuxID);
+    navigateToCarte();
     // notification que lieu bien enregistre
     let toast = Toast.show('Le lieu est bien sauvegardé', {
     duration: Toast.durations.LONG,

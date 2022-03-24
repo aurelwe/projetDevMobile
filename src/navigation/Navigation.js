@@ -80,8 +80,6 @@ const TabNavigator = () => (
     <Screen name="Map" component={map} options={{headerShown: false}}/>
     <Screen name="Recherche" component={search} options={{headerShown: false}}/>
     <Screen name="Mes Listes" component={MesListes}/>
-    {/* <Screen name="Nouveau lieu" component={DetailsLieu}/> */}
-    {/* <Screen name="Edit lieu" component={EditLieu}/> */}
   </Navigator>
 );
 
