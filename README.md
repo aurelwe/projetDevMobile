@@ -5,7 +5,6 @@
 L’utilisateur peut effectuer une recherche par: rayon
 
 Par défaut, la liste contient tous les enregistrements. Les résultats peuvent être triés par distance.
-Le filtre par date bug ??
 
 
 
@@ -45,8 +44,6 @@ gestion des erreurs partout / page pour afficher erreur
 dans la page add lieu, quand on prend la position actuelle ca met un peu de temps a charger. Peut etre afficher un symbole que ca charge comme dans le cours?
 
 regex pour que l'adresse du site commence par https:// obligatoirement
-
-quand on clique sur la carte dans la barre en bas, il faut qu'on arrive a chaque fois sur la carte et pas sur le détails d'un lieu parfois
 
 si on ajoute un lieu sans numéro, il faut que ca affiche rien comme numéro (là ca affiche null)
 
