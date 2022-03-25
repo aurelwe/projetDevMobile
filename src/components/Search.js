@@ -237,7 +237,6 @@ const Search = ({ navigation, allLieux }) => {
 
 const mapStateToProps = (state) => {
   return {
-    // allLieux: state,
     allLieux: state.allLieuxReducer
   }
 }

@@ -438,7 +438,6 @@ const FormulaireAddUpdate = ({ route, navigation, allLieux, dispatch, buttonName
 const mapStateToProps = (state) => {
   return {
     allLieux: state.allLieuxReducer
-    // listeVisites: state
   }
 }
 

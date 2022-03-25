@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import Toast from 'react-native-root-toast';
 import Communications from 'react-native-communications';
 
-const DetailsLieu = ({ route, navigation, allLieux, listeVisites, dispatch }) => {
+const DetailsLieu = ({ route, navigation, allLieux, listeVisites, listeDejaVisites, dispatch }) => {
 
   const [lieuDetails, setLieu] = useState([]);
   const [coordMap, setCoordMap] = useState(null);
@@ -136,6 +136,40 @@ const DetailsLieu = ({ route, navigation, allLieux, listeVisites, dispatch }) =>
     );
   }
 
+    // sauvegarde un lieu déja visité
+    const saveDejaVisite = async () => {
+      const action = { type: 'SAVE_DEJA_VISITE', value: route.params.lieuID };
+      dispatch(action);
+      let toast = Toast.show('Ce lieu est déja visité', {
+        duration: Toast.durations.LONG,
+      });
+    }
+  
+    // supprime un lieu qui est déja visité
+    const unsaveDejaVisite = async () => {
+      const action = { type: 'UNSAVE_DEJA_VISITE', value: route.params.lieuID };
+      dispatch(action);
+      let toast = Toast.show('Ce lieu n\'est plus déja visité', {
+        duration: Toast.durations.LONG,
+      });
+    }
+
+  // affiche le bon bouton en fonction de si le lieu est a visiter ou non
+  const displaySaveDejaVisite = () => {
+    if (listeDejaVisites.findIndex(i => i === route.params.lieuID) !== -1) {
+      return (
+        <Button onPress={unsaveDejaVisite}>
+          Retirer des lieux déja visités
+        </Button>
+      );
+    }
+    return (
+      <Button onPress={saveDejaVisite}>
+        Ajouter aux lieux déja visités
+      </Button>
+    );
+  }
+
   // dirige vers la page de modification d'un lieu
   const navigateToEditLieu = (lieuID) => {
     navigation.navigate("Edit lieu", { lieuID });
@@ -220,6 +254,7 @@ const DetailsLieu = ({ route, navigation, allLieux, listeVisites, dispatch }) =>
       </View>
 
       {displaySaveAvisiter()}
+      {displaySaveDejaVisite()}
 
       <View style={styles.section}>
         <View style={styles.row}>
@@ -236,7 +271,8 @@ const DetailsLieu = ({ route, navigation, allLieux, listeVisites, dispatch }) =>
 const mapStateToProps = (state) => {
   return {
     allLieux: state.allLieuxReducer,
-    listeVisites: state.listeVisitesReducer.listeVisites
+    listeVisites: state.listeVisitesReducer.listeVisites,
+    listeDejaVisites: state.listeDejaVisitesReducer.listeDejaVisitesID
   }
 }
 

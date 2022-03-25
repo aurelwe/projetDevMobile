@@ -3,6 +3,7 @@ import { persistStore, persistReducer } from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import allLieuxReducer from './reducers/allLieux';
 import listeVisitesReducer from './reducers/listeVisites';
+import listeDejaVisitesReducer from './reducers/listeDejaVisites';
 
 const configPersist = {
     key: 'root',
@@ -11,7 +12,8 @@ const configPersist = {
 
   const appReducer = combineReducers({
     allLieuxReducer,
-    listeVisitesReducer
+    listeVisitesReducer,
+    listeDejaVisitesReducer
   });
   
   const reducerPersist = persistReducer(configPersist, appReducer);

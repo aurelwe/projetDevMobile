@@ -3,7 +3,7 @@ import { ListItem, Text, Button } from '@ui-kitten/components';
 import { TouchableOpacity,View, StyleSheet, Image } from 'react-native';
 import Assets from '../definitions/Assets';
 
-const Lieu = ({onClick, lieuxData }) => {
+const Lieu = ({onClick, lieuxData, isAvisiter = false, isDejaVisiter=false }) => {
 
   // recupere les lieux correspondants au terme de recherche
   const imagesTags = () => {
