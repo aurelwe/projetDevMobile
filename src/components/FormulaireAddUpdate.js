@@ -169,6 +169,9 @@ const FormulaireAddUpdate = ({ route, navigation, allLieux, dispatch, buttonName
     }
     else if (tags.length == 0) {
       Alert.alert('Les catégories sont obligatoires');
+    } 
+    else if (!site.startsWith("http://")) {
+      Alert.alert('L\'adresse du site doit commencer par http://');
     }
     // else if(!emailRegex.test(site)){
     //   Alert.alert('Les sites !!');
@@ -292,7 +295,7 @@ const FormulaireAddUpdate = ({ route, navigation, allLieux, dispatch, buttonName
         "description": description,
         "tag": tagsOk,
         "telephone": telephone,
-        "site": "http://" + site,
+        "site": site,
         "address": adress,
         "city": city,
         "zipcode": zipCode,
