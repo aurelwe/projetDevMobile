@@ -56,5 +56,7 @@ quand on edit un lieu, revenir direct sur la carte ?
 
 quand on clique sur la carte dans la barre en bas, il faut qu'on arrive a chaque fois sur la carte et pas sur le détails d'un lieu parfois
 
+si on ajoute un lieu sans numéro, il faut que ca affiche rien comme numéro (là ca affiche null)
+
 # Remarques: 
 
