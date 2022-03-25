@@ -53,6 +53,7 @@ const Carte = ({ navigation, allLieux }) => {
       });
     } catch (error) {
       // TO DO
+      console.log(error);
     }
   }
 
@@ -67,6 +68,7 @@ const Carte = ({ navigation, allLieux }) => {
       });
     } catch (error) {
       //TO DO
+      console.log(error);
     }
   }
 
@@ -175,7 +177,7 @@ const Carte = ({ navigation, allLieux }) => {
 
 const mapStateToProps = (state) => {
   return {
-    allLieux: state.ajoutLieuxID
+    allLieux: state.allLieuxReducer.ajoutLieuxID
   }
 }
 

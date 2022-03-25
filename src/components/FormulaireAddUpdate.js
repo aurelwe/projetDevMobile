@@ -44,7 +44,6 @@ const FormulaireAddUpdate = ({ route, navigation, allLieux, dispatch, buttonName
   // récupère les données pour les afficher dans le formulaire de modification
   const editMode = () => {
     try {
-      console.log("LIEU ID EDIT MODE ===" + lieuId)
       const lieuIdd = allLieux.ajoutLieuxID.filter(item => item.lieu.id == lieuId);
       const mapLieu = lieuIdd.map(element => element.lieu);
       let tagsTest = "";
@@ -59,7 +58,7 @@ const FormulaireAddUpdate = ({ route, navigation, allLieux, dispatch, buttonName
         setTelephone(lieu.telephone);
         setSite(lieu.site);
         // console.log(lieu.tag)
-        tagsTest=lieu.tag;
+        tagsTest = lieu.tag;
       });
 
       // const mapTag = allLieux.tagListe.map(tagInfos => console.log("tagInfos== " + JSON.stringify(tagInfos.item)));
@@ -75,7 +74,7 @@ const FormulaireAddUpdate = ({ route, navigation, allLieux, dispatch, buttonName
 
       // const mapTag = allLieux.tagListe.map(tagInfos => console.log("tagInfos== " + JSON.stringify(tagInfos.item)));
       // const test = tagsTest.foreach(tag => console.log("tag== " + tag));
-     
+
       // const mapTag = allLieux.tagListe.filter(itemm => (itemm.item.includes(tagsTest)));
 
       // REMPLACER MANGER PAR LES TAGS DU LIEU
@@ -84,7 +83,7 @@ const FormulaireAddUpdate = ({ route, navigation, allLieux, dispatch, buttonName
       // const filterTag = allLieux.tagListe.filter(itemm => (itemm.item.includes(tagsTest)));
       // console.log("filterTag test====" + JSON.stringify(filterTag));
 
-     
+
     } catch (error) {
       // TO DO
     }
@@ -99,7 +98,6 @@ const FormulaireAddUpdate = ({ route, navigation, allLieux, dispatch, buttonName
       let adresseActuelle = await Location.reverseGeocodeAsync(location.coords);
       // parcours les donnees de l'adresse
       adresseActuelle.find((element) => {
-        console.log(JSON.stringify(element));
         // set les elements qui nous interessent pour afficher dans le formulaire
         setAdresse(element.streetNumber + " " + element.street);
         setVille(element.city);
@@ -108,6 +106,7 @@ const FormulaireAddUpdate = ({ route, navigation, allLieux, dispatch, buttonName
       });
     } catch (error) {
       // TO DO
+      console.log(error);
     }
   }
 
@@ -123,6 +122,7 @@ const FormulaireAddUpdate = ({ route, navigation, allLieux, dispatch, buttonName
       });
     } catch (error) {
       // TO DO
+      console.log(error);
     }
   }
 
@@ -131,9 +131,7 @@ const FormulaireAddUpdate = ({ route, navigation, allLieux, dispatch, buttonName
     if (buttonName == "Modifier le lieu") {
       if (verifFormulaire() == "OK") {
         updateLieu();
-        // navigateToCarte();
       }
-      console.log("dans modifier lieu btn");
     }
 
     else if (buttonName == "Ajouter un nouveau lieu") {
@@ -327,7 +325,6 @@ const FormulaireAddUpdate = ({ route, navigation, allLieux, dispatch, buttonName
 
   useEffect(() => {
     editMode();
-    // console.log("TAGS ============" + tags);
   }, [lieuId])
 
   return (
@@ -440,7 +437,8 @@ const FormulaireAddUpdate = ({ route, navigation, allLieux, dispatch, buttonName
 
 const mapStateToProps = (state) => {
   return {
-    allLieux: state
+    allLieux: state.allLieuxReducer
+    // listeVisites: state
   }
 }
 

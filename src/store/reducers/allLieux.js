@@ -26,7 +26,7 @@ function allLieux (state = initialState, action) {
         ajoutLieuxID: [...state.ajoutLieuxID, action.data]
       };
        return nextState || state;
-      //return initialState; 
+      // return initialState; 
 
       case 'UPDATE_LIEU': // modifie un lieu a l'aide de son id
         // cherche le lieu en fonction de son id
