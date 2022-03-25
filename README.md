@@ -45,7 +45,7 @@ dans la page add lieu, quand on prend la position actuelle ca met un peu de temp
 
 regex pour que l'adresse du site commence par https:// obligatoirement
 
-si on ajoute un lieu sans numéro, il faut que ca affiche rien comme numéro (là ca affiche null)
+si on ajoute un lieu avec une adresse sans numéro de rue, il faut que ca affiche rien comme numéro (là ca affiche null)
 
 # Remarques: 
 
