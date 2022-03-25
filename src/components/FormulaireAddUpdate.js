@@ -329,6 +329,8 @@ const FormulaireAddUpdate = ({ route, navigation, allLieux, dispatch, buttonName
     // console.log("TAGS ============" + tags);
   }, [lieuId])
 
+
+
   return (
 
     <React.Fragment>
@@ -420,6 +422,7 @@ const FormulaireAddUpdate = ({ route, navigation, allLieux, dispatch, buttonName
                     selectedValues={tags}
                     onMultiSelect={onMultiChange()}
                     onTapClose={onMultiChange()}
+                    onChange={(t) => setTagsList(t)}
                     isMulti
                   />
                 </View>
