@@ -40,7 +40,7 @@ barre en bas: accueil, recherche, favoris, ajouter
 
 # A FAIRE:
 
-gestion des erreurs partout
+gestion des erreurs partout / page pour afficher erreur 
 
 clavier qui se baisse tout seul
 
