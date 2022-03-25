@@ -7,11 +7,10 @@ import { connect } from 'react-redux';
 import Toast from 'react-native-root-toast';
 import Communications from 'react-native-communications';
 
-const DetailsLieu = ({ route, navigation, allLieux, dispatch }) => {
+const DetailsLieu = ({ route, navigation, allLieux, listeVisites, dispatch }) => {
 
   const [lieuDetails, setLieu] = useState([]);
   const [coordMap, setCoordMap] = useState(null);
-  const [isError, setIsError] = useState(false);
 
   // remplace les noms des tags par des images 
   const imagesTags = () => {
@@ -55,10 +54,8 @@ const DetailsLieu = ({ route, navigation, allLieux, dispatch }) => {
           longitudeDelta: 0.0421,
         });
       });
-      console.log("lieu details ===" + JSON.stringify(lieuDetails))
-
     } catch (error) {
-      setIsError(true);
+      // TO DO
     }
   }
 
@@ -89,25 +86,10 @@ const DetailsLieu = ({ route, navigation, allLieux, dispatch }) => {
     <Icon {...props} name='pencil' pack='fontawesome' />
   );
 
-  // supprimer un lieu
-  const supprimerLieu = () => {
-    // deleteLieu(route.params.lieuID);
-    navigateToCarte();
-  }
-
   // pour passer a la carte apres la suppression
   const navigateToCarte = () => {
     navigation.navigate("Carte");
   };
-
-  // On pourrait définir les actions dans un fichier à part
-  const saveLieu = async () => {
-    const action = { type: 'ADD_LIEUX', value: route.params.lieuID };
-    dispatch(action);
-    let toast = Toast.show('lieu ajouté ', {
-      duration: Toast.durations.LONG,
-    });
-  }
 
   const deleteLieu = async () => {
     const action = { type: 'DELETE_LIEU', value: route.params.lieuID };
@@ -118,11 +100,46 @@ const DetailsLieu = ({ route, navigation, allLieux, dispatch }) => {
     });
   }
 
+  // sauvegarde un lieu a visiter
+  const saveAvisiter = async () => {
+    const action = { type: 'SAVE_A_VISITER', value: route.params.lieuID };
+    dispatch(action);
+    let toast = Toast.show('Ce lieu est a visiter', {
+      duration: Toast.durations.LONG,
+    });
+  }
+
+  // supprime un lieu qui est a visiter
+  const unsaveAvisiter = async () => {
+    const action = { type: 'UNSAVE_A_VISITER', value: route.params.lieuID };
+    dispatch(action);
+    let toast = Toast.show('Ce lieu n\'est plus a visiter', {
+      duration: Toast.durations.LONG,
+    });
+  }
+
+  // affiche le bon bouton en fonction de si le lieu est a visiter ou non
+  const displaySaveAvisiter = () => {
+    if (listeVisites.findIndex(i => i === route.params.lieuID) !== -1) {
+      // Le lieu a visiter est sauvegardé
+      return (
+        <Button onPress={unsaveAvisiter}>
+          Retirer des lieux a visiter
+        </Button>
+      );
+    }
+    // Le lieu a visiter n'est pas sauvegardé
+    return (
+      <Button onPress={saveAvisiter}>
+        Ajouter aux lieux a visiter
+      </Button>
+    );
+  }
+
+  // dirige vers la page de modification d'un lieu
   const navigateToEditLieu = (lieuID) => {
-    console.log(lieuID);
     navigation.navigate("Edit lieu", { lieuID });
   };
-
 
   return (
     <Layout style={styles.container}>
@@ -196,12 +213,13 @@ const DetailsLieu = ({ route, navigation, allLieux, dispatch }) => {
         </Text>
       </View>
 
-
       <View style={styles.section}>
         <View style={styles.row}>
           {imagesTags()}
         </View>
       </View>
+
+      {displaySaveAvisiter()}
 
       <View style={styles.section}>
         <View style={styles.row}>
@@ -217,12 +235,12 @@ const DetailsLieu = ({ route, navigation, allLieux, dispatch }) => {
 
 const mapStateToProps = (state) => {
   return {
-    allLieux: state
+    allLieux: state.allLieuxReducer,
+    listeVisites: state.listeVisitesReducer.listeVisites
   }
 }
 
 export default connect(mapStateToProps)(DetailsLieu);
-
 
 const styles = StyleSheet.create({
   containerLoading: {
