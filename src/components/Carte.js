@@ -11,7 +11,7 @@ const Carte = ({ navigation, allLieux }) => {
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: 'Carte test',
+      headerTitle: 'Carte',
       headerRight: () => (
         <Icon name='plus' type='font-awesome' onPress={navigateToAddLieu} />
       ),

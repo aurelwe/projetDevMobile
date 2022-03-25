@@ -1,7 +1,7 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { BottomNavigation, BottomNavigationTab, TopNavigation, TopNavigationAction, Icon } from '@ui-kitten/components';
+import { BottomNavigation, BottomNavigationTab, TopNavigationAction, Icon } from '@ui-kitten/components';
 
 import Carte from '../components/Carte';
 import DetailsLieu from '../components/DetailsLieu';
@@ -51,10 +51,11 @@ const BottomTabBar = ({ navigation, state }) => (
 );
 
 function map() {
+  
   return (
     // <TopNavigation accessoryRight={renderAddAction}/>
     <MapNavigation.Navigator 
-      initialRouteName="ViewCarte" > 
+      initialRouteName="ViewCarte"> 
       <MapNavigation.Screen name="Carte" component={Carte} />           
       <MapNavigation.Screen name="Details" component={DetailsLieu}/>
       <MapNavigation.Screen name="Nouveau lieu" component={AddLieu}/>
@@ -75,13 +76,14 @@ function search() {
 };
 
 const TabNavigator = () => (
-  <Navigator tabBar={props => <BottomTabBar {...props} />}>
+  <Navigator tabBar={props => <BottomTabBar {...props} />} 
+    screenOptions={{
+      unmountOnBlur: true
+    }}>
     <Screen name="Accueil" component={Accueil} />
     <Screen name="Map" component={map} options={{headerShown: false}}/>
     <Screen name="Recherche" component={search} options={{headerShown: false}}/>
     <Screen name="Mes Listes" component={MesListes}/>
-    {/* <Screen name="Nouveau lieu" component={DetailsLieu}/> */}
-    {/* <Screen name="Edit lieu" component={EditLieu}/> */}
   </Navigator>
 );
 

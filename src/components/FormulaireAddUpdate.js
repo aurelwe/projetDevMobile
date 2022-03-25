@@ -126,6 +126,10 @@ const FormulaireAddUpdate = ({ route, navigation, allLieux, dispatch, buttonName
     }
   }
 
+  const navigateToCarte = () => {
+    navigation.navigate("Carte");
+  };
+
   // verification des champs du formulaire
   const addUpdate = () => {
     if (buttonName == "Modifier le lieu") {
@@ -140,15 +144,9 @@ const FormulaireAddUpdate = ({ route, navigation, allLieux, dispatch, buttonName
         // on ajoute le lieu et on vide le formulaire
         sauvegarderLieu();
         clearFormulaire();
-        // navigateToCarte();
       }
     }
   }
-
-  const navigateToCarte = () => {
-    navigation.navigate("Carte");
-  };
-
 
   // vérifie que les champs obligatoires sont bien remplis
   const verifFormulaire = () => {
@@ -171,6 +169,9 @@ const FormulaireAddUpdate = ({ route, navigation, allLieux, dispatch, buttonName
     }
     else if (tags.length == 0) {
       Alert.alert('Les catégories sont obligatoires');
+    } 
+    else if (!site.startsWith("http://")) {
+      Alert.alert('L\'adresse du site doit commencer par http://');
     }
     // else if(!emailRegex.test(site)){
     //   Alert.alert('Les sites !!');
@@ -277,6 +278,7 @@ const FormulaireAddUpdate = ({ route, navigation, allLieux, dispatch, buttonName
     dispatch(action);
     // sauvegarde les lieux dans la variable
     setLieux(allLieux.ajoutLieuxID);
+    navigateToCarte();
     // notification que lieu bien modifie
     let toast = Toast.show('Le lieu est bien modifié', {
       duration: Toast.durations.LONG,
@@ -293,7 +295,7 @@ const FormulaireAddUpdate = ({ route, navigation, allLieux, dispatch, buttonName
         "description": description,
         "tag": tagsOk,
         "telephone": telephone,
-        "site": "http://" + site,
+        "site": site,
         "address": adress,
         "city": city,
         "zipcode": zipCode,
@@ -308,6 +310,7 @@ const FormulaireAddUpdate = ({ route, navigation, allLieux, dispatch, buttonName
     dispatch(action);
     // sauvegarde les lieux dans la variable
     setLieux(allLieux.ajoutLieuxID);
+    navigateToCarte();
     // notification que lieu bien enregistre
     let toast = Toast.show('Le lieu est bien sauvegardé', {
       duration: Toast.durations.LONG,
@@ -326,6 +329,8 @@ const FormulaireAddUpdate = ({ route, navigation, allLieux, dispatch, buttonName
   useEffect(() => {
     editMode();
   }, [lieuId])
+
+
 
   return (
 
@@ -418,6 +423,7 @@ const FormulaireAddUpdate = ({ route, navigation, allLieux, dispatch, buttonName
                     selectedValues={tags}
                     onMultiSelect={onMultiChange()}
                     onTapClose={onMultiChange()}
+                    onChange={(t) => setTagsList(t)}
                     isMulti
                   />
                 </View>
