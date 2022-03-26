@@ -86,6 +86,18 @@ const DetailsLieu = ({ route, navigation, allLieux, listeVisites, listeDejaVisit
     <Icon {...props} name='pencil' pack='fontawesome' />
   );
 
+  const PlusIcon = (props) => (
+    <Icon {...props} name='plus' pack='fontawesome' />
+  );
+
+  const MinusIcon = (props) => (
+    <Icon {...props} name='minus' pack='fontawesome' />
+  );
+
+  const CheckIcon = (props) => (
+    <Icon {...props} name='check' pack='fontawesome' />
+  );
+
   // pour passer a la carte apres la suppression
   const navigateToCarte = () => {
     navigation.navigate("Carte");
@@ -123,18 +135,15 @@ const DetailsLieu = ({ route, navigation, allLieux, listeVisites, listeDejaVisit
     if (listeVisites.findIndex(i => i === route.params.lieuID) !== -1 ) {
       // Le lieu a visiter est sauvegardé
       return (
-        <Button onPress={unsaveAvisiter}>
-          Retirer des lieux a visiter
-        </Button>
+        <Button style={styles.button} accessoryLeft={MinusIcon} status='info'
+          appearance={'outline'} onPress={unsaveAvisiter} />
       );
     }
       // si le lieu n'est pas visité
     if (!(listeDejaVisites.findIndex(i => i === route.params.lieuID) !== -1)) {
     // Le lieu a visiter n'est pas sauvegardé
     return (
-      <Button onPress={saveAvisiter}>
-        Ajouter aux lieux a visiter
-      </Button>
+      <Button style={styles.button} onPress={saveAvisiter} status='info' accessoryLeft={PlusIcon}/>
     );
     }
   // }
@@ -163,15 +172,11 @@ const DetailsLieu = ({ route, navigation, allLieux, listeVisites, listeDejaVisit
   const displaySaveDejaVisite = () => {
     if (listeDejaVisites.findIndex(i => i === route.params.lieuID) !== -1) {
       return (
-        <Button onPress={unsaveDejaVisite}>
-          Retirer des lieux déja visités
-        </Button>
+        <Button onPress={unsaveDejaVisite} status='success' accessoryLeft={CheckIcon}/>
       );
     }
     return (
-      <Button onPress={saveDejaVisite}>
-        Ajouter aux lieux déja visités
-      </Button>
+      <Button onPress={saveDejaVisite} status='basic' accessoryLeft={CheckIcon}/>
     );
   }
 
@@ -207,6 +212,7 @@ const DetailsLieu = ({ route, navigation, allLieux, listeVisites, listeDejaVisit
             appearance={"ghost"}
           >
           </Button>
+          {displaySaveDejaVisite()}
         </View>
       </View>
 
@@ -258,15 +264,13 @@ const DetailsLieu = ({ route, navigation, allLieux, listeVisites, listeDejaVisit
         </View>
       </View>
 
-      {displaySaveAvisiter()}
-      {displaySaveDejaVisite()}
-
       <View style={styles.section}>
         <View style={styles.row}>
           <Button status={"danger"} accessoryLeft={DeleteIcon} onPress={deleteLieu}></Button>
-          <Button style={styles.button} onPress={() => navigateToEditLieu(lieuDetails.id)}
+          <Button status='warning' onPress={() => navigateToEditLieu(lieuDetails.id)}
             accessoryLeft={EditIcon}>
           </Button>
+          {displaySaveAvisiter()}
         </View>
       </View>
     </Layout>
