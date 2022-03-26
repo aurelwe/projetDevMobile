@@ -18,8 +18,6 @@ L’utilisateur doit pouvoir modifier le lieu (il reste plus que les tags a fair
 
 api google
 
-lieu en favoris / onglet en bas
-
 page d'accueil avec les lieux les mieux notés / meilleurs resto, musée ... 
 
 OK ? itinéraire google maps
@@ -32,7 +30,7 @@ OK: partager lieu sms ....
 
 OK: lien vers site internet lieu
 
-mes lieux visités / mes lieux à visiter 
+OK: mes lieux visités / mes lieux à visiter 
 
 OK: barre en bas: accueil, map, recherche, mes listes
 
