@@ -14,6 +14,7 @@ import MesListes from '../components/MesListes';
 const {Navigator, Screen} = createBottomTabNavigator();
 const MapNavigation = createStackNavigator();
 const SearchNavigation = createStackNavigator();
+const MyListsNavigation = createStackNavigator();
 
 const AccueilIcon = (props) => (
   <Icon {...props} name='home' pack='fontawesome'/>
@@ -62,7 +63,7 @@ function map() {
       <MapNavigation.Screen name="Edit lieu" component={EditLieu}/>
     </MapNavigation.Navigator>
   )
-};
+}
 
 
 function search() {
@@ -73,7 +74,17 @@ function search() {
       <SearchNavigation.Screen name="Details" component={DetailsLieu}/>
     </SearchNavigation.Navigator>
   )
-};
+}
+
+function mesListes(){
+  return (
+    <MyListsNavigation.Navigator 
+      initialRouteName="ViewList" > 
+      <MyListsNavigation.Screen name="Mes listes" component={MesListes} />
+      <MyListsNavigation.Screen name="Details" component={DetailsLieu}/>
+    </MyListsNavigation.Navigator>
+  )
+}
 
 const TabNavigator = () => (
   <Navigator tabBar={props => <BottomTabBar {...props} />} 
@@ -83,7 +94,7 @@ const TabNavigator = () => (
     <Screen name="Accueil" component={Accueil} />
     <Screen name="Map" component={map} options={{headerShown: false}}/>
     <Screen name="Recherche" component={search} options={{headerShown: false}}/>
-    <Screen name="Mes Listes" component={MesListes}/>
+    <Screen name="Mes Listes" component={mesListes} options={{headerShown: false}}/>
   </Navigator>
 );
 
