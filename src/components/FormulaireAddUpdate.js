@@ -57,33 +57,10 @@ const FormulaireAddUpdate = ({ route, navigation, allLieux, dispatch, buttonName
         setDescritpion(lieu.description);
         setTelephone(lieu.telephone);
         setSite(lieu.site);
-        // console.log(lieu.tag)
         tagsTest = lieu.tag;
       });
-
-      // const mapTag = allLieux.tagListe.map(tagInfos => console.log("tagInfos== " + JSON.stringify(tagInfos.item)));
-      // const test = tagsTest.map(tagInfos => console.log("tagInfos== " + JSON.stringify(tagInfos)));
-      // console.log("tags test====" + JSON.stringify(tagsTest));
-      // const mapTag = allLieux.tagListe.filter(itemm => (itemm.item.includes(tagsTest)));
-      // console.log("mapTag==" + JSON.stringify(mapTag));
-      // console.log("tagsList=========" + JSON.stringify(tagsList));
-
-      // const test = tagsTest.map(function(item){console.log("item== " + JSON.stringify(item))});
-      // console.log("tags test====" + JSON.stringify(test));
-
-
-      // const mapTag = allLieux.tagListe.map(tagInfos => console.log("tagInfos== " + JSON.stringify(tagInfos.item)));
-      // const test = tagsTest.foreach(tag => console.log("tag== " + tag));
-
-      // const mapTag = allLieux.tagListe.filter(itemm => (itemm.item.includes(tagsTest)));
-
-      // REMPLACER MANGER PAR LES TAGS DU LIEU
-      // const filterTag = allLieux.tagListe.filter(itemm => (itemm.item.includes("Manger")));
-
-      // const filterTag = allLieux.tagListe.filter(itemm => (itemm.item.includes(tagsTest)));
-      // console.log("filterTag test====" + JSON.stringify(filterTag));
-
-
+      const tagsBonFormatSelect = allLieux.tagListe.filter(q => tagsTest.some(el => q.item === el));
+      setTags(tagsBonFormatSelect);
     } catch (error) {
       // TO DO
     }
@@ -126,6 +103,7 @@ const FormulaireAddUpdate = ({ route, navigation, allLieux, dispatch, buttonName
     }
   }
 
+  // navigue vers la page de la carte
   const navigateToCarte = () => {
     navigation.navigate("Carte");
   };
@@ -150,7 +128,6 @@ const FormulaireAddUpdate = ({ route, navigation, allLieux, dispatch, buttonName
 
   // vérifie que les champs obligatoires sont bien remplis
   const verifFormulaire = () => {
-    //const emailRegex = new RegExp("#(https?|ftp|ssh|mailto):\/\/[a-z0-9\/:%_+.,\#?!@&=-]+#i");
     const siteRegex = new RegExp('^$|(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})')
     // verification des champs
     if (isNaN(zipCode) || zipCode.trim() == 0) {
@@ -170,13 +147,10 @@ const FormulaireAddUpdate = ({ route, navigation, allLieux, dispatch, buttonName
     }
     else if (tags.length == 0) {
       Alert.alert('Les catégories sont obligatoires');
-    } 
+    }
     else if (!siteRegex.test(site)) {
       Alert.alert('L\'adresse du site doit commencer par http://');
     }
-    // else if(!emailRegex.test(site)){
-    //   Alert.alert('Les sites !!');
-    // }
     else
       return "OK";
   }
@@ -324,14 +298,11 @@ const FormulaireAddUpdate = ({ route, navigation, allLieux, dispatch, buttonName
     tagsOK();
     convertAdressToCoords();
     getDateJour();
-    console.log("TAGS ============" + JSON.stringify(tags));
   }, [adress, city, zipCode, country, tags])
 
   useEffect(() => {
     editMode();
   }, [lieuId])
-
-
 
   return (
 
