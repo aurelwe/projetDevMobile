@@ -9,6 +9,16 @@ const MesListes = ({ navigation, allLieux, listeVisites, listeDejaVisites }) => 
 
     const [selectedIndex, setSelectedIndex] = React.useState(0);
 
+    const [dejaVisites, setDejaVisites] = useState([]);
+    const [aVisiter, setAvisiter] = useState([]);
+    const [isRefreshing, setIsRefreshing] = useState(false);
+    const [isError, setIsError] = useState(false);
+
+    useEffect(() => {
+        refreshDejaVisite();
+        refreshAvisiter();
+    }, [listeDejaVisites, listeVisites]);
+
     // dirige vers la page de détail d'un lieu
     const navigateToDetailsLieu = (lieuID) => {
         navigation.navigate("Details", { lieuID });
@@ -30,6 +40,46 @@ const MesListes = ({ navigation, allLieux, listeVisites, listeDejaVisites }) => 
         return false;
     };
 
+    // recupère les lieux qui sont déja visités
+    const refreshDejaVisite = async () => {
+        setIsRefreshing(true);
+        setIsError(false);
+        let dejaVisitesRefresh = [];
+        try {
+            for (const id of listeDejaVisites) {
+                var result = allLieux.ajoutLieuxID.filter(item => item.lieu.id == id);
+                result.forEach(function (lieu) {
+                    dejaVisitesRefresh.push(lieu);
+                });
+            };
+            setDejaVisites(dejaVisitesRefresh);
+        } catch (error) {
+            setIsError(true);
+            setDejaVisites([]);
+        }
+        setIsRefreshing(false);
+    };
+
+    // recupère les lieux qui sont a visiter
+    const refreshAvisiter = async () => {
+        setIsRefreshing(true);
+        setIsError(false);
+        let aVisiterRefresh = [];
+        try {
+            for (const id of listeVisites) {
+                var result = allLieux.ajoutLieuxID.filter(item => item.lieu.id == id);
+                result.forEach(function (lieu) {
+                    aVisiterRefresh.push(lieu);
+                });
+            };
+            setAvisiter(aVisiterRefresh);
+        } catch (error) {
+            setIsError(true);
+            setAvisiter([]);
+        }
+        setIsRefreshing(false);
+    };
+
 
     return (
         <TabView
@@ -39,13 +89,15 @@ const MesListes = ({ navigation, allLieux, listeVisites, listeDejaVisites }) => 
                 <Layout>
                     <View style={styles.container}>
                         <FlatList
-                            data={allLieux.ajoutLieuxID}
+                            data={aVisiter}
                             extraData={listeVisites}
                             keyExtractor={(item) => item.lieu.id.toString()}
                             renderItem={({ item }) => (
                                 <View>
                                     <Lieu lieuxData={item} onClick={navigateToDetailsLieu} isAvisiter={amIaVisiter(item.lieu.id)} />
                                 </View>)}
+                            refreshing={isRefreshing}
+                            onRefresh={refreshAvisiter}
                         />
                     </View>
                 </Layout>
@@ -54,23 +106,22 @@ const MesListes = ({ navigation, allLieux, listeVisites, listeDejaVisites }) => 
                 <Layout>
                     <View style={styles.container}>
                         <FlatList
-                            data={allLieux.ajoutLieuxID}
+                            data={dejaVisites}
                             extraData={listeDejaVisites}
                             keyExtractor={(item) => item.lieu.id.toString()}
                             renderItem={({ item }) => (
                                 <View>
                                     <Lieu lieuxData={item} onClick={navigateToDetailsLieu} isDejaVisiter={amIdejaVisite(item.lieu.id)} />
                                 </View>)}
+                            refreshing={isRefreshing}
+                            onRefresh={refreshDejaVisite}
                         />
                     </View>
                 </Layout>
             </Tab>
         </TabView>
     );
-
-
 };
-
 
 const mapStateToProps = (state) => {
     return {
