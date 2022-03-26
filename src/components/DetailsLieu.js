@@ -86,13 +86,10 @@ const DetailsLieu = ({ route, navigation, allLieux, listeVisites, listeDejaVisit
     <Icon {...props} name='pencil' pack='fontawesome' />
   );
 
-  const PlusIcon = (props) => (
-    <Icon {...props} name='plus' pack='fontawesome' />
+  const BookmarkIcon = (props) => (
+    <Icon {...props} name='bookmark' pack='fontawesome' />
   );
 
-  const MinusIcon = (props) => (
-    <Icon {...props} name='minus' pack='fontawesome' />
-  );
 
   const CheckIcon = (props) => (
     <Icon {...props} name='check' pack='fontawesome' />
@@ -135,15 +132,15 @@ const DetailsLieu = ({ route, navigation, allLieux, listeVisites, listeDejaVisit
     if (listeVisites.findIndex(i => i === route.params.lieuID) !== -1 ) {
       // Le lieu a visiter est sauvegardé
       return (
-        <Button style={styles.button} accessoryLeft={MinusIcon} status='info'
-          appearance={'outline'} onPress={unsaveAvisiter} />
+        <Button style={styles.button} accessoryLeft={BookmarkIcon} status='info'
+         onPress={unsaveAvisiter} />
       );
     }
       // si le lieu n'est pas visité
     if (!(listeDejaVisites.findIndex(i => i === route.params.lieuID) !== -1)) {
     // Le lieu a visiter n'est pas sauvegardé
     return (
-      <Button style={styles.button} onPress={saveAvisiter} status='info' accessoryLeft={PlusIcon}/>
+      <Button style={styles.button} onPress={saveAvisiter} status='basic' accessoryLeft={BookmarkIcon}/>
     );
     }
   // }
