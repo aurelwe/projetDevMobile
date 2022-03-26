@@ -82,6 +82,7 @@ function mesListes(){
       initialRouteName="ViewList" > 
       <MyListsNavigation.Screen name="Mes listes" component={MesListes} />
       <MyListsNavigation.Screen name="Details" component={DetailsLieu}/>
+      <MyListsNavigation.Screen name="Edit lieu" component={EditLieu}/>
     </MyListsNavigation.Navigator>
   )
 }
