@@ -120,7 +120,7 @@ const DetailsLieu = ({ route, navigation, allLieux, listeVisites, listeDejaVisit
 
   // affiche le bon bouton en fonction de si le lieu est a visiter ou non
   const displaySaveAvisiter = () => {
-    if (listeVisites.findIndex(i => i === route.params.lieuID) !== -1) {
+    if (listeVisites.findIndex(i => i === route.params.lieuID) !== -1 ) {
       // Le lieu a visiter est sauvegardé
       return (
         <Button onPress={unsaveAvisiter}>
@@ -128,31 +128,36 @@ const DetailsLieu = ({ route, navigation, allLieux, listeVisites, listeDejaVisit
         </Button>
       );
     }
+      // si le lieu n'est pas visité
+    if (!(listeDejaVisites.findIndex(i => i === route.params.lieuID) !== -1)) {
     // Le lieu a visiter n'est pas sauvegardé
     return (
       <Button onPress={saveAvisiter}>
         Ajouter aux lieux a visiter
       </Button>
     );
+    }
+  // }
+}
+
+  // sauvegarde un lieu déja visité
+  const saveDejaVisite = async () => {
+    unsaveAvisiter();
+    const action = { type: 'SAVE_DEJA_VISITE', value: route.params.lieuID };
+    dispatch(action);
+    let toast = Toast.show('Ce lieu a déja été visité', {
+      duration: Toast.durations.LONG,
+    });
   }
 
-    // sauvegarde un lieu déja visité
-    const saveDejaVisite = async () => {
-      const action = { type: 'SAVE_DEJA_VISITE', value: route.params.lieuID };
-      dispatch(action);
-      let toast = Toast.show('Ce lieu est déja visité', {
-        duration: Toast.durations.LONG,
-      });
-    }
-  
-    // supprime un lieu qui est déja visité
-    const unsaveDejaVisite = async () => {
-      const action = { type: 'UNSAVE_DEJA_VISITE', value: route.params.lieuID };
-      dispatch(action);
-      let toast = Toast.show('Ce lieu n\'est plus déja visité', {
-        duration: Toast.durations.LONG,
-      });
-    }
+  // supprime un lieu qui est déja visité
+  const unsaveDejaVisite = async () => {
+    const action = { type: 'UNSAVE_DEJA_VISITE', value: route.params.lieuID };
+    dispatch(action);
+    let toast = Toast.show('Ce lieu n\'est plus visité', {
+      duration: Toast.durations.LONG,
+    });
+  }
 
   // affiche le bon bouton en fonction de si le lieu est a visiter ou non
   const displaySaveDejaVisite = () => {

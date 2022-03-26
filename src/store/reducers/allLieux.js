@@ -48,7 +48,7 @@ function allLieux (state = initialState, action) {
         return nextState || state
 
     default:
-      console.log("state default === " + JSON.stringify(state));
+      // console.log("state default === " + JSON.stringify(state));
       return state
   };
 }

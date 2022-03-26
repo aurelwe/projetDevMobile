@@ -7,7 +7,7 @@ import { getPositionActuelle } from '../data/RecupereData';
 import { connect } from 'react-redux';
 
 
-const Carte = ({ navigation, allLieux }) => {
+const Carte = ({ navigation, allLieux, listeDejaVisites }) => {
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -104,6 +104,14 @@ const Carte = ({ navigation, allLieux }) => {
     setPositionAcentrer(null);
   }
 
+  // regarde si un lieu est marqué comme déja visité ou non
+  const amIdejaVisite = (lieuID) => {
+    if (listeDejaVisites.findIndex(i => i === lieuID) !== -1) {
+        return true;
+    }
+    return false;
+};
+
   useEffect(() => {
     getPosition();
   }, [allLieux]);
@@ -159,7 +167,7 @@ const Carte = ({ navigation, allLieux }) => {
         keyExtractor={(item) => item.lieu.id.toString()}
         renderItem={({ item }) => (
           <View>
-            <Lieu lieuxData={item} onClick={navigateToDetailsLieu} />
+            <Lieu lieuxData={item} onClick={navigateToDetailsLieu} isDejaVisiter={amIdejaVisite(item.lieu.id)} />
             <Button
               style={styles.centrerBtn}
               onPress={() => setPositionLieuCentrer(item.lieu.latitude, item.lieu.longitude)}
@@ -177,7 +185,9 @@ const Carte = ({ navigation, allLieux }) => {
 
 const mapStateToProps = (state) => {
   return {
-    allLieux: state.allLieuxReducer.ajoutLieuxID
+    allLieux: state.allLieuxReducer.ajoutLieuxID,
+    listeVisites: state.listeVisitesReducer.listeVisites,
+    listeDejaVisites: state.listeDejaVisitesReducer.listeDejaVisitesID
   }
 }
 
