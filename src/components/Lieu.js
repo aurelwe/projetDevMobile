@@ -36,6 +36,10 @@ const Lieu = ({onClick, lieuxData, isAvisiter = false, isDejaVisiter=false }) =>
           <View style={{flexDirection:'row', marginLeft: 'auto', paddingRight: 12}}>
             {imagesTags()}
           </View>        
+          {/* {isAvisiter ?
+            (<Image style={[styles.icon, { marginLeft: 'auto' }]} source={Assets.icons.visiter} />) :
+            (null)
+          } */}
         </View>
       </View>
     </TouchableOpacity>
