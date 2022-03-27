@@ -4,14 +4,9 @@
 
 L’utilisateur peut effectuer une recherche par: rayon
 
-Par défaut, la liste contient tous les enregistrements. Les résultats peuvent être triés par distance.
+Les résultats peuvent être triés par distance.
 
 
-
-
-## Page d’un lieu:
-
-L’utilisateur doit pouvoir modifier le lieu (il reste plus que les tags a faire)
 
 
 # NOS PLUS A NOUS:
