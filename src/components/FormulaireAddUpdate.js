@@ -254,6 +254,7 @@ const FormulaireAddUpdate = ({ route, navigation, allLieux, dispatch, buttonName
         "date_ajout": date
       }
     }
+    console.log("UPDATE ====" + JSON.stringify(data));
     // sauvegarde redux
     const action = { type: 'UPDATE_LIEU', data };
     dispatch(action);
@@ -304,7 +305,7 @@ const FormulaireAddUpdate = ({ route, navigation, allLieux, dispatch, buttonName
     tagsOK();
     convertAdressToCoords();
     getDateJour();
-  }, [adress, city, zipCode, country, tags])
+  }, [name, adress, city, zipCode, country, tags, telephone, site, description])
 
   useEffect(() => {
     editMode();

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, ActivityIndicator, Share, Image, Dimensions, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, ActivityIndicator, Share, Image, Dimensions, TouchableOpacity, ScrollView } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import { Layout, Text, Button, Icon } from '@ui-kitten/components';
 import Assets from '../definitions/Assets';
@@ -12,6 +12,7 @@ const DetailsLieu = ({ route, navigation, allLieux, listeVisites, listeDejaVisit
 
   const [lieuDetails, setLieu] = useState([]);
   const [coordMap, setCoordMap] = useState(null);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   // remplace les noms des tags par des images 
   const imagesTags = () => {
@@ -41,6 +42,7 @@ const DetailsLieu = ({ route, navigation, allLieux, listeVisites, listeDejaVisit
 
   // recupere les details du lieu correspondant
   const requestLieu = () => {
+    setIsRefreshing(true);
     try {
       // filtre par rapport a l'id du lieu
       const lieuId = allLieux.ajoutLieuxID.filter(item => item.lieu.id == route.params.lieuID);
@@ -58,6 +60,7 @@ const DetailsLieu = ({ route, navigation, allLieux, listeVisites, listeDejaVisit
     } catch (error) {
       // TO DO
     }
+    setIsRefreshing(false);
   }
 
   // partage l'adresse du lieu 
@@ -71,12 +74,10 @@ const DetailsLieu = ({ route, navigation, allLieux, listeVisites, listeDejaVisit
     }
   };
 
-  // const isFocused = useFocusEffect()
-
   useEffect(() => {
       requestLieu();
   
-  }, [lieuDetails]);
+  }, [DetailsLieu]);
 
   const DeleteIcon = (props) => (
     <Icon {...props} name='trash' pack='fontawesome' />
@@ -187,6 +188,7 @@ const DetailsLieu = ({ route, navigation, allLieux, listeVisites, listeDejaVisit
   };
 
   return (
+    
     <Layout style={styles.container}>
       <MapView style={styles.map}
         initialRegion={coordMap}
@@ -201,7 +203,7 @@ const DetailsLieu = ({ route, navigation, allLieux, listeVisites, listeDejaVisit
           : null}
       </MapView>
 
-
+    
       <View style={styles.section}>
         <View style={styles.row}>
           <Text style={styles.text}>
@@ -274,7 +276,9 @@ const DetailsLieu = ({ route, navigation, allLieux, listeVisites, listeDejaVisit
           {displaySaveAvisiter()}
         </View>
       </View>
+     
     </Layout>
+    
   );
 };
 
