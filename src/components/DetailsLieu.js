@@ -1,18 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, ActivityIndicator, Share, Image, Dimensions, TouchableOpacity, ScrollView } from 'react-native';
+import { View, StyleSheet, FlatList, Share, Image, Dimensions, TouchableOpacity } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import { Layout, Text, Button, Icon } from '@ui-kitten/components';
 import Assets from '../definitions/Assets';
 import { connect } from 'react-redux';
 import Toast from 'react-native-root-toast';
 import Communications from 'react-native-communications';
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect, useIsFocused } from '@react-navigation/native';
+
+import DisplayError from '../components/DisplayError';
 
 const DetailsLieu = ({ route, navigation, allLieux, listeVisites, listeDejaVisites, dispatch }) => {
 
   const [lieuDetails, setLieu] = useState([]);
   const [coordMap, setCoordMap] = useState(null);
-  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const [isError, setIsError] = useState(false);
 
   // remplace les noms des tags par des images 
   const imagesTags = () => {
@@ -36,13 +39,12 @@ const DetailsLieu = ({ route, navigation, allLieux, listeVisites, listeDejaVisit
       });
       return (img);
     } catch (error) {
-      // TO DO
+      setIsError(true)
     }
   }
 
   // recupere les details du lieu correspondant
   const requestLieu = () => {
-    setIsRefreshing(true);
     try {
       // filtre par rapport a l'id du lieu
       const lieuId = allLieux.ajoutLieuxID.filter(item => item.lieu.id == route.params.lieuID);
@@ -58,9 +60,8 @@ const DetailsLieu = ({ route, navigation, allLieux, listeVisites, listeDejaVisit
         });
       });
     } catch (error) {
-      // TO DO
+      setIsError(true)
     }
-    setIsRefreshing(false);
   }
 
   // partage l'adresse du lieu 
@@ -74,10 +75,13 @@ const DetailsLieu = ({ route, navigation, allLieux, listeVisites, listeDejaVisit
     }
   };
 
+  const isFocused = useIsFocused();
+
   useEffect(() => {
+    if (isFocused) {
       requestLieu();
-  
-  }, [DetailsLieu]);
+    }
+  }, [lieuDetails]);
 
   const DeleteIcon = (props) => (
     <Icon {...props} name='trash' pack='fontawesome' />
@@ -134,22 +138,22 @@ const DetailsLieu = ({ route, navigation, allLieux, listeVisites, listeDejaVisit
 
   // affiche le bon bouton en fonction de si le lieu est a visiter ou non
   const displaySaveAvisiter = () => {
-    if (listeVisites.findIndex(i => i === route.params.lieuID) !== -1 ) {
+    if (listeVisites.findIndex(i => i === route.params.lieuID) !== -1) {
       // Le lieu a visiter est sauvegardé
       return (
         <Button style={styles.button} accessoryLeft={BookmarkIcon} status='info'
-         onPress={unsaveAvisiter} />
+          onPress={unsaveAvisiter} />
       );
     }
-      // si le lieu n'est pas visité
+    // si le lieu n'est pas visité
     if (!(listeDejaVisites.findIndex(i => i === route.params.lieuID) !== -1)) {
-    // Le lieu a visiter n'est pas sauvegardé
-    return (
-      <Button style={styles.button} onPress={saveAvisiter} status='basic' accessoryLeft={BookmarkIcon}/>
-    );
+      // Le lieu a visiter n'est pas sauvegardé
+      return (
+        <Button style={styles.button} onPress={saveAvisiter} status='basic' accessoryLeft={BookmarkIcon} />
+      );
     }
-  // }
-}
+    // }
+  }
 
   // sauvegarde un lieu déja visité
   const saveDejaVisite = async () => {
@@ -174,11 +178,11 @@ const DetailsLieu = ({ route, navigation, allLieux, listeVisites, listeDejaVisit
   const displaySaveDejaVisite = () => {
     if (listeDejaVisites.findIndex(i => i === route.params.lieuID) !== -1) {
       return (
-        <Button onPress={unsaveDejaVisite} status='success' accessoryLeft={CheckIcon}/>
+        <Button onPress={unsaveDejaVisite} status='success' accessoryLeft={CheckIcon} />
       );
     }
     return (
-      <Button onPress={saveDejaVisite} status='basic' accessoryLeft={CheckIcon}/>
+      <Button onPress={saveDejaVisite} status='basic' accessoryLeft={CheckIcon} />
     );
   }
 
@@ -188,8 +192,8 @@ const DetailsLieu = ({ route, navigation, allLieux, listeVisites, listeDejaVisit
   };
 
   return (
-    
     <Layout style={styles.container}>
+
       <MapView style={styles.map}
         initialRegion={coordMap}
       >
@@ -203,82 +207,91 @@ const DetailsLieu = ({ route, navigation, allLieux, listeVisites, listeDejaVisit
           : null}
       </MapView>
 
-    
-      <View style={styles.section}>
-        <View style={styles.row}>
-          <Text style={styles.text}>
-            {lieuDetails.name}
-          </Text>
-          <Button accessoryLeft={ShareIcon}
-            onPress={onShare}
-            style={styles.button}
-            appearance={"ghost"}
-          >
-          </Button>
-          {displaySaveDejaVisite()}
-        </View>
-      </View>
-
-      <View style={styles.section}>
-        <Text style={styles.normalText}>
-          {lieuDetails.address}
-        </Text>
-        <Text style={styles.normalText}>
-          {lieuDetails.zipcode} {lieuDetails.city}
-        </Text>
-        <Text style={styles.normalText}>
-          {lieuDetails.country_name}
-        </Text>
-      </View>
-
-      {lieuDetails.telephone != "" ?
+      <View style={{ flex: 1 }}>
         <View style={styles.section}>
-          <Text style={styles.normalText}>Téléphone : </Text>
-          <TouchableOpacity onPress={() => Communications.phonecall(lieuDetails.telephone, true)}>
-            <View style={styles.row}>
-              <Icon name='phone' fill='black' width={24} height={24} />
-              <Text> {lieuDetails.telephone}</Text>
-            </View>
-          </TouchableOpacity>
+          <View style={styles.row}>
+            <Text style={styles.text}>
+              {lieuDetails.name}
+            </Text>
+            <Button accessoryLeft={ShareIcon}
+              onPress={onShare}
+              style={styles.button}
+              appearance={"ghost"}
+            >
+            </Button>
+            {displaySaveDejaVisite()}
+          </View>
         </View>
-        : null}
+        <FlatList listKey="scroll"
+          ListHeaderComponent={
+            <>
+              <View style={styles.section}>
+                <Text style={styles.normalText}>
+                  {lieuDetails.address}
+                </Text>
+                <Text style={styles.normalText}>
+                  {lieuDetails.zipcode} {lieuDetails.city}
+                </Text>
+                <Text style={styles.normalText}>
+                  {lieuDetails.country_name}
+                </Text>
+              </View>
 
-      {lieuDetails.site != "" ?
+              {lieuDetails.telephone != "" ?
+                <View style={styles.section}>
+                  <Text style={styles.normalText}>Téléphone : </Text>
+                  <TouchableOpacity onPress={() => Communications.phonecall(lieuDetails.telephone, true)}>
+                    <View style={styles.row}>
+                      <Icon name='phone' fill='black' width={24} height={24} />
+                      <Text> {lieuDetails.telephone}</Text>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+                : null}
+
+              {lieuDetails.site != "" ?
+                <View style={styles.section}>
+                  <Text style={styles.normalText}>Site internet :</Text>
+                  <TouchableOpacity onPress={() => Communications.web(lieuDetails.site)}>
+                    <View style={styles.row}>
+                      <Icon name='link' fill='black' width={24} height={24} />
+                      <Text> {lieuDetails.site}</Text>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+                : null}
+
+              <View style={styles.section}>
+                <Text style={styles.normalText}>
+                  {lieuDetails.description}
+                </Text>
+              </View>
+
+              <View style={styles.section}>
+                <View style={styles.row}>
+                  {
+                    isError ?
+                      (<DisplayError message="Impossible d\'afficher les tags" />) :
+                      (
+                        imagesTags()
+                      )
+                  }
+                </View>
+              </View>
+            </>
+          }>
+        </FlatList>
         <View style={styles.section}>
-          <Text style={styles.normalText}>Site internet :</Text>
-          <TouchableOpacity onPress={() => Communications.web(lieuDetails.site)}>
-            <View style={styles.row}>
-              <Icon name='link' fill='black' width={24} height={24} />
-              <Text> {lieuDetails.site}</Text>
-            </View>
-          </TouchableOpacity>
-        </View>
-        : null}
-
-      <View style={styles.section}>
-        <Text style={styles.normalText}>
-          {lieuDetails.description}
-        </Text>
-      </View>
-
-      <View style={styles.section}>
-        <View style={styles.row}>
-          {imagesTags()}
+          <View style={styles.row}>
+            <Button status={"danger"} accessoryLeft={DeleteIcon} onPress={deleteLieu}></Button>
+            <Button status='warning' onPress={() => navigateToEditLieu(lieuDetails.id)}
+              accessoryLeft={EditIcon}>
+            </Button>
+            {displaySaveAvisiter()}
+          </View>
         </View>
       </View>
-
-      <View style={styles.section}>
-        <View style={styles.row}>
-          <Button status={"danger"} accessoryLeft={DeleteIcon} onPress={deleteLieu}></Button>
-          <Button status='warning' onPress={() => navigateToEditLieu(lieuDetails.id)}
-            accessoryLeft={EditIcon}>
-          </Button>
-          {displaySaveAvisiter()}
-        </View>
-      </View>
-     
     </Layout>
-    
   );
 };
 
@@ -305,7 +318,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   map: {
-    flex: 1,
+    flex: 0.5,
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
   },

@@ -7,6 +7,8 @@ import { connect } from 'react-redux';
 import Toast from 'react-native-root-toast';
 import * as Location from 'expo-location';
 
+import DisplayError from '../components/DisplayError';
+
 const FormulaireAddUpdate = ({ route, navigation, allLieux, dispatch, buttonName, lieuId }) => {
 
   // tags choisis dans le select
@@ -31,13 +33,14 @@ const FormulaireAddUpdate = ({ route, navigation, allLieux, dispatch, buttonName
   const [site, setSite] = useState("");
 
   const [lieux, setLieux] = useState([]);
+  const [isError, setIsError] = useState(false);
 
   // recupere la liste des tags
   const searchTags = async () => {
     try {
       setTagsList(allLieux.tagListe);
     } catch (error) {
-      // TO DO
+      setIsError(true)
     }
   }
 
@@ -62,7 +65,7 @@ const FormulaireAddUpdate = ({ route, navigation, allLieux, dispatch, buttonName
       const tagsBonFormatSelect = allLieux.tagListe.filter(q => tagsTest.some(el => q.item === el));
       setTags(tagsBonFormatSelect);
     } catch (error) {
-      // TO DO
+      
     }
   }
 
@@ -82,7 +85,7 @@ const FormulaireAddUpdate = ({ route, navigation, allLieux, dispatch, buttonName
         setCounrty(element.country);
       });
     } catch (error) {
-      // TO DO
+      setIsError(true)
       console.log(error);
     }
   }
@@ -98,7 +101,7 @@ const FormulaireAddUpdate = ({ route, navigation, allLieux, dispatch, buttonName
         setLongitude(element.longitude);
       });
     } catch (error) {
-      // TO DO
+      setIsError(true)
       console.log(error);
     }
   }
@@ -365,7 +368,13 @@ const FormulaireAddUpdate = ({ route, navigation, allLieux, dispatch, buttonName
 
                 <View>
                   <Text style={styles.text}>Ou</Text>
-                  <Button onPress={getAdressPositionActuelle}>Position Actuelle</Button>
+                  {
+                    isError ?
+                      (<DisplayError message='Impossible de récupérer la position actuelle' />) :
+                      (
+                        <Button onPress={getAdressPositionActuelle}>Position Actuelle</Button>
+                      )
+                  }
                 </View>
               </View>
 
