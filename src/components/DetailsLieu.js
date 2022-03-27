@@ -6,6 +6,7 @@ import Assets from '../definitions/Assets';
 import { connect } from 'react-redux';
 import Toast from 'react-native-root-toast';
 import Communications from 'react-native-communications';
+import { useFocusEffect } from '@react-navigation/native';
 
 const DetailsLieu = ({ route, navigation, allLieux, listeVisites, listeDejaVisites, dispatch }) => {
 
@@ -70,8 +71,11 @@ const DetailsLieu = ({ route, navigation, allLieux, listeVisites, listeDejaVisit
     }
   };
 
+  // const isFocused = useFocusEffect()
+
   useEffect(() => {
-    requestLieu();
+      requestLieu();
+  
   }, [lieuDetails]);
 
   const DeleteIcon = (props) => (
