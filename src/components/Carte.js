@@ -141,9 +141,7 @@ const Carte = ({ navigation, allLieux, listeDejaVisites }) => {
   );
 
   return (
-    
- 
-        
+       
     <Layout style={styles.container}>
       <TopNavigation onTouchEnd={navigateToAddLieu} accessoryRight={renderAddAction} />
 
@@ -185,8 +183,6 @@ const Carte = ({ navigation, allLieux, listeDejaVisites }) => {
           />
     </Layout>
 
-            
-    
   );
 };
 
