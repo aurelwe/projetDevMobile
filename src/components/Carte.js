@@ -3,10 +3,8 @@ import MapView, { Marker } from 'react-native-maps';
 import { StyleSheet, Dimensions, View } from 'react-native';
 import { Layout, List, Divider, TopNavigationAction, TopNavigation, Icon, Button } from '@ui-kitten/components';
 import Lieu from '../components/Lieu';
-import { getPositionActuelle } from '../data/RecupereData';
 import { connect } from 'react-redux';
-
-import DisplayError from '../components/DisplayError';
+import * as Location from 'expo-location';
 
 const Carte = ({ navigation, allLieux, listeDejaVisites }) => {
 
@@ -28,20 +26,17 @@ const Carte = ({ navigation, allLieux, listeDejaVisites }) => {
   // position du lieu a centrer
   const [positionAcentrer, setPositionAcentrer] = useState(null);
   const [isError, setIsError] = useState(false);
-  // rafraichir la page
-  // const [isRefreshing, setIsRefreshing] = useState(false);
 
-  // recherche tous les lieux enregistrés
-  // const searchLieux = async () => {
-  //   setIsRefreshing(true);
-  //   try {
-  //     setLieux(allLieux);
-  //     console.log("SET LIEUX CARTE ====" + JSON.stringify(lieux));
-  //   } catch (error) {
-  //     // TO DO
-  //   }
-  //   setIsRefreshing(false);
-  // }
+  const getPositionActuelle = async () => { 
+    try {
+      var positionActuelleUser = Location.getCurrentPositionAsync({});
+      return positionActuelleUser;
+    } catch (error) {
+      console.log(`Error with function getPositionActuelle ${error.message}`);
+      throw error;
+    }
+  }
+
 
   // recupere la position actuelle de l'utilisateur
   const getPosition = async () => {
