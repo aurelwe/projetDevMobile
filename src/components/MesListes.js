@@ -4,6 +4,7 @@ import { Layout, Tab, TabView, List } from '@ui-kitten/components';
 import { connect } from 'react-redux';
 import Lieu from '../components/Lieu';
 
+import DisplayError from '../components/DisplayError';
 
 const MesListes = ({ navigation, allLieux, listeVisites, listeDejaVisites }) => {
 
@@ -26,17 +27,26 @@ const MesListes = ({ navigation, allLieux, listeVisites, listeDejaVisites }) => 
 
     // regarde si un lieu est marqué comme a visiter ou non
     const amIaVisiter = (lieuID) => {
-        if (listeVisites.findIndex(i => i === lieuID) !== -1) {
-            return true;
+        try {
+            if (listeVisites.findIndex(i => i === lieuID) !== -1) {
+                return true;
+            }
+        } catch {
+            setIsError(false);
         }
         return false;
     };
 
     // regarde si un lieu est marqué comme déja visité ou non
     const amIdejaVisite = (lieuID) => {
-        if (listeDejaVisites.findIndex(i => i === lieuID) !== -1) {
-            return true;
+        try {
+            if (listeDejaVisites.findIndex(i => i === lieuID) !== -1) {
+                return true;
+            }
+        } catch {
+            setIsError(false);
         }
+        
         return false;
     };
 
@@ -88,24 +98,31 @@ const MesListes = ({ navigation, allLieux, listeVisites, listeDejaVisites }) => 
             <Tab title='A visiter'>
                 <Layout>
                     <View style={styles.container}>
-                        <FlatList
-                            data={aVisiter}
-                            extraData={listeVisites}
-                            keyExtractor={(item) => item.lieu.id.toString()}
-                            renderItem={({ item }) => (
-                                <View>
-                                    <Lieu lieuxData={item} onClick={navigateToDetailsLieu} isAvisiter={amIaVisiter(item.lieu.id)} />
-                                </View>)}
-                            refreshing={isRefreshing}
-                            onRefresh={refreshAvisiter}
-                        />
+                    {
+                    isError ?
+                        (<DisplayError message='Impossible de récupérer les lieux à visiter' />) :
+                            (<FlatList
+                                data={aVisiter}
+                                extraData={listeVisites}
+                                keyExtractor={(item) => item.lieu.id.toString()}
+                                renderItem={({ item }) => (
+                                    <View>
+                                        <Lieu lieuxData={item} onClick={navigateToDetailsLieu} isAvisiter={amIaVisiter(item.lieu.id)} />
+                                    </View>)}
+                                refreshing={isRefreshing}
+                                onRefresh={refreshAvisiter}
+                            />)
+                        }
                     </View>
                 </Layout>
             </Tab>
             <Tab title='Déjà visité'>
                 <Layout>
                     <View style={styles.container}>
-                        <FlatList
+                    {
+                    isError ?
+                        (<DisplayError message='Impossible de récupérer les lieux déjà visités' />) :
+                            (<FlatList
                             data={dejaVisites}
                             extraData={listeDejaVisites}
                             keyExtractor={(item) => item.lieu.id.toString()}
@@ -115,7 +132,8 @@ const MesListes = ({ navigation, allLieux, listeVisites, listeDejaVisites }) => 
                                 </View>)}
                             refreshing={isRefreshing}
                             onRefresh={refreshDejaVisite}
-                        />
+                        />)
+                    }
                     </View>
                 </Layout>
             </Tab>

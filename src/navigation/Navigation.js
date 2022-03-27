@@ -5,7 +5,6 @@ import { BottomNavigation, BottomNavigationTab, TopNavigationAction, Icon } from
 
 import Carte from '../components/Carte';
 import DetailsLieu from '../components/DetailsLieu';
-import Accueil from '../components/Accueil';
 import Search from '../components/Search';
 import AddLieu from '../components/AddLieu';
 import EditLieu from '../components/EditLieu';
@@ -16,9 +15,6 @@ const MapNavigation = createStackNavigator();
 const SearchNavigation = createStackNavigator();
 const MyListsNavigation = createStackNavigator();
 
-const AccueilIcon = (props) => (
-  <Icon {...props} name='home' pack='fontawesome'/>
-);
 
 const MapIcon = (props) => (
   <Icon {...props} name='map' pack='fontawesome'/>
@@ -44,7 +40,6 @@ const BottomTabBar = ({ navigation, state }) => (
   <BottomNavigation
     selectedIndex={state.index}
     onSelect={index => navigation.navigate(state.routeNames[index])}>
-    <BottomNavigationTab title="Accueil" icon={AccueilIcon}/>
     <BottomNavigationTab title="Carte" icon={MapIcon}/>
     <BottomNavigationTab title="Search" icon={SearchIcon}/>
     <BottomNavigationTab title="Mes Listes" icon={ListesIcon}/>
@@ -92,7 +87,6 @@ const TabNavigator = () => (
     screenOptions={{
       unmountOnBlur: true
     }}>
-    <Screen name="Accueil" component={Accueil} />
     <Screen name="Map" component={map} options={{headerShown: false}}/>
     <Screen name="Recherche" component={search} options={{headerShown: false}}/>
     <Screen name="Mes Listes" component={mesListes} options={{headerShown: false}}/>

@@ -6,6 +6,7 @@ import Lieu from '../components/Lieu';
 import { getPositionActuelle } from '../data/RecupereData';
 import { connect } from 'react-redux';
 
+import DisplayError from '../components/DisplayError';
 
 const Carte = ({ navigation, allLieux, listeDejaVisites }) => {
 
@@ -26,6 +27,7 @@ const Carte = ({ navigation, allLieux, listeDejaVisites }) => {
   const [positionActuelle, setPosition] = useState(null);
   // position du lieu a centrer
   const [positionAcentrer, setPositionAcentrer] = useState(null);
+  const [isError, setIsError] = useState(false);
   // rafraichir la page
   // const [isRefreshing, setIsRefreshing] = useState(false);
 
@@ -52,7 +54,7 @@ const Carte = ({ navigation, allLieux, listeDejaVisites }) => {
         longitudeDelta: 0.0421,
       });
     } catch (error) {
-      // TO DO
+      setIsError(true)
       console.log(error);
     }
   }
@@ -67,7 +69,7 @@ const Carte = ({ navigation, allLieux, listeDejaVisites }) => {
         longitudeDelta: 0.0421 * 0.05,
       });
     } catch (error) {
-      //TO DO
+      setIsError(true)
       console.log(error);
     }
   }
@@ -139,9 +141,13 @@ const Carte = ({ navigation, allLieux, listeDejaVisites }) => {
   );
 
   return (
+    
+ 
+        
     <Layout style={styles.container}>
-
       <TopNavigation onTouchEnd={navigateToAddLieu} accessoryRight={renderAddAction} />
+
+      
 
       <MapView style={styles.map}
         initialRegion={positionActuelle}
@@ -159,27 +165,28 @@ const Carte = ({ navigation, allLieux, listeDejaVisites }) => {
           />
         ))}
       </MapView>
-
-      <List
-        style={styles.list}
-        ItemSeparatorComponent={Divider}
-        data={lieux}
-        keyExtractor={(item) => item.lieu.id.toString()}
-        renderItem={({ item }) => (
-          <View>
-            <Lieu lieuxData={item} onClick={navigateToDetailsLieu} isDejaVisiter={amIdejaVisite(item.lieu.id)} />
-            <Button
-              style={styles.centrerBtn}
-              onPress={() => setPositionLieuCentrer(item.lieu.latitude, item.lieu.longitude)}
-              accessoryLeft={CentrerIcon}>
-            </Button>
-          </View>
-
-        )}
-        // refreshing={isRefreshing}
-        // onRefresh={searchLieux}
-      />
+     <List
+            style={styles.list}
+            ItemSeparatorComponent={Divider}
+            data={lieux}
+            keyExtractor={(item) => item.lieu.id.toString()}
+            renderItem={({ item }) => (
+              <View>
+                <Lieu lieuxData={item} onClick={navigateToDetailsLieu} isDejaVisiter={amIdejaVisite(item.lieu.id)} />
+                <Button
+                  style={styles.centrerBtn}
+                  onPress={() => setPositionLieuCentrer(item.lieu.latitude, item.lieu.longitude)}
+                  accessoryLeft={CentrerIcon}>
+                </Button>
+              </View>
+            )}
+          // refreshing={isRefreshing}
+          // onRefresh={searchLieux}
+          />
     </Layout>
+
+            
+    
   );
 };
 

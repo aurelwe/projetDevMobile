@@ -1,9 +1,13 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { ListItem, Text, Button } from '@ui-kitten/components';
 import { TouchableOpacity,View, StyleSheet, Image } from 'react-native';
 import Assets from '../definitions/Assets';
 
+import DisplayError from '../components/DisplayError';
+
 const Lieu = ({onClick, lieuxData, isAvisiter = false, isDejaVisiter=false }) => {
+
+  const [isError, setIsError] = useState(false);
 
   // recupere les lieux correspondants au terme de recherche
   const imagesTags = () => {
@@ -22,7 +26,7 @@ const Lieu = ({onClick, lieuxData, isAvisiter = false, isDejaVisiter=false }) =>
       }   
       return (img);
     } catch (error) {
-      // TO DO
+      setIsError(true)
     }
   }
    
@@ -34,7 +38,13 @@ const Lieu = ({onClick, lieuxData, isAvisiter = false, isDejaVisiter=false }) =>
             {lieuxData.lieu.name}
           </Text>
           <View style={{flexDirection:'row', marginLeft: 'auto', paddingRight: 12}}>
-            {imagesTags()}
+          {
+            isError ?
+              (<DisplayError message='Impossible de récupérer les lieux' />) :
+              (
+                imagesTags() 
+              )
+            }
           </View>        
           {/* {isAvisiter ?
             (<Image style={[styles.icon, { marginLeft: 'auto' }]} source={Assets.icons.visiter} />) :

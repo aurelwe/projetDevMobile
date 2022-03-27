@@ -8,6 +8,8 @@ import { xorBy } from 'lodash';
 import { connect } from 'react-redux';
 import * as Location from 'expo-location';
 
+import DisplayError from '../components/DisplayError';
+
 // permet d'afficher dans le input la valeur choisie dans le select (sinon "Option1")
 function getSelectValue(selectedIndexPaths, options) {
   if (selectedIndexPaths.length) {
@@ -42,6 +44,8 @@ const Search = ({ navigation, allLieux }) => {
   const [km, setKm] = useState([]);
   const kmList = ["5 km", "10 km", "20 km", "30 km", "40 km", "+50 km"];
 
+  const [isError, setIsError] = useState(false);
+
   // recupere les lieux correspondants au terme de recherche
   const searchLieu = async () => {
     try {
@@ -54,7 +58,7 @@ const Search = ({ navigation, allLieux }) => {
       }
       setLieux(result);
     } catch (error) {
-      // TO DO
+      setIsError(true);
     }
   }
 
@@ -72,7 +76,7 @@ const Search = ({ navigation, allLieux }) => {
         setVille(element.city);
       });
     } catch (error) {
-      // TO DO
+      setIsError(true);
     }
   }
 
@@ -89,7 +93,7 @@ const Search = ({ navigation, allLieux }) => {
       const listeVillesSansDoublons = [...new Set(listeVilles)];
       setVillesList(listeVillesSansDoublons);
     } catch (error) {
-      // TO DO
+      setIsError(true);
     }
   }
 
@@ -98,7 +102,7 @@ const Search = ({ navigation, allLieux }) => {
     try {
       setTagsList(allLieux.tagListe);
     } catch (error) {
-      // TO DO
+      setIsError(true);
     }
   }
 
@@ -118,7 +122,7 @@ const Search = ({ navigation, allLieux }) => {
         setFiltre(filtre);
       }
     } catch (error) {
-      // TO DO
+      setIsError(true);
     }
   }
 
@@ -214,16 +218,21 @@ const Search = ({ navigation, allLieux }) => {
                 </Select>
               </View>
 
-              <List
-                style={styles.list}
-                ItemSeparatorComponent={Divider}
-                data={lieux}
-                listKey={"liste lieux"}
-                keyExtractor={(item) => item.lieu.id.toString()}
-                renderItem={({ item }) => (
-                  <Lieu lieuxData={item} onClick={navigateToDetailsLieu} />
-                )}
-              />
+
+              {
+                isError ?
+                  (<DisplayError message='Impossible de récupérer les lieux' />) :
+                  (<List
+                    style={styles.list}
+                    ItemSeparatorComponent={Divider}
+                    data={lieux}
+                    listKey={"liste lieux"}
+                    keyExtractor={(item) => item.lieu.id.toString()}
+                    renderItem={({ item }) => (
+                      <Lieu lieuxData={item} onClick={navigateToDetailsLieu} />
+                    )}
+                  />)
+              }
             </>
           }>
         </FlatList>

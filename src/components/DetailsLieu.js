@@ -6,12 +6,16 @@ import Assets from '../definitions/Assets';
 import { connect } from 'react-redux';
 import Toast from 'react-native-root-toast';
 import Communications from 'react-native-communications';
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect, useIsFocused } from '@react-navigation/native';
+
+import DisplayError from '../components/DisplayError';
 
 const DetailsLieu = ({ route, navigation, allLieux, listeVisites, listeDejaVisites, dispatch }) => {
 
   const [lieuDetails, setLieu] = useState([]);
   const [coordMap, setCoordMap] = useState(null);
+
+  const [isError, setIsError] = useState(false);
 
   // remplace les noms des tags par des images 
   const imagesTags = () => {
@@ -35,7 +39,7 @@ const DetailsLieu = ({ route, navigation, allLieux, listeVisites, listeDejaVisit
       });
       return (img);
     } catch (error) {
-      // TO DO
+      setIsError(true)
     }
   }
 
@@ -56,7 +60,7 @@ const DetailsLieu = ({ route, navigation, allLieux, listeVisites, listeDejaVisit
         });
       });
     } catch (error) {
-      // TO DO
+      setIsError(true)
     }
   }
 
@@ -71,11 +75,12 @@ const DetailsLieu = ({ route, navigation, allLieux, listeVisites, listeDejaVisit
     }
   };
 
-  // const isFocused = useFocusEffect()
+  const isFocused = useIsFocused();
 
   useEffect(() => {
+    if(isFocused) {
       requestLieu();
-  
+    }
   }, [lieuDetails]);
 
   const DeleteIcon = (props) => (
@@ -261,7 +266,13 @@ const DetailsLieu = ({ route, navigation, allLieux, listeVisites, listeDejaVisit
 
       <View style={styles.section}>
         <View style={styles.row}>
-          {imagesTags()}
+        {
+          isError ?
+            (<DisplayError message="Impossible d\'afficher les tags" />) :
+            (
+              imagesTags()
+            )
+          }
         </View>
       </View>
 
