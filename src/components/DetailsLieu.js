@@ -14,7 +14,7 @@ const DetailsLieu = ({ route, navigation, allLieux, listeVisites, listeDejaVisit
 
   const [lieuDetails, setLieu] = useState([]);
   const [coordMap, setCoordMap] = useState(null);
-
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const [isError, setIsError] = useState(false);
 
   // remplace les noms des tags par des images 
@@ -45,6 +45,7 @@ const DetailsLieu = ({ route, navigation, allLieux, listeVisites, listeDejaVisit
 
   // recupere les details du lieu correspondant
   const requestLieu = () => {
+    setIsRefreshing(true);
     try {
       // filtre par rapport a l'id du lieu
       const lieuId = allLieux.ajoutLieuxID.filter(item => item.lieu.id == route.params.lieuID);
@@ -62,6 +63,7 @@ const DetailsLieu = ({ route, navigation, allLieux, listeVisites, listeDejaVisit
     } catch (error) {
       setIsError(true)
     }
+    setIsRefreshing(false);
   }
 
   // partage l'adresse du lieu 
@@ -75,13 +77,10 @@ const DetailsLieu = ({ route, navigation, allLieux, listeVisites, listeDejaVisit
     }
   };
 
-  const isFocused = useIsFocused();
-
   useEffect(() => {
-    if (isFocused) {
       requestLieu();
-    }
-  }, [lieuDetails]);
+      console.log("ALL LIEUX ===== " + JSON.stringify(allLieux));
+  }, [allLieux]);
 
   const DeleteIcon = (props) => (
     <Icon {...props} name='trash' pack='fontawesome' />
@@ -207,7 +206,7 @@ const DetailsLieu = ({ route, navigation, allLieux, listeVisites, listeDejaVisit
           : null}
       </MapView>
 
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1 }}    >
         <View style={styles.section}>
           <View style={styles.row}>
             <Text style={styles.text}>
@@ -279,8 +278,9 @@ const DetailsLieu = ({ route, navigation, allLieux, listeVisites, listeDejaVisit
                 </View>
               </View>
             </>
-          }>
-        </FlatList>
+          }
+          />
+         
         <View style={styles.section}>
           <View style={styles.row}>
             <Button status={"danger"} accessoryLeft={DeleteIcon} onPress={deleteLieu}></Button>

@@ -39,7 +39,7 @@ const Search = ({ navigation, allLieux }) => {
   const [tags, setTags] = useState([]);
   // filtre
   const [filtre, setFiltre] = useState([]);
-  const filtresListe = ["Ne pas filtrer", "Par date d'ajout"];
+  const filtresListe = ["Par date d'ajout"];
 
   const [km, setKm] = useState([]);
   const kmList = ["5 km", "10 km", "20 km", "30 km", "40 km", "+50 km"];
@@ -56,6 +56,7 @@ const Search = ({ navigation, allLieux }) => {
       if (tags != "") {
         result = result.filter(item => tags.some(el => item.lieu.tag.includes(el.item)));
       }
+      setFiltre([]);
       setLieux(result);
     } catch (error) {
       setIsError(true);
@@ -110,15 +111,10 @@ const Search = ({ navigation, allLieux }) => {
   const filtrerPar = async (filtre) => {
     try {
       // row=1 correspond a "par date d'ajout"
-      if (filtre.row == 1) {
+      if (filtre.row == 0) {
         // trie en fonction de la date
         const sorted = lieux.sort((a, b) => a.lieu.date_ajout > b.lieu.date_ajout);
         setLieux(sorted);
-        setFiltre(filtre);
-      }
-      else if (filtre.row == 0)// 0="ne pas filtrer"
-      {
-        searchLieu();
         setFiltre(filtre);
       }
     } catch (error) {
@@ -127,6 +123,7 @@ const Search = ({ navigation, allLieux }) => {
   }
 
   useEffect(() => {
+    searchLieu();
     searchVilles();
     searchTags();
   }, [allLieux]);
@@ -190,7 +187,7 @@ const Search = ({ navigation, allLieux }) => {
                 />
               </View>
 
-              <View style={styles.rowContainer}>
+              {/* <View style={styles.rowContainer}>
                 <Select
                   style={styles.selectRow}
                   selectedIndex={km}
@@ -201,7 +198,7 @@ const Search = ({ navigation, allLieux }) => {
                     <SelectItem title={value} key={value} />
                   )}
                 </Select>
-              </View>
+              </View> */}
 
               <Button onPress={searchLieu}>Rechercher</Button>
 

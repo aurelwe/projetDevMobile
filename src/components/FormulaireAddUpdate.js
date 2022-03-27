@@ -78,8 +78,14 @@ const FormulaireAddUpdate = ({ route, navigation, allLieux, dispatch, buttonName
       let adresseActuelle = await Location.reverseGeocodeAsync(location.coords);
       // parcours les donnees de l'adresse
       adresseActuelle.find((element) => {
+        if(element.streetNumber===null){
+          setAdresse(element.street);
+        }
+        else{
+          setAdresse(element.streetNumber + " " + element.street);
+        }
         // set les elements qui nous interessent pour afficher dans le formulaire
-        setAdresse(element.streetNumber + " " + element.street);
+        // setAdresse(element.streetNumber + " " + element.street);
         setVille(element.city);
         setCp(element.postalCode);
         setCounrty(element.country);
@@ -257,7 +263,6 @@ const FormulaireAddUpdate = ({ route, navigation, allLieux, dispatch, buttonName
         "date_ajout": date
       }
     }
-    console.log("UPDATE ====" + JSON.stringify(data));
     // sauvegarde redux
     const action = { type: 'UPDATE_LIEU', data };
     dispatch(action);

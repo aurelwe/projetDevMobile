@@ -24,6 +24,7 @@ const MesListes = ({ navigation, allLieux, listeVisites, listeDejaVisites }) => 
     const navigateToDetailsLieu = (lieuID) => {
         navigation.navigate("Details", { lieuID });
     };
+    
 
     // regarde si un lieu est marqué comme a visiter ou non
     const amIaVisiter = (lieuID) => {
